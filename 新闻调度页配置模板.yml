@@ -1,0 +1,51 @@
+description: ''
+doc_rate: 1
+batch_start:
+  type: at
+  num:
+    - 18
+  unit: day
+ratio: 0.99
+size: small
+global_dedup: ''
+type: script
+use_incr_id: false
+expression: |-
+  def start_requests(**kwargs):
+      web_site = ""
+
+      web_site_url = ""
+      hub_fields = {
+          "web_site": web_site,
+          "web_site_url": web_site_url
+      }
+      yield {"url": web_site_url, "page_rule_id": None, "hub_fields": hub_fields}
+
+      for page in range(1):
+          url = f""
+          yield {"url": url, "page_rule_id": None, "hub_fields": hub_fields}
+      url = ""
+      for page in range(10):
+          data = f""
+          yield {"url": url, "page_rule_id": None, "data": data, "method": "POST", "hub_fields": hub_fields}
+      cates = [
+          {"cate": "", "pages": None},
+          {"cate": "", "pages": None},
+      ]
+      for each in cates:
+          cate = each["cate"]
+          pages = each["pages"]
+          web_site_url = f""
+          hub_fields = {"web_site": web_site, "web_site_url": web_site_url}
+          for page in range(pages):
+              page = f"_{page}" if page else ""
+              url = f""
+              yield {"url": url, "page_rule_id": None, "hub_fields": hub_fields}
+page_rule_id: null
+table: ''
+instance_name: ''
+url_template: ''
+missing_field: ''
+urls: []
+checkedRuleCode: ''
+module: ''

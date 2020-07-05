@@ -1,0 +1,250 @@
+name: 文件链接页配置
+description: 解析文件链接
+locator: xpath
+expression: >-
+  .//a[(contains(translate(@href, "PDF", "pdf"), ".pdf") or
+  contains(translate(@href, "XLS", "xls"), ".xls") or contains(translate(@href,
+  "DOC", "doc"), ".doc")) and not(contains(@href, "file://"))]
+storage_id: 10270
+if_match: ''
+if_url_match: ''
+fields:
+  - name: web_site
+    description: 来源网站
+    data_type: varchar(1024)
+    locator: hub
+    expression: web_site
+    is_dedup_key: false
+    multi: false
+    keep_html: false
+    extend_url: false
+    is_extra: false
+    allow_invalid_expression: false
+    download_policy: not_download
+    processors: []
+    validators:
+      - method: length
+        params: 1 +inf
+        fail_type: retry
+  - name: web_site_url
+    description: 来源网站地址
+    data_type: varchar(1024)
+    locator: hub
+    expression: web_site_url
+    is_dedup_key: false
+    multi: false
+    keep_html: false
+    extend_url: false
+    is_extra: false
+    allow_invalid_expression: false
+    download_policy: not_download
+    processors: []
+    validators:
+      - method: length
+        params: 1 +inf
+        fail_type: retry
+  - name: content_url
+    description: 正文详情url
+    data_type: varchar(1024)
+    locator: xpath
+    expression: ./@href
+    is_dedup_key: false
+    multi: false
+    keep_html: false
+    extend_url: true
+    is_extra: false
+    allow_invalid_expression: false
+    download_policy: not_download
+    processors: []
+    validators:
+      - method: length
+        params: 1 +inf
+        fail_type: retry
+  - name: title
+    description: 标题
+    data_type: varchar(1024)
+    locator: xpath
+    expression: .
+    is_dedup_key: false
+    multi: false
+    keep_html: false
+    extend_url: false
+    is_extra: false
+    allow_invalid_expression: false
+    download_policy: not_download
+    processors: []
+    validators:
+      - method: length
+        params: 1 +inf
+        fail_type: retry
+  - name: publish_time
+    description: 新闻发布时间
+    data_type: datetime
+    locator: xpath
+    expression: .
+    is_dedup_key: false
+    multi: false
+    keep_html: false
+    extend_url: false
+    is_extra: false
+    allow_invalid_expression: false
+    download_policy: not_download
+    processors:
+      - method: text2datetime
+        params: ''
+    validators:
+      - method: regex
+        params: |-
+          def validate(context):
+              from datetime import datetime
+              now = datetime.now()
+              pt = datetime.strptime(context, "%Y-%m-%d %H:%M:%S")
+              if pt > now:
+                  return False
+              return True
+        fail_type: retry
+  - name: news_type
+    description: 新闻类型（资讯，公告，纰漏）
+    data_type: varchar(1024)
+    locator: xpath
+    expression: .
+    is_dedup_key: false
+    multi: false
+    keep_html: false
+    extend_url: false
+    is_extra: false
+    allow_invalid_expression: false
+    download_policy: not_download
+    processors: []
+    validators:
+      - method: length
+        params: 1 +inf
+        fail_type: retry
+  - name: publish_org
+    description: 新闻发布来源
+    data_type: varchar(1024)
+    locator: xpath
+    expression: .
+    is_dedup_key: false
+    multi: false
+    keep_html: false
+    extend_url: false
+    is_extra: false
+    allow_invalid_expression: false
+    download_policy: not_download
+    processors: []
+    validators:
+      - method: length
+        params: 1 +inf
+        fail_type: retry
+  - name: abstract
+    description: 新闻摘要
+    data_type: varchar(1024)
+    locator: xpath
+    expression: .
+    is_dedup_key: false
+    multi: false
+    keep_html: false
+    extend_url: false
+    is_extra: false
+    allow_invalid_expression: false
+    download_policy: not_download
+    processors: []
+    validators:
+      - method: length
+        params: 1 +inf
+        fail_type: retry
+  - name: tag
+    description: 标签
+    data_type: varchar(1024)
+    locator: xpath
+    expression: .
+    is_dedup_key: false
+    multi: true
+    keep_html: false
+    extend_url: false
+    is_extra: false
+    allow_invalid_expression: false
+    download_policy: not_download
+    processors: []
+    validators:
+      - method: length
+        params: 1 +inf
+        fail_type: retry
+  - name: author
+    description: 作者
+    data_type: varchar(1024)
+    locator: xpath
+    expression: .
+    is_dedup_key: false
+    multi: true
+    keep_html: false
+    extend_url: false
+    is_extra: false
+    allow_invalid_expression: false
+    download_policy: not_download
+    processors:
+      - method: script
+        params: |-
+          def process(text):
+              import re
+              p = re.compile(r"([\u4e00-\u9fa5]+)")
+              res = p.findall(text)
+              return res
+    validators:
+      - method: length
+        params: 1 +inf
+        fail_type: retry
+  - name: content_md5
+    description: 新闻详情内容md5
+    data_type: varchar(128)
+    locator: xpath
+    expression: .
+    is_dedup_key: false
+    multi: false
+    keep_html: false
+    extend_url: false
+    is_extra: false
+    allow_invalid_expression: false
+    download_policy: not_download
+    processors:
+      - method: format
+        params: '网站名{}'
+      - method: md5
+        params: ''
+    validators: []
+  - name: article_file_name
+    description: 附件名称
+    data_type: varchar(1024)
+    locator: xpath
+    expression: .
+    is_dedup_key: false
+    multi: true
+    keep_html: false
+    extend_url: false
+    is_extra: false
+    allow_invalid_expression: true
+    download_policy: not_download
+    processors: []
+    validators:
+      - method: length
+        params: 1 +inf
+        fail_type: retry
+  - name: article_file_url
+    description: 附件地址
+    data_type: varchar(1024)
+    locator: xpath
+    expression: ./@href
+    is_dedup_key: false
+    multi: true
+    keep_html: false
+    extend_url: true
+    is_extra: false
+    allow_invalid_expression: true
+    download_policy: not_download
+    processors: []
+    validators:
+      - method: length
+        params: 1 +inf
+        fail_type: retry
+links: []
