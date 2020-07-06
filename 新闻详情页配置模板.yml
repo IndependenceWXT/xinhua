@@ -19,7 +19,7 @@ rows:
     description: 注意保持字段与详情页对应
     locator: self
     expression: ''
-    storage_id: 9600
+    storage_id: 10270
     if_match: ''
     if_url_match: ''
     fields:
