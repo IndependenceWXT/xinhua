@@ -1,4 +1,4 @@
-description: ''
+description: '测试时注意核验字段值的数据准确性: 作者, 来源, 标签'
 proxy: default
 normal_status_list:
   - '200'
@@ -74,6 +74,24 @@ rows:
           - method: length
             params: 1 +inf
             fail_type: retry
+      - name: content_md5
+        description: 网站名组合标题的md5
+        data_type: varchar(1024)
+        locator: hub
+        expression: title
+        is_dedup_key: false
+        multi: false
+        keep_html: false
+        extend_url: false
+        is_extra: false
+        allow_invalid_expression: false
+        download_policy: not_download
+        processors:
+          - method: format
+            params: '网站名{}'
+          - method: md5
+            params: ''
+        validators: []
       - name: title
         description: 标题
         data_type: varchar(1024)
@@ -126,24 +144,7 @@ rows:
             params: 1 +inf
             fail_type: retry
       - name: publish_org
-        description: 新闻发布来源
-        data_type: varchar(1024)
-        locator: xpath
-        expression: .
-        is_dedup_key: false
-        multi: false
-        keep_html: false
-        extend_url: false
-        is_extra: false
-        allow_invalid_expression: false
-        download_policy: not_download
-        processors: []
-        validators:
-          - method: length
-            params: 1 +inf
-            fail_type: retry
-      - name: abstract
-        description: 新闻摘要
+        description: ❤️新闻发布来源
         data_type: varchar(1024)
         locator: xpath
         expression: .
@@ -160,7 +161,7 @@ rows:
             params: 1 +inf
             fail_type: retry
       - name: tag
-        description: 标签
+        description: ❤️标签
         data_type: varchar(1024)
         locator: xpath
         expression: .
@@ -177,7 +178,7 @@ rows:
             params: 1 +inf
             fail_type: retry
       - name: author
-        description: 作者
+        description: ❤️作者
         data_type: varchar(1024)
         locator: xpath
         expression: .
@@ -217,9 +218,26 @@ rows:
           - method: length
             params: 1 +inf
             fail_type: retry
+      - name: abstract
+        description: 新闻摘要
+        data_type: varchar(1024)
+        locator: xpath
+        expression: .
+        is_dedup_key: false
+        multi: false
+        keep_html: false
+        extend_url: false
+        is_extra: false
+        allow_invalid_expression: false
+        download_policy: not_download
+        processors: []
+        validators:
+          - method: length
+            params: 1 +inf
+            fail_type: retry
       - name: content
         description: 新闻详情
-        data_type: varchar(128)
+        data_type: text
         locator: xpath
         expression: .
         is_dedup_key: false
@@ -241,24 +259,6 @@ rows:
                   if len(re.sub('\s+', '', text))<80:
                       return ""
                   return text
-        validators: []
-      - name: content_md5
-        description: 新闻详情内容md5
-        data_type: varchar(128)
-        locator: xpath
-        expression: 抽取标题规则表达式
-        is_dedup_key: false
-        multi: false
-        keep_html: false
-        extend_url: false
-        is_extra: false
-        allow_invalid_expression: false
-        download_policy: not_download
-        processors:
-          - method: format
-            params: '网站名{}'
-          - method: md5
-            params: ''
         validators: []
       - name: content_html
         description: 新闻详情带html标签
@@ -592,11 +592,7 @@ rows:
             params: 1 +inf
             fail_type: retry
     links: []
-preprocessors:
-  - method: drop_tree
-    params: .//script
-  - method: drop_tree
-    params: .//style
+preprocessors: []
 prevalidators:
   - method: regex
     params: ^(?!.*200).*$
@@ -612,12 +608,12 @@ examples:
   - method: GET
     url: ''
     data: ''
-    description: 异常测试
+    description: '异常测试说明:'
     should_save_sync: false
   - method: GET
     url: ''
     data: ''
-    description: 异常测试
+    description: '异常测试说明:'
     should_save_sync: false
 size: small
 global_dedup: false
