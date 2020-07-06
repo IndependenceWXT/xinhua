@@ -1,4 +1,4 @@
-description: ''
+description: '测试时注意核验字段值的数据准确性: 描述中有❤️标志的字段'
 proxy: default
 normal_status_list:
   - '200'
@@ -14,7 +14,7 @@ encoding: ''
 headers: ''
 download_script: ''
 rows:
-  - name: 列表页配置
+  - name: ❤️列表页配置
     description: 注意保持字段与详情页对应
     locator: xpath
     expression: .
@@ -68,7 +68,7 @@ rows:
         processors: []
         validators: []
       - name: publish_time
-        description: 新闻发布时间
+        description: ❤️新闻发布时间
         data_type: varchar(1024)
         locator: xpath
         expression: .
@@ -93,22 +93,8 @@ rows:
                       return False
                   return True
             fail_type: retry
-      - name: abstract
-        description: 新闻摘要
-        data_type: varchar(1024)
-        locator: xpath
-        expression: .
-        is_dedup_key: false
-        multi: false
-        keep_html: false
-        extend_url: false
-        is_extra: false
-        allow_invalid_expression: false
-        download_policy: not_download
-        processors: []
-        validators: []
       - name: tag
-        description: 标签
+        description: ❤️标签
         data_type: varchar(1024)
         locator: xpath
         expression: .
@@ -122,7 +108,7 @@ rows:
         processors: []
         validators: []
       - name: author
-        description: 作者
+        description: ❤️作者
         data_type: varchar(1024)
         locator: xpath
         expression: .
@@ -137,6 +123,20 @@ rows:
         validators: []
       - name: author_info
         description: 作者简介
+        data_type: varchar(1024)
+        locator: xpath
+        expression: .
+        is_dedup_key: false
+        multi: false
+        keep_html: false
+        extend_url: false
+        is_extra: false
+        allow_invalid_expression: false
+        download_policy: not_download
+        processors: []
+        validators: []
+      - name: abstract
+        description: 新闻摘要
         data_type: varchar(1024)
         locator: xpath
         expression: .
@@ -237,127 +237,9 @@ rows:
           - method: length
             params: 1 +inf
             fail_type: retry
-      - name: publish_time
-        description: 新闻发布时间
-        data_type: datetime
-        locator: xpath
-        expression: .
-        is_dedup_key: false
-        multi: false
-        keep_html: false
-        extend_url: false
-        is_extra: false
-        allow_invalid_expression: false
-        download_policy: not_download
-        processors:
-          - method: text2datetime
-            params: ''
-        validators:
-          - method: regex
-            params: |-
-              def validate(context):
-                  from datetime import datetime
-                  now = datetime.now()
-                  pt = datetime.strptime(context, "%Y-%m-%d %H:%M:%S")
-                  if pt > now:
-                      return False
-                  return True
-            fail_type: retry
-      - name: news_type
-        description: 新闻类型（资讯，公告，纰漏）
-        data_type: varchar(1024)
-        locator: xpath
-        expression: .
-        is_dedup_key: false
-        multi: false
-        keep_html: false
-        extend_url: false
-        is_extra: false
-        allow_invalid_expression: false
-        download_policy: not_download
-        processors: []
-        validators:
-          - method: length
-            params: 1 +inf
-            fail_type: retry
-      - name: publish_org
-        description: 新闻发布来源
-        data_type: varchar(1024)
-        locator: xpath
-        expression: .
-        is_dedup_key: false
-        multi: false
-        keep_html: false
-        extend_url: false
-        is_extra: false
-        allow_invalid_expression: false
-        download_policy: not_download
-        processors: []
-        validators:
-          - method: length
-            params: 1 +inf
-            fail_type: retry
-      - name: abstract
-        description: 新闻摘要
-        data_type: varchar(1024)
-        locator: xpath
-        expression: .
-        is_dedup_key: false
-        multi: false
-        keep_html: false
-        extend_url: false
-        is_extra: false
-        allow_invalid_expression: false
-        download_policy: not_download
-        processors: []
-        validators:
-          - method: length
-            params: 1 +inf
-            fail_type: retry
-      - name: tag
-        description: 标签
-        data_type: varchar(1024)
-        locator: xpath
-        expression: .
-        is_dedup_key: false
-        multi: true
-        keep_html: false
-        extend_url: false
-        is_extra: false
-        allow_invalid_expression: false
-        download_policy: not_download
-        processors: []
-        validators:
-          - method: length
-            params: 1 +inf
-            fail_type: retry
-      - name: author
-        description: 作者
-        data_type: varchar(1024)
-        locator: xpath
-        expression: .
-        is_dedup_key: false
-        multi: true
-        keep_html: false
-        extend_url: false
-        is_extra: false
-        allow_invalid_expression: false
-        download_policy: not_download
-        processors:
-          - method: script
-            params: |-
-              def process(text):
-                  import re
-                  p = re.compile(r"([\u4e00-\u9fa5]+)")
-                  res = p.findall(text)
-                  return res
-        validators:
-          - method: length
-            params: 1 +inf
-            fail_type: retry
       - name: content_md5
-        description: 新闻详情内容md5
-        data_type: varchar(128)
+        description: 来源网站加标题的md5
+        data_type: varchar(1024)
         locator: xpath
         expression: .
         is_dedup_key: false
@@ -369,7 +251,7 @@ rows:
         download_policy: not_download
         processors:
           - method: format
-            params: '网站名{}'
+            params: 'web_site{}'
           - method: md5
             params: ''
         validators: []
@@ -407,6 +289,152 @@ rows:
           - method: length
             params: 1 +inf
             fail_type: retry
+      - name: news_type
+        description: 新闻类型（资讯，公告，纰漏）
+        data_type: varchar(1024)
+        locator: xpath
+        expression: .
+        is_dedup_key: false
+        multi: false
+        keep_html: false
+        extend_url: false
+        is_extra: false
+        allow_invalid_expression: false
+        download_policy: not_download
+        processors:
+          - method: script
+            params: |-
+              def process(text):
+                  """
+                  处理文本, 返回处理后的文本
+                  """
+                  return text
+        validators:
+          - method: length
+            params: 1 +inf
+            fail_type: retry
+      - name: publish_time
+        description: ❤️新闻发布时间
+        data_type: datetime
+        locator: xpath
+        expression: .
+        is_dedup_key: false
+        multi: false
+        keep_html: false
+        extend_url: false
+        is_extra: false
+        allow_invalid_expression: false
+        download_policy: not_download
+        processors:
+          - method: script
+            params: |-
+              def process(text):
+                  """
+                  处理文本, 返回处理后的文本
+                  """
+                  return text
+          - method: text2datetime
+            params: ''
+        validators:
+          - method: script
+            params: |-
+              def validate(context):
+                  from datetime import datetime
+                  now = datetime.now()
+                  pt = datetime.strptime(context, "%Y-%m-%d %H:%M:%S")
+                  if pt > now:
+                      return False
+                  return True
+            fail_type: retry
+      - name: publish_org
+        description: ❤️新闻发布来源
+        data_type: varchar(1024)
+        locator: xpath
+        expression: .
+        is_dedup_key: false
+        multi: false
+        keep_html: false
+        extend_url: false
+        is_extra: false
+        allow_invalid_expression: false
+        download_policy: not_download
+        processors:
+          - method: script
+            params: |-
+              def process(text):
+                  """
+                  处理文本, 返回处理后的文本
+                  """
+                  return text
+        validators:
+          - method: length
+            params: 1 +inf
+            fail_type: retry
+      - name: author
+        description: ❤️作者
+        data_type: varchar(1024)
+        locator: xpath
+        expression: .
+        is_dedup_key: false
+        multi: true
+        keep_html: false
+        extend_url: false
+        is_extra: false
+        allow_invalid_expression: false
+        download_policy: not_download
+        processors:
+          - method: script
+            params: |-
+              def process(text):
+                  import re
+                  p = re.compile(r"([\u4e00-\u9fa5]+)")
+                  res = p.findall(text)
+                  return res
+        validators:
+          - method: length
+            params: 1 +inf
+            fail_type: retry
+      - name: tag
+        description: ❤️标签
+        data_type: varchar(1024)
+        locator: xpath
+        expression: .
+        is_dedup_key: false
+        multi: true
+        keep_html: false
+        extend_url: false
+        is_extra: false
+        allow_invalid_expression: false
+        download_policy: not_download
+        processors:
+          - method: script
+            params: |-
+              def process(text):
+                  """
+                  处理文本, 返回处理后的文本
+                  """
+                  return text
+        validators:
+          - method: length
+            params: 1 +inf
+            fail_type: retry
+      - name: abstract
+        description: 新闻摘要
+        data_type: varchar(1024)
+        locator: xpath
+        expression: .
+        is_dedup_key: false
+        multi: false
+        keep_html: false
+        extend_url: false
+        is_extra: false
+        allow_invalid_expression: false
+        download_policy: not_download
+        processors: []
+        validators:
+          - method: length
+            params: 1 +inf
+            fail_type: retry
     links: []
 preprocessors: []
 prevalidators: []
@@ -421,6 +449,11 @@ examples:
     data: ''
     description: 异常测试
     should_save_sync: false
+  - method: GET
+    should_save_sync: false
+    url: ''
+    data: ''
+    description: 异常测试
 size: small
 global_dedup: false
 captcha: {}
