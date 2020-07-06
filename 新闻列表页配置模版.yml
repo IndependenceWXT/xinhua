@@ -83,7 +83,7 @@ rows:
           - method: text2datetime
             params: ''
         validators:
-          - method: regex
+          - method: script
             params: |-
               def validate(context):
                   from datetime import datetime
