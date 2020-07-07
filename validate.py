@@ -16,7 +16,9 @@ def validate_default(context):
 
 
 def validate(context):
+    """验证发布时间是否大于当前时间"""
     from datetime import datetime
+
     now = datetime.now()
     pt = datetime.strptime(context, "%Y-%m-%d %H:%M:%S")
     if pt > now:
@@ -24,6 +26,6 @@ def validate(context):
     return True
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print(validate("2019-07-22 00:00:00"))
-    
+
