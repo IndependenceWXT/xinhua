@@ -10,6 +10,7 @@ def process_url(text):
     """规范化非法url"""
     import re
     from urllib.parse import urlsplit, urlunsplit, urljoin, SplitResult, parse_qs, urlencode
+
     p = re.compile(r"(https?:.*\.pdf)")
     url = p.findall(text)[0]
     query = urlsplit(url)
@@ -28,11 +29,12 @@ def process_url(text):
 def process_time(text):
     """提取时间"""
     import re
+
     p = re.compile(r"\d{4}年\d{1,2}月\d{1,2}日\s\d{2}:\d{2}")
     p0 = re.compile(r"\d{4}-\d{1,2}-\d{1,2}\s\d{2}:\d{2}:\d{2}")
     p1 = re.compile(r"\w+\s\d{1,2},\s\d{4}")
     p2 = re.compile(r"\w+\s\d{4}")
-    p3 = re.compile(r'\d{4}')
+    p3 = re.compile(r"\d{4}")
     if text.strip():
         res = p.findall(text)
         if res:
@@ -55,6 +57,7 @@ def process_time(text):
 def process_timestamp(text):
     "时间戳转字符串"
     from datetime import datetime
+
     return datetime.fromtimestamp(int(text)).strftime("%Y-%m-%d %H:%M:%S")
 
 
@@ -67,6 +70,7 @@ def process_title_from_url(text):
 def process_url_query(text):
     """url参数过滤：处理url参数不同但页面相同的情况"""
     from urllib.parse import urlsplit, urlunsplit, SplitResult, parse_qs, urlencode
+
     res = urlsplit(text)
     query = parse_qs(res.query)
     query = {k: v[0] for k, v in query.items() if k not in ["p", "ret"]}
@@ -81,6 +85,7 @@ def process_request(text):
     import pycurl
     from urllib.parse import urljoin
     from io import BytesIO
+
     buffer = BytesIO()
     ch = pycurl.Curl()
     url = urljoin("site_root", text)
@@ -110,7 +115,9 @@ def process_time_ambiguous(text):
 
 
 def process_author(text):
+    """从有不同分隔符的作者字符串中提取人名：*请先去除非人名汉字*"""
     import re
+
     p = re.compile(r"([\u4e00-\u9fa5]+)")
     res = p.findall(text)
     return res
@@ -118,6 +125,7 @@ def process_author(text):
 
 def update_url_query(text, **kwargs):
     from urllib.parse import urlsplit, urlunsplit, SplitResult, parse_qs, urlencode
+
     res = urlsplit(text)
     query = parse_qs(res.query)
     query = {k: v[0] for k, v in query.items()}
@@ -127,7 +135,8 @@ def update_url_query(text, **kwargs):
 
 def process_time_in_url(text):
     import re
-    p = re.compile(r'/(?P<year>\d{4})/(?P<month>\d{2})(?P<day>\d{2})/')
+
+    p = re.compile(r"/(?P<year>\d{4})/(?P<month>\d{2})(?P<day>\d{2})/")
     res = p.findall(text)
     if res:
         return "-".join(res[0])

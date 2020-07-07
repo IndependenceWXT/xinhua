@@ -119,7 +119,16 @@ rows:
         is_extra: false
         allow_invalid_expression: false
         download_policy: not_download
-        processors: []
+        processors:
+          - method: script
+            params: |-
+              def process(text):
+                  """从有不同分隔符的作者字符串中提取人名：*请先去除非人名汉字*"""
+                  import re
+
+                  p = re.compile(r"([\u4e00-\u9fa5]+)")
+                  res = p.findall(text)
+                  return res
         validators: []
       - name: author_info
         description: 作者简介
@@ -386,7 +395,9 @@ rows:
           - method: script
             params: |-
               def process(text):
+                  """从有不同分隔符的作者字符串中提取人名：*请先去除非人名汉字*"""
                   import re
+
                   p = re.compile(r"([\u4e00-\u9fa5]+)")
                   res = p.findall(text)
                   return res
@@ -450,10 +461,10 @@ examples:
     description: 异常测试
     should_save_sync: false
   - method: GET
-    should_save_sync: false
     url: ''
     data: ''
     description: 异常测试
+    should_save_sync: false
 size: small
 global_dedup: false
 captcha: {}
