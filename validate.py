@@ -28,4 +28,3 @@ def validate(context):
 
 if __name__ == "__main__":
     print(validate("2019-07-22 00:00:00"))
-
