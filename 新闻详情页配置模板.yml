@@ -74,6 +74,20 @@ rows:
           - method: length
             params: 1 +inf
             fail_type: retry
+      - name: refer
+        description: 列表页链接
+        data_type: varchar(128)
+        locator: hub
+        expression: refer
+        is_dedup_key: false
+        multi: false
+        keep_html: false
+        extend_url: false
+        is_extra: true
+        allow_invalid_expression: false
+        download_policy: not_download
+        processors: []
+        validators: []
       - name: content_md5
         description: 网站名组合标题的md5
         data_type: varchar(1024)

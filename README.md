@@ -36,7 +36,29 @@ pdf，doc，xls，ppt，rar，zip
 
 
 
+# 关于需求问题：
+
+采集历史三年的问题：默认采集历史三年，客户担心存储浪费，不需要全量数据 不好配置的采集全量
+
+
+
 10  廊坊发改委 http://fgw.lf.gov.cn/Category_58/Index_1.aspx 第三个6月18日的跳转到中央
 
 20。山西省忻州市政府  http://zwgk.sxxz.gov.cn/xzsrmzf/wj/   第6个链接 跳转到中央网站
+
+链接不同 内容相同
+
+http://fgw.dt.gov.cn/dtsfzhggwyh/zcfg/201201/6KKRN2ULIOF8O7DYLE60FU54WSMYGQ69.shtml
+
+http://fgw.dt.gov.cn/dtsfzhggwyh/zcfg/201201/4D8BGUXAS8VIT1MJ2V2H13U7RYQRHIO7.shtml
+
+
+
+58/60
+
+293个地级市及发改委网站中的：邢台市人民政府，md5去重复失败
+
+http://xingtai.gov.cn/xxgk/szfbgs/xxgkml/201812/t20181203_287596.html
+
+http://www.xingtai.gov.cn/xxgk/szfbgs/xxgkml/201903/t20190311_495785.html
 

@@ -53,6 +53,20 @@ rows:
           - method: length
             params: 1 +inf
             fail_type: retry
+      - name: refer
+        description: 列表页链接
+        data_type: varchar(128)
+        locator: url_re
+        expression: .*
+        is_dedup_key: false
+        multi: false
+        keep_html: false
+        extend_url: false
+        is_extra: false
+        allow_invalid_expression: false
+        download_policy: not_download
+        processors: []
+        validators: []
       - name: title
         description: 标题
         data_type: varchar(1024)
@@ -298,6 +312,20 @@ rows:
           - method: length
             params: 1 +inf
             fail_type: retry
+      - name: refer
+        description: 列表页链接
+        data_type: varchar(128)
+        locator: url_re
+        expression: .*
+        is_dedup_key: false
+        multi: false
+        keep_html: false
+        extend_url: false
+        is_extra: false
+        allow_invalid_expression: false
+        download_policy: not_download
+        processors: []
+        validators: []
       - name: news_type
         description: 新闻类型（资讯，公告，纰漏）
         data_type: varchar(1024)
