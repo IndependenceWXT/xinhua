@@ -62,3 +62,12 @@ http://xingtai.gov.cn/xxgk/szfbgs/xxgkml/201812/t20181203_287596.html
 
 http://www.xingtai.gov.cn/xxgk/szfbgs/xxgkml/201903/t20190311_495785.html
 
+
+
+# TODO
+
+-   [x] 时间验证器 + 脚本处理器模板
+-   [ ] 作者验证器 + 脚本处理器模板
+-   [ ] 来源验证器 + 脚本处理器模板
+-   [ ] 标签验证器 + 脚本处理器模板
+-   [ ] 链接验证器

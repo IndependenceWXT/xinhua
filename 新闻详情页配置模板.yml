@@ -419,7 +419,8 @@ rows:
 
           def process(data):
               """计算网站名发布时间标题内容详情的MD5"""
-              return data["content_md5"] = md5(data["web_site"] + data["publish_time"] + data["title"] + data["content"])
+              data["content_md5"] = md5(data["web_site"] + data["publish_time"] + data["title"] + data["content"])
+              return data
     links: []
 preprocessors: []
 prevalidators:
