@@ -4,6 +4,7 @@ from urllib.parse import urlsplit, urlunsplit, urljoin, SplitResult, parse_qs, u
 import re
 import requests
 import time
+from dateutil.parser import parse as datetime_parse
 
 
 def process_url(text):
@@ -24,6 +25,37 @@ def process_url(text):
             return urlunsplit(SplitResult("https", *[*query][1:]))
         else:
             return urlunsplit(SplitResult("http", *[*query][1:]))
+
+
+def process_time_template(text):
+    """时间提取脚本模版
+    returns:
+        9999: 正则匹配失败
+        9404: xpath定位内容为空
+    """
+    import re
+
+    rules = [
+        r"\d{4}[-年/]\d{1,2}[-月/]\d{1,2}[-日/]?[\s\d{2}:\d{2}[:\d{2}]?]?",  # 常见中文日期格式
+        r"",  # 如有不是常见的日期时间格式，此处替换成案例
+    ]
+    # 无内容时间返回空
+    if not text.strip():
+        return "9404"
+    # 预处理，替换掉会影响正则提取的固定字符串
+    flags = [""]
+    for each in flags:
+        text = text.replace(each, "")
+    # 提取日期时间
+    for each in rules:
+        p = re.compile(each)
+        res = p.findall(text)
+        if res:
+            return res[0]
+        else:
+            continue
+    else:
+        return "9999"
 
 
 def process_time(text):
@@ -147,10 +179,10 @@ if __name__ == "__main__":
     # print(process_url("mailto:http://www.foeg.uzh.ch/analyse/politischekommunikation/news11/Sotomostudie.pdf"))
     # print(process_url_query("https://www.imemo.ru/en/index.php?page_id=502&id=484&p=60&ret=498"))
     # print(process("https://videos.aarp.org/detail/videos/all-videos/video/4117187433001/top-five-money-wasters?autoStart=true"))
-    # print(process_time_diff_lang("20 Juni 2019"))
+    print(process_time_template("2019-5-19"))
     # print(process_text("27November2019"))
     # print(process_request("http://www.ebrd.com/cs/Satellite?c=Content&cid=1395242494713&pagename=EBRD%2FContent%2FDownloadDocument"))
     # text = """撰文：纪晓燕 龚丽欣 黄子慢"""
     # print(process_author(text))
     # print(process_time("May 16, 2002Economic and Social Research Institute"))
-    print(process_time_in_url("http://www.gjbmj.gov.cn/n1/2018/1217/c409082-30471818.html"))
+    # print(process_time_in_url("http://www.gjbmj.gov.cn/n1/2018/1217/c409082-30471818.html"))

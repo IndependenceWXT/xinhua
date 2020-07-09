@@ -100,11 +100,7 @@ rows:
         is_extra: false
         allow_invalid_expression: false
         download_policy: not_download
-        processors:
-          - method: format
-            params: '网站名{}'
-          - method: md5
-            params: ''
+        processors: []
         validators: []
       - name: title
         description: 标题
@@ -256,16 +252,12 @@ rows:
         expression: .
         is_dedup_key: false
         multi: false
-        keep_html: true
+        keep_html: false
         extend_url: false
         is_extra: false
         allow_invalid_expression: false
         download_policy: not_download
         processors:
-          - method: drop_tree
-            params: .//script|.//style
-          - method: sub
-            params: '<[^>]+> '''''
           - method: script
             params: |-
               def process(text):
@@ -418,6 +410,16 @@ rows:
           - method: length
             params: 1 +inf
             fail_type: retry
+    processors:
+      - method: script
+        params: |-
+          import hashlib
+          def md5(text):
+              return hashlib.md5(str(text).encode()).hexdigest()
+
+          def process(data):
+              """计算网站名发布时间标题内容详情的MD5"""
+              return data["content_md5"] = md5(data["web_site"] + data["publish_time"] + data["title"] + data["content"])
     links: []
 preprocessors: []
 prevalidators:

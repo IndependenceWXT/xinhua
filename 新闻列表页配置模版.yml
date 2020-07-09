@@ -94,6 +94,37 @@ rows:
         allow_invalid_expression: false
         download_policy: not_download
         processors:
+          - method: script
+            params: |-
+              def process(text):
+                  """时间提取脚本模版
+                  returns:
+                      9999: 正则匹配失败
+                      9404: 上一步字段定位xpath，获取到的字段值内容为空
+                  """
+                  import re
+
+                  rules = [
+                      r"\d{4}[-年/]\d{1,2}[-月/]\d{1,2}[-日/]?[\s\d{2}:\d{2}[:\d{2}]?]?",  # 常见中文日期格式
+                      r"",  # 如有不是常见的日期时间格式，此处替换成案例
+                  ]
+                  # 无内容时间返回空
+                  if not text.strip():
+                      return "9404"
+                  # 预处理，替换掉会影响正则提取的固定字符串
+                  flags = [""]
+                  for each in flags:
+                      text = text.replace(each, "")
+                  # 提取日期时间
+                  for each in rules:
+                      p = re.compile(each)
+                      res = p.findall(text)
+                      if res:
+                          return res[0]
+                      else:
+                          continue
+                  else:
+                      return "9999"
           - method: text2datetime
             params: ''
         validators:
@@ -177,7 +208,7 @@ rows:
         new_task_name: ''
         description: 详情页链接
         locator: xpath
-        expression: .
+        expression: ./@href
         processors: []
         keep_other_site: false
   - name: 文件链接页配置
@@ -366,10 +397,34 @@ rows:
           - method: script
             params: |-
               def process(text):
+                  """时间提取脚本模版
+                  returns:
+                      9999: 正则匹配失败
+                      9404: 上一步字段定位xpath，获取到的字段值内容为空
                   """
-                  处理文本, 返回处理后的文本
-                  """
-                  return text
+                  import re
+
+                  rules = [
+                      r"\d{4}[-年/]\d{1,2}[-月/]\d{1,2}[-日/]?[\s\d{2}:\d{2}[:\d{2}]?]?",  # 常见中文日期格式
+                      r"",  # 如有不是常见的日期时间格式，此处替换成案例
+                  ]
+                  # 无内容时间返回空
+                  if not text.strip():
+                      return "9404"
+                  # 预处理，替换掉会影响正则提取的固定字符串
+                  flags = [""]
+                  for each in flags:
+                      text = text.replace(each, "")
+                  # 提取日期时间
+                  for each in rules:
+                      p = re.compile(each)
+                      res = p.findall(text)
+                      if res:
+                          return res[0]
+                      else:
+                          continue
+                  else:
+                      return "9999"
           - method: text2datetime
             params: ''
         validators:
