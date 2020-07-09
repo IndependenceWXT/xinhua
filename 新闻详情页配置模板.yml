@@ -15,8 +15,8 @@ encoding: ''
 headers: ''
 download_script: ''
 rows:
-  - name: ❤️详情页配置
-    description: 注意保持字段与详情页对应
+  - name: ❤️详情配置
+    description: 注意保持字段与列表页对应
     locator: self
     expression: ''
     storage_id: 10270

@@ -14,10 +14,13 @@ encoding: ''
 headers: ''
 download_script: ''
 rows:
-  - name: ❤️列表页配置
+  - name: ❤️列表详情链接配置
     description: 注意保持字段与详情页对应
     locator: xpath
-    expression: .
+    expression: >-
+      .//a[not(contains(translate(@href, "PDF", "pdf"), ".pdf") and
+      contains(translate(@href, "XLS", "xls"), ".xls") and
+      contains(translate(@href, "DOC", "doc"), ".doc"))]
     storage_id: -1
     if_match: ''
     if_url_match: ''
@@ -54,7 +57,7 @@ rows:
             params: 1 +inf
             fail_type: retry
       - name: refer
-        description: 列表页链接
+        description: ❌列表页链接上线需删除
         data_type: varchar(128)
         locator: url_re
         expression: .*
@@ -211,7 +214,7 @@ rows:
         expression: ./@href
         processors: []
         keep_other_site: false
-  - name: 文件链接页配置
+  - name: "\U0001F4C1文件链接配置"
     description: 解析文件链接
     locator: xpath
     expression: >-
@@ -295,7 +298,7 @@ rows:
         description: 来源网站加标题的md5
         data_type: varchar(1024)
         locator: xpath
-        expression: .
+        expression: ./@href
         is_dedup_key: false
         multi: false
         keep_html: false
@@ -304,8 +307,6 @@ rows:
         allow_invalid_expression: false
         download_policy: not_download
         processors:
-          - method: format
-            params: 'web_site{}'
           - method: md5
             params: ''
         validators: []
@@ -344,7 +345,7 @@ rows:
             params: 1 +inf
             fail_type: retry
       - name: refer
-        description: 列表页链接
+        description: ❌列表页链接上线需删除
         data_type: varchar(128)
         locator: url_re
         expression: .*
@@ -529,6 +530,16 @@ rows:
           - method: length
             params: 1 +inf
             fail_type: retry
+    processors:
+      - method: script
+        params: |-
+          import hashlib
+          def md5(text):
+              return hashlib.md5(str(text).encode()).hexdigest()
+
+          def process(data):
+              """计算网站名发布时间标题内容详情链接的MD5"""
+              return data["content_md5"] = md5(data["web_site"] + data["publish_time"] + data["title"] + data["content_url"])
     links: []
 preprocessors: []
 prevalidators: []
