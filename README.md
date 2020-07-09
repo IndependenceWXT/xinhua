@@ -32,7 +32,7 @@
 
 常见附件格式后缀
 
-pdf，doc，xls，ppt，rar，zip
+pdf，doc，xls，ppt，rar，zip，
 
 
 
