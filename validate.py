@@ -19,37 +19,63 @@ def validate_publish_time(context):
     """验证发布时间是否大于当前时间"""
     from datetime import datetime
 
-    now = datetime.now()
-    pt = datetime.strptime(context, "%Y-%m-%d %H:%M:%S")
-    if pt > now:
+    if context.startswith("error:"):
         return False
-    return True
+    else:
+        now = datetime.now()
+        pt = datetime.strptime(context, "%Y-%m-%d %H:%M:%S")
+        if pt > now:
+            return False
+        return True
 
 
 def validate_author(context):
     """
     验证中文作者是否含有非法词
     """
-    flags = ["记者", "撰文", "通讯员", "责任编辑", "编辑"]
-    for each in flags:
-        if each in context:
-            return False
-    else:
-        if len(context) > 10 or len(context) < 2:
-            return False
-        return True
+    if context.startswith("error:"):
+        return False
+    elif len(context) > 4 or len(context) < 2:
+        return False
+    return True
+
+
+def validate_publish_org(context):
+    """
+    验证来源中是否有error: 
+        卡住未经正确处理的请求
+    """
+    if context.startswith("error:"):
+        return False
+    return True
 
 
 def validate_url(context):
     """验证链接是否合法"""
-    # TODO: 用urllib.parse处理
-    pass
+    import re
+    from urllib.parse import urlparse
 
-
-def validate_publish_org(text):
-    # TODO: 发布来源验证
-    pass
+    url = context.strip()
+    rules = [
+        r"@^(https?|ftp)://[^\s/$.?#].[^\s]*$@iS",
+        r"#\b(([\w-]+://?|www[.])[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/)))#iS",
+    ]
+    for each in rules:
+        p = re.compile(each)
+        res = p.findall(url)
+        if res:
+            return True
+    else:
+        try:
+            q = urlparse(url)
+        except:
+            return False
+        else:
+            if all([q.scheme, q.netloc, q.path]):
+                return True
+            else:
+                return False
 
 
 if __name__ == "__main__":
-    print(validate("2019-07-22 00:00:00"))
+    print(validate_url("http:/10.40.35.103:8090/?a=1"))

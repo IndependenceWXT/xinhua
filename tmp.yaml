@@ -1,0 +1,436 @@
+cache_after: 0
+cache_ttl: 0
+captcha: {}
+description: '测试时注意核验字段值的数据准确性: 描述中有❤️标志的字段'
+download_script: ''
+downloader: pycurl
+encoding: ''
+examples:
+- data: ''
+  description: 配置测试
+  method: GET
+  should_save_sync: false
+  url: ''
+- data: ''
+  description: '异常测试说明:'
+  method: GET
+  should_save_sync: false
+  url: ''
+- data: ''
+  description: '异常测试说明:'
+  method: GET
+  should_save_sync: false
+  url: ''
+global_dedup: false
+headers: ''
+load_wait: 0
+login_id: ''
+min_data_length: 1
+min_link_length: 0
+normal_status_list:
+- '200'
+- '404'
+preprocessors: []
+prevalidators:
+- fail_type: success
+  method: regex
+  params: ^(?!.*200).*$
+  succ_type: ignore
+  target: status_code
+proxy: default
+rows:
+- description: 注意保持字段与列表页对应
+  expression: ''
+  fields:
+  - allow_invalid_expression: false
+    data_type: varchar(1024)
+    description: 来源网站
+    download_policy: not_download
+    expression: web_site
+    extend_url: false
+    is_dedup_key: false
+    is_extra: false
+    keep_html: false
+    locator: hub
+    multi: false
+    name: web_site
+    processors: []
+    validators:
+    - fail_type: retry
+      method: length
+      params: 1 +inf
+  - allow_invalid_expression: false
+    data_type: varchar(1024)
+    description: 来源网站地址
+    download_policy: not_download
+    expression: web_site_url
+    extend_url: false
+    is_dedup_key: false
+    is_extra: false
+    keep_html: false
+    locator: hub
+    multi: false
+    name: web_site_url
+    processors: []
+    validators:
+    - fail_type: retry
+      method: length
+      params: 1 +inf
+  - allow_invalid_expression: false
+    data_type: varchar(1024)
+    description: 正文详情url
+    download_policy: not_download
+    expression: .*
+    extend_url: false
+    is_dedup_key: false
+    is_extra: false
+    keep_html: false
+    locator: url_re
+    multi: false
+    name: content_url
+    processors: []
+    validators:
+    - fail_type: retry
+      method: length
+      params: 1 +inf
+  - allow_invalid_expression: false
+    data_type: varchar(128)
+    description: 列表页链接
+    download_policy: not_download
+    expression: refer
+    extend_url: false
+    is_dedup_key: false
+    is_extra: true
+    keep_html: false
+    locator: hub
+    multi: false
+    name: refer
+    processors: []
+    validators: []
+  - allow_invalid_expression: false
+    data_type: varchar(1024)
+    description: 网站名组合标题的md5
+    download_policy: not_download
+    expression: title
+    extend_url: false
+    is_dedup_key: false
+    is_extra: false
+    keep_html: false
+    locator: hub
+    multi: false
+    name: content_md5
+    processors: []
+    validators: []
+  - allow_invalid_expression: false
+    data_type: varchar(1024)
+    description: 标题
+    download_policy: not_download
+    expression: title
+    extend_url: false
+    is_dedup_key: false
+    is_extra: false
+    keep_html: false
+    locator: hub
+    multi: false
+    name: title
+    processors: []
+    validators:
+    - fail_type: retry
+      method: length
+      params: 1 +inf
+  - allow_invalid_expression: false
+    data_type: datetime
+    description: 新闻发布时间
+    download_policy: not_download
+    expression: publish_time
+    extend_url: false
+    is_dedup_key: false
+    is_extra: false
+    keep_html: false
+    locator: hub
+    multi: false
+    name: publish_time
+    processors: []
+    validators:
+    - fail_type: retry
+      method: length
+      params: 1 +inf
+  - allow_invalid_expression: false
+    data_type: varchar(1024)
+    description: 新闻类型（资讯，公告，纰漏）
+    download_policy: not_download
+    expression: .
+    extend_url: false
+    is_dedup_key: false
+    is_extra: false
+    keep_html: false
+    locator: xpath
+    multi: false
+    name: news_type
+    processors: []
+    validators:
+    - fail_type: retry
+      method: length
+      params: 1 +inf
+  - allow_invalid_expression: false
+    data_type: varchar(1024)
+    description: ❤️新闻发布来源
+    download_policy: not_download
+    expression: .
+    extend_url: false
+    is_dedup_key: false
+    is_extra: false
+    keep_html: false
+    locator: xpath
+    multi: false
+    name: publish_org
+    processors: []
+    validators:
+    - fail_type: retry
+      method: length
+      params: 1 +inf
+  - allow_invalid_expression: false
+    data_type: varchar(1024)
+    description: ❤️标签
+    download_policy: not_download
+    expression: .
+    extend_url: false
+    is_dedup_key: false
+    is_extra: false
+    keep_html: false
+    locator: xpath
+    multi: true
+    name: tag
+    processors: []
+    validators:
+    - fail_type: retry
+      method: length
+      params: 1 +inf
+  - allow_invalid_expression: false
+    data_type: varchar(1024)
+    description: ❤️作者
+    download_policy: not_download
+    expression: .
+    extend_url: false
+    is_dedup_key: false
+    is_extra: false
+    keep_html: false
+    locator: xpath
+    multi: true
+    name: author
+    processors:
+    - method: script
+      params: "def process(text):\n    import re\n    p = re.compile(r\"([\\u4e00-\\\
+        u9fa5]+)\")\n    res = p.findall(text)\n    return res"
+    validators:
+    - fail_type: retry
+      method: length
+      params: 2 3
+  - allow_invalid_expression: false
+    data_type: varchar(1024)
+    description: 作者简介
+    download_policy: not_download
+    expression: .
+    extend_url: false
+    is_dedup_key: false
+    is_extra: false
+    keep_html: false
+    locator: xpath
+    multi: false
+    name: author_info
+    processors: []
+    validators:
+    - fail_type: retry
+      method: length
+      params: 1 +inf
+  - allow_invalid_expression: false
+    data_type: varchar(1024)
+    description: 新闻摘要
+    download_policy: not_download
+    expression: .
+    extend_url: false
+    is_dedup_key: false
+    is_extra: false
+    keep_html: false
+    locator: xpath
+    multi: false
+    name: abstract
+    processors: []
+    validators:
+    - fail_type: retry
+      method: length
+      params: 1 +inf
+  - allow_invalid_expression: false
+    data_type: text
+    description: 新闻详情
+    download_policy: not_download
+    expression: .
+    extend_url: false
+    is_dedup_key: false
+    is_extra: false
+    keep_html: false
+    locator: xpath
+    multi: false
+    name: content
+    processors:
+    - method: script
+      params: "def process(text):\n    import re\n    if len(re.sub('\\s+', '', text))<80:\n\
+        \        return \"\"\n    return text"
+    validators: []
+  - allow_invalid_expression: false
+    data_type: text
+    description: 新闻详情带html标签
+    download_policy: not_download
+    expression: .
+    extend_url: false
+    is_dedup_key: false
+    is_extra: false
+    keep_html: true
+    locator: xpath
+    multi: false
+    name: content_html
+    processors: []
+    validators:
+    - fail_type: retry
+      method: length
+      params: 1 +inf
+  - allow_invalid_expression: true
+    data_type: varchar(1024)
+    description: 附件名称
+    download_policy: not_download
+    expression: .//a[(contains(translate(@href, "PDF", "pdf"), ".pdf") or contains(translate(@href,
+      "XLS", "xls"), ".xls") or contains(translate(@href, "DOC", "doc"), ".doc"))
+      and not(contains(@href, "file://"))]
+    extend_url: false
+    is_dedup_key: false
+    is_extra: false
+    keep_html: false
+    locator: xpath
+    multi: true
+    name: article_file_name
+    processors: []
+    validators:
+    - fail_type: retry
+      method: length
+      params: 1 +inf
+  - allow_invalid_expression: true
+    data_type: varchar(1024)
+    description: 附件地址
+    download_policy: not_download
+    expression: .//a[(contains(translate(@href, "PDF", "pdf"), ".pdf") or contains(translate(@href,
+      "XLS", "xls"), ".xls") or contains(translate(@href, "DOC", "doc"), ".doc"))
+      and not(contains(@href, "file://"))]/@href
+    extend_url: true
+    is_dedup_key: false
+    is_extra: false
+    keep_html: false
+    locator: xpath
+    multi: true
+    name: article_file_url
+    processors: []
+    validators:
+    - fail_type: retry
+      method: length
+      params: 1 +inf
+  - allow_invalid_expression: false
+    data_type: bigint
+    description: 点赞数
+    download_policy: not_download
+    expression: .
+    extend_url: false
+    is_dedup_key: false
+    is_extra: false
+    keep_html: false
+    locator: xpath
+    multi: false
+    name: likes
+    processors: []
+    validators:
+    - fail_type: retry
+      method: length
+      params: 1 +inf
+  - allow_invalid_expression: false
+    data_type: bigint
+    description: 点击量访问量
+    download_policy: not_download
+    expression: .
+    extend_url: false
+    is_dedup_key: false
+    is_extra: false
+    keep_html: false
+    locator: xpath
+    multi: false
+    name: hits
+    processors: []
+    validators:
+    - fail_type: retry
+      method: length
+      params: 1 +inf
+  - allow_invalid_expression: false
+    data_type: bigint
+    description: 评论数
+    download_policy: not_download
+    expression: .
+    extend_url: false
+    is_dedup_key: false
+    is_extra: false
+    keep_html: false
+    locator: xpath
+    multi: false
+    name: replies
+    processors: []
+    validators:
+    - fail_type: retry
+      method: length
+      params: 1 +inf
+  - allow_invalid_expression: false
+    data_type: varchar(1024)
+    description: 公众号
+    download_policy: not_download
+    expression: .
+    extend_url: false
+    is_dedup_key: false
+    is_extra: false
+    keep_html: false
+    locator: xpath
+    multi: false
+    name: office_account
+    processors: []
+    validators:
+    - fail_type: retry
+      method: length
+      params: 1 +inf
+  - allow_invalid_expression: false
+    data_type: varchar(1024)
+    description: 公众号简介
+    download_policy: not_download
+    expression: .
+    extend_url: false
+    is_dedup_key: false
+    is_extra: false
+    keep_html: false
+    locator: xpath
+    multi: false
+    name: office_account_info
+    processors: []
+    validators:
+    - fail_type: retry
+      method: length
+      params: 1 +inf
+  if_match: ''
+  if_url_match: ''
+  links: []
+  locator: self
+  name: ❤️详情配置
+  processors:
+  - method: script
+    params: "import hashlib\n\n\ndef md5(text):\n    return hashlib.md5(str(text).encode()).hexdigest()\n\
+      \n\ndef process(data):\n    \"\"\"计算网站名发布时间标题内容详情的MD5\"\"\"\n    print(data)\n\
+      \    data[\"content_md5\"] = md5(\n        data.get(\"web_site\", \"\") + \n\
+      \        data.get(\"publish_time\", \"\") + \n        data.get(\"title\", \"\
+      \") + \n        data.get(\"content\", \"\")     # 空字符串到这里会变成None\n    )\n  \
+      \  return data"
+  storage_id: 10270
+size: small
+timeout: 30
+use_bot: false

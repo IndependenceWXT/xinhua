@@ -177,7 +177,10 @@ rows:
                   p = re.compile(r"([\u4e00-\u9fa5]+)")
                   res = p.findall(text)
                   return res
-        validators: []
+        validators:
+          - method: length
+            params: 2 3
+            fail_type: retry
       - name: author_info
         description: 作者简介
         data_type: varchar(1024)
@@ -487,7 +490,7 @@ rows:
                   return res
         validators:
           - method: length
-            params: 1 +inf
+            params: 2 3
             fail_type: retry
       - name: tag
         description: ❤️标签

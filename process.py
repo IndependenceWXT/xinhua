@@ -29,33 +29,31 @@ def process_url(text):
 
 def process_time_template(text):
     """时间提取脚本模版
-    returns:
-        9999: 正则匹配失败
-        9404: xpath定位内容为空
     """
     import re
+    data = text.strip()
 
     rules = [
         r"\d{4}[-年/]\d{1,2}[-月/]\d{1,2}[-日/]?[\s\d{2}:\d{2}[:\d{2}]?]?",  # 常见中文日期格式
         r"",  # 如有不是常见的日期时间格式，此处替换成案例
     ]
     # 无内容时间返回空
-    if not text.strip():
-        return "9404"
-    # 预处理，替换掉会影响正则提取的固定字符串
+    if not data:
+        return "error:空字符串"
+    # 预处理，替换掉会影响正则提取的固定字符串, 如点击量的数字
     flags = [""]
     for each in flags:
-        text = text.replace(each, "")
+        data = data.replace(each, "")
     # 提取日期时间
     for each in rules:
         p = re.compile(each)
-        res = p.findall(text)
+        res = p.findall(data)
         if res:
             return res[0]
         else:
             continue
     else:
-        return "9999"
+        return f"error:{text}"
 
 
 def process_time(text):
@@ -152,30 +150,32 @@ def process_author_template(text):
         []: 正则匹配失败
     """
     import re
+    author = text.strip()
 
     # 按需排序
     rules = [
         r"\b([\u4e00-\u9fa5]\s?[\u4e00-\u9fa5]+)\b",  # 常见中文作者格式
-        r"",  # 如有不是常见的作者格式，此处替换成案例
-        r"(\w+)",  # 作者为字母
+        r"([a-zA-Z0-9]+)",  # 作者为字母和数字组合
+        # r"",  # 如有不是常见的作者格式，此处替换成案例
     ]
     # 无内容作者返回空列表
-    if not text.strip():
+    if not author:
         return []
     # 预处理，替换掉会影响正则提取的固定字符串, 从验证器中更新
-    flags = ["记者", "撰文", "通讯员", "责任编辑", "编辑"]
+    flags = ["记者", "撰文", "通讯员", "责任编辑", "编辑", "通讯中"]
     for each in flags:
-        text = text.replace(each, "")
+        author = author.replace(each, "")
     # 提取作者
     for each in rules:
         p = re.compile(each)
-        res = p.findall(text)
+        res = p.findall(author)
         if res:
+            print(each, text)
             return [i.replace(" ", "") for i in res]
         else:
             continue
     else:
-        return []
+        return [f"error:{text}"]
 
 
 def process_author(text):
@@ -189,6 +189,53 @@ def process_author(text):
     p = re.compile(r"([\u4e00-\u9fa5]+)")
     res = p.findall(text)
     return res
+
+
+def process_publish_org_template(text):
+    """
+    来源提取
+    """
+    import re
+
+    # 按需排序
+    rules = [
+        r"([\u4e00-\u9fa5]+)",  # 默认提取中文, 其它格式卡住后处理
+        # r"", # 自定义
+        # r"([^\s/$.?].[^\s]*)", # www.railwaygazette.com
+    ]
+    # 无内容作者返回空列表
+    if not text.strip():
+        return []
+    # 预处理，替换掉会影响正则提取的固定字符串, 从验证器中更新
+    flags = ["来源", "转自"]
+    for each in flags:
+        text = text.replace(each, "")
+    # 提取来源
+    for each in rules:
+        p = re.compile(each)
+        res = p.findall(text)
+        if res:
+            print(each)
+            return res[0]
+        else:
+            continue
+    else:
+        return f"error:[{text}]"
+
+
+def process_publish_org(text):
+    """
+    去掉flag中文字符后用正则提取组织
+    """
+    import re
+
+    p = re.compile(r"([\u4e00-\u9fa5]+)")
+    # p = re.compile(r"([\w]+)")
+    res = p.findall(text)
+    if res:
+        return res[0]
+    else:
+        return ""
 
 
 def update_url_query(text, **kwargs):
@@ -228,9 +275,25 @@ def process_data(data):
 def process_short_content(text):
     import re
 
-    if len(re.sub("\s+", "", text)) < 80:
+    if len(re.sub(r"\s+", "", text)) < 80:
         return ""
     return text
+
+def check_publish_org():
+    with open("publish_org.txt", mode="r", encoding="utf-8") as f:
+        for line in f:
+            text = line.strip()
+            res = process_publish_org_template(text)
+            print(f"/{res}/")
+
+
+def check_author():
+    with open("author.txt", mode="r", encoding="utf-8") as f:
+        for line in f:
+            text = line.strip()
+            res = process_author_template(text)
+            print(f"/{res}/")
+
 
 
 if __name__ == "__main__":
@@ -246,5 +309,4 @@ if __name__ == "__main__":
     # print(process_time_in_url("http://www.gjbmj.gov.cn/n1/2018/1217/c409082-30471818.html"))
     # print(process_author("(：test2)"))
     # print(process_author_template("(：test2)"))
-    res = process_short_content("123")
-    print(type(res), f"/{res}/")
+    check_author()

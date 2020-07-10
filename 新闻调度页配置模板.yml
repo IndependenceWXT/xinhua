@@ -1,4 +1,6 @@
-description: 测试库数据通过复审并且修改详情页存储配置为正式库后开始运行调度前<待上线>
+description: |-
+  设置报警通知人员
+  测试种子正常后删除带有TODO的注释
 doc_rate: 1
 batch_start:
   type: at
