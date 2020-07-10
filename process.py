@@ -225,6 +225,14 @@ def process_data(data):
         return data
 
 
+def process_short_content(text):
+    import re
+
+    if len(re.sub("\s+", "", text)) < 80:
+        return ""
+    return text
+
+
 if __name__ == "__main__":
     # print(process_url("mailto:http://www.foeg.uzh.ch/analyse/politischekommunikation/news11/Sotomostudie.pdf"))
     # print(process_url_query("https://www.imemo.ru/en/index.php?page_id=502&id=484&p=60&ret=498"))
@@ -236,5 +244,7 @@ if __name__ == "__main__":
     # print(process_author(text))
     # print(process_time("May 16, 2002Economic and Social Research Institute"))
     # print(process_time_in_url("http://www.gjbmj.gov.cn/n1/2018/1217/c409082-30471818.html"))
-    print(process_author("(：test2)"))
-    print(process_author_template("(：test2)"))
+    # print(process_author("(：test2)"))
+    # print(process_author_template("(：test2)"))
+    res = process_short_content("123")
+    print(type(res), f"/{res}/")

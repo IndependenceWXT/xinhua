@@ -35,12 +35,19 @@ def validate_author(context):
         if each in context:
             return False
     else:
+        if len(context) > 10 or len(context) < 2:
+            return False
         return True
 
 
 def validate_url(context):
     """验证链接是否合法"""
-    # TODO:用urllib.parse处理
+    # TODO: 用urllib.parse处理
+    pass
+
+
+def validate_publish_org(text):
+    # TODO: 发布来源验证
     pass
 
 

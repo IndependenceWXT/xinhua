@@ -414,12 +414,21 @@ rows:
       - method: script
         params: |-
           import hashlib
+
+
           def md5(text):
               return hashlib.md5(str(text).encode()).hexdigest()
 
+
           def process(data):
               """计算网站名发布时间标题内容详情的MD5"""
-              data["content_md5"] = md5(data["web_site"] + data["publish_time"] + data["title"] + data["content"])
+              print(data)
+              data["content_md5"] = md5(
+                  data.get("web_site", "") + 
+                  data.get("publish_time", "") + 
+                  data.get("title", "") + 
+                  data.get("content", "")     # 空字符串到这里会变成None
+              )
               return data
     links: []
 preprocessors: []
