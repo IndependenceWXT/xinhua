@@ -14,10 +14,13 @@ encoding: ''
 headers: ''
 download_script: ''
 rows:
-  - name: ❤️列表页配置
+  - name: ❤️列表详情链接配置
     description: 注意保持字段与详情页对应
     locator: xpath
-    expression: .
+    expression: >-
+      .//a[not(contains(translate(@href, "PDF", "pdf"), ".pdf") and
+      contains(translate(@href, "XLS", "xls"), ".xls") and
+      contains(translate(@href, "DOC", "doc"), ".doc"))]
     storage_id: -1
     if_match: ''
     if_url_match: ''
@@ -53,6 +56,20 @@ rows:
           - method: length
             params: 1 +inf
             fail_type: retry
+      - name: refer
+        description: ❌列表页链接上线需删除
+        data_type: varchar(128)
+        locator: url_re
+        expression: .*
+        is_dedup_key: false
+        multi: false
+        keep_html: false
+        extend_url: false
+        is_extra: false
+        allow_invalid_expression: false
+        download_policy: not_download
+        processors: []
+        validators: []
       - name: title
         description: 标题
         data_type: varchar(1024)
@@ -80,6 +97,37 @@ rows:
         allow_invalid_expression: false
         download_policy: not_download
         processors:
+          - method: script
+            params: |-
+              def process(text):
+                  """时间提取脚本模版
+                  returns:
+                      9999: 正则匹配失败
+                      9404: 上一步字段定位xpath，获取到的字段值内容为空
+                  """
+                  import re
+
+                  rules = [
+                      r"\d{4}[-年/]\d{1,2}[-月/]\d{1,2}[-日/]?[\s\d{2}:\d{2}[:\d{2}]?]?",  # 常见中文日期格式
+                      r"",  # 如有不是常见的日期时间格式，此处替换成案例
+                  ]
+                  # 无内容时间返回空
+                  if not text.strip():
+                      return "9404"
+                  # 预处理，替换掉会影响正则提取的固定字符串
+                  flags = [""]
+                  for each in flags:
+                      text = text.replace(each, "")
+                  # 提取日期时间
+                  for each in rules:
+                      p = re.compile(each)
+                      res = p.findall(text)
+                      if res:
+                          return res[0]
+                      else:
+                          continue
+                  else:
+                      return "9999"
           - method: text2datetime
             params: ''
         validators:
@@ -163,10 +211,10 @@ rows:
         new_task_name: ''
         description: 详情页链接
         locator: xpath
-        expression: .
+        expression: ./@href
         processors: []
         keep_other_site: false
-  - name: 文件链接页配置
+  - name: "\U0001F4C1文件链接配置"
     description: 解析文件链接
     locator: xpath
     expression: >-
@@ -250,7 +298,7 @@ rows:
         description: 来源网站加标题的md5
         data_type: varchar(1024)
         locator: xpath
-        expression: .
+        expression: ./@href
         is_dedup_key: false
         multi: false
         keep_html: false
@@ -259,8 +307,6 @@ rows:
         allow_invalid_expression: false
         download_policy: not_download
         processors:
-          - method: format
-            params: 'web_site{}'
           - method: md5
             params: ''
         validators: []
@@ -298,6 +344,20 @@ rows:
           - method: length
             params: 1 +inf
             fail_type: retry
+      - name: refer
+        description: ❌列表页链接上线需删除
+        data_type: varchar(128)
+        locator: url_re
+        expression: .*
+        is_dedup_key: false
+        multi: false
+        keep_html: false
+        extend_url: false
+        is_extra: false
+        allow_invalid_expression: false
+        download_policy: not_download
+        processors: []
+        validators: []
       - name: news_type
         description: 新闻类型（资讯，公告，纰漏）
         data_type: varchar(1024)
@@ -338,10 +398,34 @@ rows:
           - method: script
             params: |-
               def process(text):
+                  """时间提取脚本模版
+                  returns:
+                      9999: 正则匹配失败
+                      9404: 上一步字段定位xpath，获取到的字段值内容为空
                   """
-                  处理文本, 返回处理后的文本
-                  """
-                  return text
+                  import re
+
+                  rules = [
+                      r"\d{4}[-年/]\d{1,2}[-月/]\d{1,2}[-日/]?[\s\d{2}:\d{2}[:\d{2}]?]?",  # 常见中文日期格式
+                      r"",  # 如有不是常见的日期时间格式，此处替换成案例
+                  ]
+                  # 无内容时间返回空
+                  if not text.strip():
+                      return "9404"
+                  # 预处理，替换掉会影响正则提取的固定字符串
+                  flags = [""]
+                  for each in flags:
+                      text = text.replace(each, "")
+                  # 提取日期时间
+                  for each in rules:
+                      p = re.compile(each)
+                      res = p.findall(text)
+                      if res:
+                          return res[0]
+                      else:
+                          continue
+                  else:
+                      return "9999"
           - method: text2datetime
             params: ''
         validators:
@@ -446,6 +530,17 @@ rows:
           - method: length
             params: 1 +inf
             fail_type: retry
+    processors:
+      - method: script
+        params: |-
+          import hashlib
+          def md5(text):
+              return hashlib.md5(str(text).encode()).hexdigest()
+
+          def process(data):
+              """计算网站名发布时间标题内容详情链接的MD5"""
+              data["content_md5"] = md5(data["web_site"] + data["publish_time"] + data["title"] + data["content_url"])
+              return data
     links: []
 preprocessors: []
 prevalidators: []

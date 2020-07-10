@@ -15,8 +15,8 @@ encoding: ''
 headers: ''
 download_script: ''
 rows:
-  - name: ❤️详情页配置
-    description: 注意保持字段与详情页对应
+  - name: ❤️详情配置
+    description: 注意保持字段与列表页对应
     locator: self
     expression: ''
     storage_id: 10270
@@ -74,6 +74,20 @@ rows:
           - method: length
             params: 1 +inf
             fail_type: retry
+      - name: refer
+        description: 列表页链接
+        data_type: varchar(128)
+        locator: hub
+        expression: refer
+        is_dedup_key: false
+        multi: false
+        keep_html: false
+        extend_url: false
+        is_extra: true
+        allow_invalid_expression: false
+        download_policy: not_download
+        processors: []
+        validators: []
       - name: content_md5
         description: 网站名组合标题的md5
         data_type: varchar(1024)
@@ -86,11 +100,7 @@ rows:
         is_extra: false
         allow_invalid_expression: false
         download_policy: not_download
-        processors:
-          - method: format
-            params: '网站名{}'
-          - method: md5
-            params: ''
+        processors: []
         validators: []
       - name: title
         description: 标题
@@ -242,16 +252,12 @@ rows:
         expression: .
         is_dedup_key: false
         multi: false
-        keep_html: true
+        keep_html: false
         extend_url: false
         is_extra: false
         allow_invalid_expression: false
         download_policy: not_download
         processors:
-          - method: drop_tree
-            params: .//script|.//style
-          - method: sub
-            params: '<[^>]+> '''''
           - method: script
             params: |-
               def process(text):
@@ -404,193 +410,17 @@ rows:
           - method: length
             params: 1 +inf
             fail_type: retry
-      - name: opinion_tag
-        description: 舆情标签
-        data_type: varchar(1024)
-        locator: hub
-        expression: opinion_tag
-        is_dedup_key: false
-        multi: false
-        keep_html: false
-        extend_url: false
-        is_extra: false
-        allow_invalid_expression: false
-        download_policy: not_download
-        processors: []
-        validators:
-          - method: length
-            params: 1 +inf
-            fail_type: retry
-      - name: opinion_type
-        description: 舆情类型
-        data_type: varchar(1024)
-        locator: hub
-        expression: opinion_type
-        is_dedup_key: false
-        multi: false
-        keep_html: false
-        extend_url: false
-        is_extra: false
-        allow_invalid_expression: false
-        download_policy: not_download
-        processors: []
-        validators:
-          - method: length
-            params: 1 +inf
-            fail_type: retry
-      - name: opinion_score
-        description: 舆情分数
-        data_type: bigint
-        locator: hub
-        expression: opinion_score
-        is_dedup_key: false
-        multi: false
-        keep_html: false
-        extend_url: false
-        is_extra: false
-        allow_invalid_expression: false
-        download_policy: not_download
-        processors: []
-        validators:
-          - method: length
-            params: 1 +inf
-            fail_type: retry
-      - name: event_tag
-        description: 事件标签
-        data_type: varchar(1024)
-        locator: hub
-        expression: event_tag
-        is_dedup_key: false
-        multi: false
-        keep_html: false
-        extend_url: false
-        is_extra: false
-        allow_invalid_expression: false
-        download_policy: not_download
-        processors: []
-        validators:
-          - method: length
-            params: 1 +inf
-            fail_type: retry
-      - name: emotion_tag
-        description: 情感标签
-        data_type: varchar(1024)
-        locator: hub
-        expression: emotion_tag
-        is_dedup_key: false
-        multi: false
-        keep_html: false
-        extend_url: false
-        is_extra: false
-        allow_invalid_expression: false
-        download_policy: not_download
-        processors: []
-        validators:
-          - method: length
-            params: 1 +inf
-            fail_type: retry
-      - name: region_tag
-        description: 地区标签
-        data_type: varchar(1024)
-        locator: hub
-        expression: region_tag
-        is_dedup_key: false
-        multi: false
-        keep_html: false
-        extend_url: false
-        is_extra: false
-        allow_invalid_expression: false
-        download_policy: not_download
-        processors: []
-        validators:
-          - method: length
-            params: 1 +inf
-            fail_type: retry
-      - name: risk_tag
-        description: 风险标签
-        data_type: varchar(1024)
-        locator: hub
-        expression: risk_tag
-        is_dedup_key: false
-        multi: false
-        keep_html: false
-        extend_url: false
-        is_extra: false
-        allow_invalid_expression: false
-        download_policy: not_download
-        processors: []
-        validators:
-          - method: length
-            params: 1 +inf
-            fail_type: retry
-      - name: company
-        description: 新闻涉及公司
-        data_type: varchar(1024)
-        locator: hub
-        expression: company
-        is_dedup_key: false
-        multi: false
-        keep_html: false
-        extend_url: false
-        is_extra: false
-        allow_invalid_expression: false
-        download_policy: not_download
-        processors: []
-        validators:
-          - method: length
-            params: 1 +inf
-            fail_type: retry
-      - name: positive_org
-        description: 正面舆情公司名
-        data_type: varchar(1024)
-        locator: hub
-        expression: positive_org
-        is_dedup_key: false
-        multi: false
-        keep_html: false
-        extend_url: false
-        is_extra: false
-        allow_invalid_expression: false
-        download_policy: not_download
-        processors: []
-        validators:
-          - method: length
-            params: 1 +inf
-            fail_type: retry
-      - name: negative_org
-        description: 负面舆情公司名
-        data_type: varchar(1024)
-        locator: hub
-        expression: negative_org
-        is_dedup_key: false
-        multi: false
-        keep_html: false
-        extend_url: false
-        is_extra: false
-        allow_invalid_expression: false
-        download_policy: not_download
-        processors: []
-        validators:
-          - method: length
-            params: 1 +inf
-            fail_type: retry
-      - name: neutra_org
-        description: 中性舆情公司名
-        data_type: varchar(1024)
-        locator: hub
-        expression: neutra_org
-        is_dedup_key: false
-        multi: false
-        keep_html: false
-        extend_url: false
-        is_extra: false
-        allow_invalid_expression: false
-        download_policy: not_download
-        processors: []
-        validators:
-          - method: length
-            params: 1 +inf
-            fail_type: retry
+    processors:
+      - method: script
+        params: |-
+          import hashlib
+          def md5(text):
+              return hashlib.md5(str(text).encode()).hexdigest()
+
+          def process(data):
+              """计算网站名发布时间标题内容详情的MD5"""
+              data["content_md5"] = md5(data["web_site"] + data["publish_time"] + data["title"] + data["content"])
+              return data
     links: []
 preprocessors: []
 prevalidators:

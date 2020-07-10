@@ -15,7 +15,7 @@ def validate_default(context):
     return True
 
 
-def validate(context):
+def validate_publish_time(context):
     """验证发布时间是否大于当前时间"""
     from datetime import datetime
 
@@ -24,6 +24,24 @@ def validate(context):
     if pt > now:
         return False
     return True
+
+
+def validate_author(context):
+    """
+    验证中文作者是否含有非法词
+    """
+    flags = ["记者", "撰文", "通讯员", "责任编辑", "编辑"]
+    for each in flags:
+        if each in context:
+            return False
+    else:
+        return True
+
+
+def validate_url(context):
+    """验证链接是否合法"""
+    # TODO:用urllib.parse处理
+    pass
 
 
 if __name__ == "__main__":

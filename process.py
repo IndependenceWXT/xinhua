@@ -4,6 +4,7 @@ from urllib.parse import urlsplit, urlunsplit, urljoin, SplitResult, parse_qs, u
 import re
 import requests
 import time
+from dateutil.parser import parse as datetime_parse
 
 
 def process_url(text):
@@ -24,6 +25,37 @@ def process_url(text):
             return urlunsplit(SplitResult("https", *[*query][1:]))
         else:
             return urlunsplit(SplitResult("http", *[*query][1:]))
+
+
+def process_time_template(text):
+    """时间提取脚本模版
+    returns:
+        9999: 正则匹配失败
+        9404: xpath定位内容为空
+    """
+    import re
+
+    rules = [
+        r"\d{4}[-年/]\d{1,2}[-月/]\d{1,2}[-日/]?[\s\d{2}:\d{2}[:\d{2}]?]?",  # 常见中文日期格式
+        r"",  # 如有不是常见的日期时间格式，此处替换成案例
+    ]
+    # 无内容时间返回空
+    if not text.strip():
+        return "9404"
+    # 预处理，替换掉会影响正则提取的固定字符串
+    flags = [""]
+    for each in flags:
+        text = text.replace(each, "")
+    # 提取日期时间
+    for each in rules:
+        p = re.compile(each)
+        res = p.findall(text)
+        if res:
+            return res[0]
+        else:
+            continue
+    else:
+        return "9999"
 
 
 def process_time(text):
@@ -114,8 +146,44 @@ def process_time_ambiguous(text):
     return "/".join(parts)
 
 
+def process_author_template(text):
+    """作者提取脚本模版
+    returns:
+        []: 正则匹配失败
+    """
+    import re
+
+    # 按需排序
+    rules = [
+        r"\b([\u4e00-\u9fa5]\s?[\u4e00-\u9fa5]+)\b",  # 常见中文作者格式
+        r"",  # 如有不是常见的作者格式，此处替换成案例
+        r"(\w+)",  # 作者为字母
+    ]
+    # 无内容作者返回空列表
+    if not text.strip():
+        return []
+    # 预处理，替换掉会影响正则提取的固定字符串, 从验证器中更新
+    flags = ["记者", "撰文", "通讯员", "责任编辑", "编辑"]
+    for each in flags:
+        text = text.replace(each, "")
+    # 提取作者
+    for each in rules:
+        p = re.compile(each)
+        res = p.findall(text)
+        if res:
+            return [i.replace(" ", "") for i in res]
+        else:
+            continue
+    else:
+        return []
+
+
 def process_author(text):
-    """从有不同分隔符的作者字符串中提取人名：*请先去除非人名汉字*"""
+    """
+    从有不同分隔符的作者字符串中提取人名：
+        *请先去除非人名汉字*:
+        记者, 撰文, 编辑, 责任编辑等
+    """
     import re
 
     p = re.compile(r"([\u4e00-\u9fa5]+)")
@@ -143,14 +211,30 @@ def process_time_in_url(text):
     return ""
 
 
+def process_data(data):
+    import hashlib
+
+    def md5(text):
+        return hashlib.md5(str(text).encode()).hexdigest()
+
+    def process(data):
+        """计算网站名发布时间标题内容详情的MD5"""
+        data["content_md5"] = md5(
+            data["web_site"] + data["publish_time"] + data["title"] + data["content"]
+        )
+        return data
+
+
 if __name__ == "__main__":
     # print(process_url("mailto:http://www.foeg.uzh.ch/analyse/politischekommunikation/news11/Sotomostudie.pdf"))
     # print(process_url_query("https://www.imemo.ru/en/index.php?page_id=502&id=484&p=60&ret=498"))
     # print(process("https://videos.aarp.org/detail/videos/all-videos/video/4117187433001/top-five-money-wasters?autoStart=true"))
-    # print(process_time_diff_lang("20 Juni 2019"))
+    # print(process_time_template("2019-5-19"))
     # print(process_text("27November2019"))
     # print(process_request("http://www.ebrd.com/cs/Satellite?c=Content&cid=1395242494713&pagename=EBRD%2FContent%2FDownloadDocument"))
     # text = """撰文：纪晓燕 龚丽欣 黄子慢"""
     # print(process_author(text))
     # print(process_time("May 16, 2002Economic and Social Research Institute"))
-    print(process_time_in_url("http://www.gjbmj.gov.cn/n1/2018/1217/c409082-30471818.html"))
+    # print(process_time_in_url("http://www.gjbmj.gov.cn/n1/2018/1217/c409082-30471818.html"))
+    print(process_author("(：test2)"))
+    print(process_author_template("(：test2)"))
