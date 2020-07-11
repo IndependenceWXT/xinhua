@@ -1,11 +1,8 @@
-description: |-
-  设置报警通知人员
-  测试种子正常后删除带有TODO的注释
+description: "Version: 2020_07_11_13_20_00_release\n\U0001F494测试种子正常后删除带有TODO的注释"
 doc_rate: 1
 batch_start:
-  type: at
-  num:
-    - 18
+  type: once
+  num: []
   unit: day
 ratio: 0.99
 size: small
@@ -22,7 +19,7 @@ expression: |
       web_site_url = "请替换此处为栏目的链接"
       hub_fields = {"web_site": web_site, "web_site_url": web_site_url}
 
-      # 根据需要选择下面的模板代码块
+      # TODO: 根据需要选择下面的模板代码块
       # 只有一条列表页
       # TODO: 请仔细核对配置页面编号, 修改None值
       yield {"url": web_site_url, "page_rule_id": None, "hub_fields": hub_fields}
@@ -65,7 +62,7 @@ expression: |
               page = f"_{page}" if page else ""
               url = f""
               yield {"url": url, "page_rule_id": None, "hub_fields": hub_fields}
-page_rule_id: null
+page_rule_id: 10520
 table: ''
 instance_name: ''
 url_template: ''

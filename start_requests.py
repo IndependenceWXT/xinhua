@@ -1,29 +1,45 @@
 def start_requests(**kwargs):
-    # TODO: 根据网站栏目数量, 复制要传递的列表页参数定义部分
-    # TODO: 请复制粘贴网站名
-    web_site = "请替换此处为网站名"
+    web_site = "河北"
 
-    # TODO: 请复制粘贴栏目的链接
-    web_site_url = "请替换此处为栏目的链接"
+    web_site_url = "http://www.hebei.gov.cn/hebei/14462058/14471802/14471805/index.html"
     hub_fields = {"web_site": web_site, "web_site_url": web_site_url}
+    yield {"url": web_site_url, "page_rule_id": 10520, "hub_fields": hub_fields}
 
-    # 根据需要选择下面的模板代码块
+    web_site_url = "http://info.hebei.gov.cn/hbszfxxgk/6806024/6810698/index.html"
+    hub_fields = {"web_site": web_site, "web_site_url": web_site_url}
+    yield {"url": web_site_url, "page_rule_id": 10869, "hub_fields": hub_fields}
+
+    web_site_url = "http://info.hebei.gov.cn/eportal/ui?pageId=6817552"
+    hub_fields = {"web_site": web_site, "web_site_url": web_site_url}
+    for page in range(87):
+        page += 1
+        url = f"http://info.hebei.gov.cn/eportal/ui?currentPage={page}&pageId=6817552"
+        yield {"url": url, "page_rule_id": 10890, "hub_fields": hub_fields}
+
+    web_site_url = "http://www.hebei.gov.cn/hebei/14462058/14471802/14471750/index.html"
+    hub_fields = {"web_site": web_site, "web_site_url": web_site_url}
+    for page in range(2082):
+        page += 1
+        url = f"http://www.hebei.gov.cn/hebei/14462058/14471802/14471750/df829939/index{page}.html"
+        yield {"url": url, "page_rule_id": 10890, "hub_fields": hub_fields}
+
+    web_site_url = "http://www.hebei.gov.cn/hebei/14462058/14471802/14471756/index.html"
+    hub_fields = {"web_site": web_site, "web_site_url": web_site_url}
+    for page in range(3614):
+        page += 1
+        url = f"http://info.hebei.gov.cn/eportal/ui?currentPage={page}&pageId=6911774"
+        yield {"url": url, "page_rule_id": 10890, "hub_fields": hub_fields}
+
     # 只有一条列表页
-    # TODO: 请仔细核对配置页面编号, 修改None值
     yield {"url": web_site_url, "page_rule_id": None, "hub_fields": hub_fields}
 
     # 列表页分页为GET请求
-    # TODO: 请仔细核对配置分页总页数, 修改None值
     for page in range(None):
-        # TODO: 计算页码
         page = f"_{page}" if page else ""
-        # TODO: 请复制粘贴列表页链接, 并修改变化部分为page参数
         url = f"请替换此处为列表页链接然后修改为格式化字符串"
-        # TODO: 请仔细核对配置页面编号, 修改None值
         yield {"url": url, "page_rule_id": None, "hub_fields": hub_fields}
 
     # 列表页分页为POST请求: 请先尝试转换为GET方式是否可行
-    # TODO: 请仔细核对配置页面编号, 修改None值
     url = ""
     for page in range(None):
         page = f"_{page}" if page else ""

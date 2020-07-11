@@ -102,6 +102,9 @@ def count_configured(users):
     report = []
     ctime = datetime.now().isoformat(sep=" ", timespec="seconds")
     report.append(f"日报[{ctime}]\n")
+    thead = ["配置者", "完成时间", "进度", "网站名"]
+    report.append(f"|\t{thead[0]}\t|\t{thead[1]}\t|\t{thead[2]}\t|\t{thead[3]}\t|")
+    report.append("|----"*4+"|")
 
     bar = trange(1560, 1567)
     for group_id in bar:
@@ -110,7 +113,7 @@ def count_configured(users):
         if len(rules) < 1:
             continue
         for rule in rules:
-            if "历史" in rule["name"] and rule["user"] in users and rule["status"] == 0:
+            if "更新" in rule["name"] and rule["user"] in users and rule["status"] == 0:
                 history_plan_id = rule["id"]
                 user = rule["user"]
                 batches = get_lastest_batch_result(history_plan_id)
@@ -127,7 +130,7 @@ def count_configured(users):
                 start_time = datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S")
 
                 today = datetime.now().date()
-                if today == start_time.date():
+                if today != start_time.date():
                     continue
                 group_name = rule["group_name"]
                 total = batch_result["total_count"]
@@ -136,7 +139,8 @@ def count_configured(users):
                 group_name = group_name.split("_")[-1].strip()
                 res[user].append(group_name)
                 progress = int((done / total) * 100)
-                msg = f"{users_db[user]} {start_time} {progress}% {group_name}"
+                space = " "
+                msg = f"|\t{users_db[user]}\t|\t{start_time}\t|\t{progress:>3}%\t|\t{group_name}\t|"
                 report.append(msg)
                 tqdm.write(msg)
                 break
@@ -146,7 +150,8 @@ def count_configured(users):
         tqdm.write(msg)
     report = "\n".join(report)
     print(send(report))
-    return {k: v for k, v in res if v}
+    print(res)
+    return {k: v for k, v in res.items() if v}
 
 
 def check_disable():
@@ -189,5 +194,5 @@ def send(text):
 
 
 if __name__ == "__main__":
-    users = [i for i in range(12, 17)]
+    users = [k for k in users_db]
     res = count_configured(users)

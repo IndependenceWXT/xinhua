@@ -28,13 +28,17 @@ def process_url(text):
 
 
 def process_time_template(text):
-    """时间提取脚本模版
+    """Version: 2020_07_11
+    时间提取脚本模版
     """
     import re
+    from datetime import datetime
+
     data = text.strip()
 
     rules = [
         r"\d{4}[-年/]\d{1,2}[-月/]\d{1,2}[-日/]?[\s\d{2}:\d{2}[:\d{2}]?]?",  # 常见中文日期格式
+        # r"\d{10}",  # TODO: 处理时间戳, 遇到再加: 15开头的10或13位数字, 其实匹配前10个就够了
         r"",  # 如有不是常见的日期时间格式，此处替换成案例
     ]
     # 无内容时间返回空
@@ -56,7 +60,7 @@ def process_time_template(text):
         return f"error:{text}"
 
 
-def process_time(text):
+def process_time_test(text):
     """提取时间"""
     import re
 
@@ -145,11 +149,13 @@ def process_time_ambiguous(text):
 
 
 def process_author_template(text):
-    """作者提取脚本模版
+    """Version: 2020_07_11
+    作者提取脚本模版
     returns:
         []: 正则匹配失败
     """
     import re
+
     author = text.strip()
 
     # 按需排序
@@ -170,7 +176,6 @@ def process_author_template(text):
         p = re.compile(each)
         res = p.findall(author)
         if res:
-            print(each, text)
             return [i.replace(" ", "") for i in res]
         else:
             continue
@@ -178,8 +183,8 @@ def process_author_template(text):
         return [f"error:{text}"]
 
 
-def process_author(text):
-    """
+def process_author_test(text):
+    """Version: 2020_07_11
     从有不同分隔符的作者字符串中提取人名：
         *请先去除非人名汉字*:
         记者, 撰文, 编辑, 责任编辑等
@@ -192,7 +197,7 @@ def process_author(text):
 
 
 def process_publish_org_template(text):
-    """
+    """Version: 2020_07_11
     来源提取
     """
     import re
@@ -215,7 +220,6 @@ def process_publish_org_template(text):
         p = re.compile(each)
         res = p.findall(text)
         if res:
-            print(each)
             return res[0]
         else:
             continue
@@ -223,7 +227,7 @@ def process_publish_org_template(text):
         return f"error:[{text}]"
 
 
-def process_publish_org(text):
+def process_publish_org_test(text):
     """
     去掉flag中文字符后用正则提取组织
     """
@@ -258,26 +262,39 @@ def process_time_in_url(text):
     return ""
 
 
-def process_data(data):
-    import hashlib
+# 行处理器计算content_md5
+import hashlib
 
-    def md5(text):
-        return hashlib.md5(str(text).encode()).hexdigest()
 
-    def process(data):
-        """计算网站名发布时间标题内容详情的MD5"""
-        data["content_md5"] = md5(
-            data["web_site"] + data["publish_time"] + data["title"] + data["content"]
-        )
-        return data
+def md5(text):
+    return hashlib.md5(str(text).encode()).hexdigest()
+
+
+def process(data):
+    """Version: 2020_07_11
+    计算网站名发布时间标题内容详情的MD5
+    # TODO: 数组字段去重处理
+    """
+    data["content_md5"] = md5(
+        data["web_site"]
+        + data["publish_time"]
+        + data["title"]
+        + data.get("content", "")  # 空字符串到这里会变成None
+    )
+
+    return data
 
 
 def process_short_content(text):
+    """Version: 2020_07_11_release
+    处理短正文, 用了挺久了, 应该稳定可用了
+    """
     import re
 
     if len(re.sub(r"\s+", "", text)) < 80:
         return ""
     return text
+
 
 def check_publish_org():
     with open("publish_org.txt", mode="r", encoding="utf-8") as f:
@@ -293,7 +310,6 @@ def check_author():
             text = line.strip()
             res = process_author_template(text)
             print(f"/{res}/")
-
 
 
 if __name__ == "__main__":

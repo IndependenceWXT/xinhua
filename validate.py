@@ -16,7 +16,9 @@ def validate_default(context):
 
 
 def validate_publish_time(context):
-    """验证发布时间是否大于当前时间"""
+    """Version: 2020_07_11
+    验证发布时间是否大于当前时间
+    """
     from datetime import datetime
 
     if context.startswith("error:"):
@@ -30,7 +32,7 @@ def validate_publish_time(context):
 
 
 def validate_author(context):
-    """
+    """Version: 2020_07_11
     验证中文作者是否含有非法词
     """
     if context.startswith("error:"):
@@ -41,7 +43,7 @@ def validate_author(context):
 
 
 def validate_publish_org(context):
-    """
+    """Version: 2020_07_11
     验证来源中是否有error: 
         卡住未经正确处理的请求
     """
@@ -51,12 +53,15 @@ def validate_publish_org(context):
 
 
 def validate_url(context):
-    """验证链接是否合法"""
+    """Version: 2020_07_11
+    验证链接是否合法
+    """
     import re
     from urllib.parse import urlparse
 
     url = context.strip()
     rules = [
+        r"(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]",
         r"@^(https?|ftp)://[^\s/$.?#].[^\s]*$@iS",
         r"#\b(([\w-]+://?|www[.])[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/)))#iS",
     ]
@@ -77,5 +82,70 @@ def validate_url(context):
                 return False
 
 
+def validate_tag(context):
+    """Version: 2020_07_11
+    TODO: 验证标签, 不同网站调整长度, 测试一段时间
+    """
+    import re
+
+    text = context.strip()
+    # 验证长度
+    if len(text) > 5 or len(text) < 2:
+        return False
+    # 验证是否是含有非中文字符
+    rules = [r"[\u4e00-\u9fa5]+"]
+    for each in rules:
+        p = re.compile(each)
+        res = p.match(text)
+        if res:
+            if res[0] == text:
+                return True
+            else:
+                return False
+    else:
+        return False
+
+
+def validate_title(context):
+    """Version: 2020_07_11
+    验证标题是否是省略过的
+    """
+    text = context.strip()
+    if text and text.endswith("..."):
+        return False
+    else:
+        return True
+
+
+def validate_news_type(context):
+    """2020_07_11
+    验证新闻类型
+    """
+    import re
+
+    text = context.strip()
+    # 验证长度
+    if len(text) > 5 or len(text) < 2:
+        return False
+
+    rules = [r"[\u4e00-\u9fa5]+"]
+    for each in rules:
+        p = re.compile(each)
+        res = p.match(text)
+        if res:
+            if res[0] == text:
+                return True
+            else:
+                return False
+    else:
+        return False
+
+
+def test_validators():
+    # TODO: 测试验证器
+    pass
+
+
 if __name__ == "__main__":
-    print(validate_url("http:/10.40.35.103:8090/?a=1"))
+    # print(validate_url("http:/10.40.35.103:8090/?a=1"))
+    print(validate_tag(""))
