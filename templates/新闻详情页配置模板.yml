@@ -1,5 +1,5 @@
 description: >-
-  Version: 2020_07_11_13_20_00
+  Version: 2020_07_12
 
   ⚠️配置前请核对版本号是否最新; 带有✔️字段开始往下的字段需要配置, 页面中没有的字段删除即可; 测试时注意核验字段值的数据准确性:
   描述中有❤️标志的字段
@@ -729,14 +729,12 @@ rows:
 
           def process(data):
               """Version: 2020_07_12
-              计算网站名发布时间标题内容详情的MD5
+              计算 网站名 发布时间 标题 内容详情 的MD5
               """
-              data["content_md5"] = md5(
-                  data["web_site"]
-                  + data["publish_time"]
-                  + data["title"]
-                  + data.get("content", "")  # 空字符串到这里会变成None
-              )
+              keys = ["web_site", "publish_time", "title", "content"]
+              values = [data.get(k) if data.get(k) else "" for k in keys]
+
+              data["content_md5"] = md5("".join(values))
               # 数组字段去重, 去空
               if data.get("tag"):
                   data["tag"] = list(set([tag for tag in data["tag"] if tag.strip()]))
@@ -756,7 +754,7 @@ examples:
   - method: GET
     url: ''
     data: ''
-    description: "\U0001F44D配置测试保留测试链接勿删"
+    description: "\U0001F44D配置测试保存做对比"
     should_save_sync: false
   - method: GET
     url: ''
