@@ -62,7 +62,7 @@ expression: |
               page = f"_{page}" if page else ""
               url = f""
               yield {"url": url, "page_rule_id": None, "hub_fields": hub_fields}
-page_rule_id: 10520
+page_rule_id: null
 table: ''
 instance_name: ''
 url_template: ''

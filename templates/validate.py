@@ -83,12 +83,14 @@ def validate_url(context):
 
 
 def validate_tag(context):
-    """Version: 2020_07_11
+    """Version: 2020_07_12
     TODO: 验证标签, 不同网站调整长度, 测试一段时间
     """
     import re
 
     text = context.strip()
+    if text.startswith("error:"):
+        return False
     # 验证长度
     if len(text) > 5 or len(text) < 2:
         return False

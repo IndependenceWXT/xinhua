@@ -11,7 +11,7 @@ import hashlib
 import hmac
 import json
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 from pprint import pprint
 from time import sleep
 from urllib.parse import quote_plus, urlsplit
@@ -21,8 +21,8 @@ import yaml
 from tqdm import tqdm, trange
 
 users_db = {
-    16: "胡涛涛",
-    15: "张豹",
+    16: "张豹",
+    15: "胡涛涛",
     14: "柯玉强",
     13: "石张毅",
     12: "王尚文",
@@ -90,30 +90,45 @@ def get_lastest_batch_result(plan_id):
     return res.json()["results"]
 
 
-def count_configured(users):
+def count_configured(users, today=True, ago=False, section=(1560, 1857), notify=False):
     """
     {
         1: [275],
         6: [207, 210],
         10: [612, 655]
     }
+    today=True: 扫描当前日期的批次记录
+    ago=True: 扫描历史调度
+    section: 组ID的范围
     """
     res = {k: [] for k in users_db}
+    _type = "更新" if not ago else "历史"
+
     report = []
     ctime = datetime.now().isoformat(sep=" ", timespec="seconds")
-    report.append(f"日报[{ctime}]\n")
-    thead = ["配置者", "完成时间", "进度", "网站名"]
-    report.append(f"|\t{thead[0]}\t|\t{thead[1]}\t|\t{thead[2]}\t|\t{thead[3]}\t|")
-    report.append("|----"*4+"|")
 
-    bar = trange(1560, 1567)
+    if today and not ago:
+        now = datetime.now().date()
+        kind = "日报"
+        report.append(f"日报[{now.isoformat()}]\n")
+    elif not today and ago == False:
+        now = datetime.now() - timedelta(days=10)
+        now = now.date()
+        kind = "扫描报告"
+        report.append(f"{_type}调度扫描报告[{now.isoformat()}]\n")
+
+    thead = ["配置者", "完成时间", f"{_type}进度", "网站名"]
+    report.append(f"|\t{thead[0]}\t|\t{thead[1]}\t|\t{thead[2]}\t|\t{thead[3]}\t|")
+    report.append("|----" * 4 + "|")
+
+    bar = trange(*section)
     for group_id in bar:
         bar.set_description(desc=f"{group_id:0>4}")
         rules = get_rule_list(group_id)
         if len(rules) < 1:
             continue
         for rule in rules:
-            if "更新" in rule["name"] and rule["user"] in users and rule["status"] == 0:
+            if _type in rule["name"] and rule["user"] in users and rule["status"] == 0:
                 history_plan_id = rule["id"]
                 user = rule["user"]
                 batches = get_lastest_batch_result(history_plan_id)
@@ -129,13 +144,13 @@ def count_configured(users):
                 )
                 start_time = datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S")
 
-                today = datetime.now().date()
-                if today != start_time.date():
+                
+                if today and now != start_time.date():
                     continue
                 group_name = rule["group_name"]
                 total = batch_result["total_count"]
                 done = batch_result["done_count"]
-                start_time = batch_result["start_time"][-8:].strip()
+                start_time = batch_result["start_time"].strip()
                 group_name = group_name.split("_")[-1].strip()
                 res[user].append(group_name)
                 progress = int((done / total) * 100)
@@ -149,8 +164,11 @@ def count_configured(users):
         report.append(msg)
         tqdm.write(msg)
     report = "\n".join(report)
-    print(send(report))
-    print(res)
+    if notify:
+        send(report)
+    else:
+        with open(f"reports/{now.isoformat()}_{_type}调度{kind}.md", mode="w", encoding="utf-8") as f:
+            f.write(report)
     return {k: v for k, v in res.items() if v}
 
 
@@ -193,6 +211,41 @@ def send(text):
     return res.json()
 
 
+def report_for_user(user_id):
+    """
+    配置人员扫描历史配置的历史调度进度
+    """
+    pass
+
+
+def check_update(user):
+    """
+    配置人员查看自己的历史配置的更新调度进度
+    """
+    pass
+
+
+def report_for_progress(users):
+    """
+    生成markdown表格源码格式日报, 用机器人发送到叮叮群
+    """
+    pass
+
+
+def report_all_history(users):
+    """
+    扫描全部开启计划的历史调度
+    """
+    pass
+
+
+def report_all_update(users):
+    """
+    扫描全部开启计划的更新调度
+    """
+    pass
+
+
 if __name__ == "__main__":
     users = [k for k in users_db]
-    res = count_configured(users)
+    res = count_configured(users, today=True, section=(1511, 1884))

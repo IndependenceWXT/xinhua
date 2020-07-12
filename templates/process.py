@@ -197,10 +197,19 @@ def process_author_test(text):
 
 
 def process_publish_org_template(text):
-    """Version: 2020_07_11
+    """Version: 2020_07_12_16:23:00
     来源提取
     """
     import re
+
+    # 预处理，替换掉会影响正则提取的固定字符串, 从验证器中更新
+    flags = ["来源", "转自", "发文机关"]
+    for each in flags:
+        text = text.replace(each, "")
+
+    # 来源为空
+    if len(text.strip()) < 2:
+        return ""
 
     # 按需排序
     rules = [
@@ -208,13 +217,7 @@ def process_publish_org_template(text):
         # r"", # 自定义
         # r"([^\s/$.?].[^\s]*)", # www.railwaygazette.com
     ]
-    # 无内容作者返回空列表
-    if not text.strip():
-        return []
-    # 预处理，替换掉会影响正则提取的固定字符串, 从验证器中更新
-    flags = ["来源", "转自"]
-    for each in flags:
-        text = text.replace(each, "")
+
     # 提取来源
     for each in rules:
         p = re.compile(each)
@@ -242,6 +245,40 @@ def process_publish_org_test(text):
         return ""
 
 
+def process_tag_template(text):
+    """Version: 2020_07_12_19:10:00
+    标签提取脚本模版
+    returns:
+        []: 正则匹配失败
+    """
+    import re
+
+    tag = text.strip()
+
+    # 按需排序
+    rules = [
+        r"\b([\u4e00-\u9fa5]+)\b",  # 连续中文字符
+        # r"",  # 如有不是常见的作者格式，此处替换成案例
+    ]
+    # 无内容返回空列表
+    if not tag:
+        return []
+    # 预处理，替换掉会影响正则提取的固定字符串, 从验证器中更新
+    flags = ["标签", "关键字", "主题分类"]
+    for each in flags:
+        tag = tag.replace(each, "")
+    # 提取作者
+    for each in rules:
+        p = re.compile(each)
+        res = p.findall(tag)
+        if res:
+            return res
+        else:
+            continue
+    else:
+        return [f"error:{text}"]
+
+
 def update_url_query(text, **kwargs):
     from urllib.parse import urlsplit, urlunsplit, SplitResult, parse_qs, urlencode
 
@@ -262,7 +299,7 @@ def process_time_in_url(text):
     return ""
 
 
-# 行处理器计算content_md5
+# 计算content_md5, 数组字段去重, 不处理附件
 import hashlib
 
 
@@ -271,16 +308,18 @@ def md5(text):
 
 
 def process(data):
-    """Version: 2020_07_11
-    计算网站名发布时间标题内容详情的MD5
-    # TODO: 数组字段去重处理
+    """Version: 2020_07_12
+    计算 网站名 发布时间 标题 内容详情 的MD5
     """
-    data["content_md5"] = md5(
-        data["web_site"]
-        + data["publish_time"]
-        + data["title"]
-        + data.get("content", "")  # 空字符串到这里会变成None
-    )
+    keys = ["web_site", "publish_time", "title", "content"]
+    values = [data.get(k) if data.get(k) else "" for k in keys]
+
+    data["content_md5"] = md5("".join(values))
+    # 数组字段去重, 去空
+    if data.get("tag"):
+        data["tag"] = list(set([tag for tag in data["tag"] if tag.strip()]))
+    if data.get("author"):
+        data["author"] = list(set([tag for tag in data["author"] if tag.strip()]))
 
     return data
 
@@ -325,4 +364,4 @@ if __name__ == "__main__":
     # print(process_time_in_url("http://www.gjbmj.gov.cn/n1/2018/1217/c409082-30471818.html"))
     # print(process_author("(：test2)"))
     # print(process_author_template("(：test2)"))
-    check_author()
+    print(process_tag_template("主题分类：其他"))

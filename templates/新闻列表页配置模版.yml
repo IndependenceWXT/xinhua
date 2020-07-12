@@ -6,11 +6,10 @@ description: >-
 proxy: default
 normal_status_list:
   - '200'
-  - '404'
 login_id: ''
 downloader: pycurl
-min_data_length: 1
-min_link_length: 0
+min_data_length: 0
+min_link_length: 1
 timeout: 30
 load_wait: 0
 cache_ttl: 0
@@ -19,32 +18,17 @@ encoding: ''
 headers: ''
 download_script: ''
 rows:
-  - name: ❤️详情配置
-    description: 注意保持字段与列表页对应
-    locator: self
-    expression: ''
-    storage_id: 10270
+  - name: ❤️列表详情链接配置
+    description: 注意保持字段与详情页对应
+    locator: xpath
+    expression: >-
+      .//a[not(contains(translate(@href, "PDF", "pdf"), ".pdf") and
+      contains(translate(@href, "XLS", "xls"), ".xls") and
+      contains(translate(@href, "DOC", "doc"), ".doc"))]
+    storage_id: -1
     if_match: ''
     if_url_match: ''
     fields:
-      - name: content_md5
-        description: 用于去重的md5
-        data_type: varchar(1024)
-        locator: hub
-        expression: web_site
-        is_dedup_key: false
-        multi: false
-        keep_html: false
-        extend_url: false
-        is_extra: false
-        allow_invalid_expression: false
-        download_policy: not_download
-        processors: []
-        validators:
-          - method: length
-            params: 1 +inf
-            fail_type: retry
-        is_dedup_array: false
       - name: web_site
         description: 来源网站
         data_type: varchar(1024)
@@ -58,10 +42,7 @@ rows:
         allow_invalid_expression: false
         download_policy: not_download
         processors: []
-        validators:
-          - method: length
-            params: 1 +inf
-            fail_type: retry
+        validators: []
         is_dedup_array: false
       - name: web_site_url
         description: 来源网站地址
@@ -110,54 +91,8 @@ rows:
             fail_type: retry
         is_dedup_array: false
       - name: refer
-        description: 列表页链接
+        description: "\U0001F494列表页链接上线需删除"
         data_type: varchar(128)
-        locator: hub
-        expression: refer
-        is_dedup_key: false
-        multi: false
-        keep_html: false
-        extend_url: false
-        is_extra: true
-        allow_invalid_expression: false
-        download_policy: not_download
-        processors: []
-        validators:
-          - method: script
-            params: |-
-              def validate(context):
-                  """Version: 2020_07_11
-                  验证链接是否合法
-                  """
-                  import re
-                  from urllib.parse import urlparse
-
-                  url = context.strip()
-                  rules = [
-                      r"(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]",
-                      r"@^(https?|ftp)://[^\s/$.?#].[^\s]*$@iS",
-                      r"#\b(([\w-]+://?|www[.])[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/)))#iS",
-                  ]
-                  for each in rules:
-                      p = re.compile(each)
-                      res = p.findall(url)
-                      if res:
-                          return True
-                  else:
-                      try:
-                          q = urlparse(url)
-                      except:
-                          return False
-                      else:
-                          if all([q.scheme, q.netloc, q.path]):
-                              return True
-                          else:
-                              return False
-            fail_type: retry
-        is_dedup_array: false
-      - name: content_url
-        description: 正文详情url
-        data_type: varchar(1024)
         locator: url_re
         expression: .*
         is_dedup_key: false
@@ -202,10 +137,10 @@ rows:
             fail_type: retry
         is_dedup_array: false
       - name: title
-        description: 标题
+        description: "\U0001F49A标题"
         data_type: varchar(1024)
-        locator: hub
-        expression: title
+        locator: xpath
+        expression: .
         is_dedup_key: false
         multi: false
         keep_html: false
@@ -229,10 +164,10 @@ rows:
             fail_type: retry
         is_dedup_array: false
       - name: publish_time
-        description: 新闻发布时间
-        data_type: datetime
-        locator: hub
-        expression: publish_time
+        description: ❤️新闻发布时间
+        data_type: varchar(1024)
+        locator: xpath
+        expression: .
         is_dedup_key: false
         multi: false
         keep_html: false
@@ -249,13 +184,12 @@ rows:
                   """
                   import re
                   from datetime import datetime
-
                   data = text.strip()
 
                   rules = [
                       r"\d{4}[-年/]\d{1,2}[-月/]\d{1,2}[-日/]?[\s\d{2}:\d{2}[:\d{2}]?]?",  # 常见中文日期格式
                       # r"\d{10}",  # TODO: 处理时间戳, 遇到再加: 15开头的10或13位数字, 其实匹配前10个就够了
-                      r"",  # 如有不是常见的日期时间格式，此处替换成案例
+                      r"",     # 如有不是常见的日期时间格式，此处替换成案例
                   ]
                   # 无内容时间返回空
                   if not data:
@@ -278,7 +212,7 @@ rows:
             params: ''
         validators:
           - method: script
-            params: |-
+            params: |
               def validate(context):
                   """Version: 2020_07_11
                   验证发布时间是否大于当前时间
@@ -293,81 +227,6 @@ rows:
                       if pt > now:
                           return False
                       return True
-            fail_type: retry
-        is_dedup_array: false
-      - name: news_type
-        description: "\U0001F49A新闻类型（资讯，公告，纰漏）"
-        data_type: varchar(1024)
-        locator: xpath
-        expression: .
-        is_dedup_key: false
-        multi: false
-        keep_html: false
-        extend_url: false
-        is_extra: false
-        allow_invalid_expression: false
-        download_policy: not_download
-        processors: []
-        validators:
-          - method: length
-            params: 1 +inf
-            fail_type: retry
-        is_dedup_array: false
-      - name: publish_org
-        description: ❤️新闻发布来源
-        data_type: varchar(1024)
-        locator: xpath
-        expression: .
-        is_dedup_key: false
-        multi: false
-        keep_html: false
-        extend_url: false
-        is_extra: false
-        allow_invalid_expression: false
-        download_policy: not_download
-        processors:
-          - method: script
-            params: |-
-              def process(text):
-                  """Version: 2020_07_11
-                  来源提取
-                  """
-                  import re
-
-                  # 按需排序
-                  rules = [
-                      r"([\u4e00-\u9fa5]+)",  # 默认提取中文, 其它格式卡住后处理
-                      # r"", # 自定义
-                      # r"([^\s/$.?].[^\s]*)", # www.railwaygazette.com
-                  ]
-                  # 无内容作者返回空列表
-                  if not text.strip():
-                      return []
-                  # 预处理，替换掉会影响正则提取的固定字符串, 从验证器中更新
-                  flags = ["来源", "转自"]
-                  for each in flags:
-                      text = text.replace(each, "")
-                  # 提取来源
-                  for each in rules:
-                      p = re.compile(each)
-                      res = p.findall(text)
-                      if res:
-                          return res[0]
-                      else:
-                          continue
-                  else:
-                      return f"error:[{text}]"
-        validators:
-          - method: script
-            params: |-
-              def validate(context):
-                  """Version: 2020_07_11
-                  验证来源中是否有error: 
-                      卡住未经正确处理的请求
-                  """
-                  if context.startswith("error:"):
-                      return False
-                  return True
             fail_type: retry
         is_dedup_array: false
       - name: tag
@@ -485,10 +344,7 @@ rows:
         allow_invalid_expression: false
         download_policy: not_download
         processors: []
-        validators:
-          - method: length
-            params: 1 +inf
-            fail_type: retry
+        validators: []
         is_dedup_array: false
       - name: abstract
         description: 新闻摘要
@@ -503,14 +359,159 @@ rows:
         allow_invalid_expression: false
         download_policy: not_download
         processors: []
+        validators: []
+        is_dedup_array: false
+    links:
+      - page_rule_id: null
+        new_task_name: ''
+        description: 详情页链接
+        locator: xpath
+        expression: ./@href
+        processors: []
+        keep_other_site: false
+  - name: "\U0001F4C1文件链接配置"
+    description: 解析文件链接
+    locator: xpath
+    expression: >-
+      .//a[(contains(translate(@href, "PDF", "pdf"), ".pdf") or
+      contains(translate(@href, "XLS", "xls"), ".xls") or
+      contains(translate(@href, "DOC", "doc"), ".doc")) and not(contains(@href,
+      "file://"))]
+    storage_id: 10270
+    if_match: ''
+    if_url_match: ''
+    fields:
+      - name: web_site
+        description: 来源网站
+        data_type: varchar(1024)
+        locator: hub
+        expression: web_site
+        is_dedup_key: false
+        multi: false
+        keep_html: false
+        extend_url: false
+        is_extra: false
+        allow_invalid_expression: false
+        download_policy: not_download
+        processors: []
         validators:
           - method: length
             params: 1 +inf
             fail_type: retry
         is_dedup_array: false
-      - name: content
-        description: 新闻详情
-        data_type: text
+      - name: web_site_url
+        description: 来源网站地址
+        data_type: varchar(1024)
+        locator: hub
+        expression: web_site_url
+        is_dedup_key: false
+        multi: false
+        keep_html: false
+        extend_url: false
+        is_extra: false
+        allow_invalid_expression: false
+        download_policy: not_download
+        processors: []
+        validators:
+          - method: script
+            params: |-
+              def validate(context):
+                  """Version: 2020_07_11
+                  验证链接是否合法
+                  """
+                  import re
+                  from urllib.parse import urlparse
+
+                  url = context.strip()
+                  rules = [
+                      r"(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]",
+                      r"@^(https?|ftp)://[^\s/$.?#].[^\s]*$@iS",
+                      r"#\b(([\w-]+://?|www[.])[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/)))#iS",
+                  ]
+                  for each in rules:
+                      p = re.compile(each)
+                      res = p.findall(url)
+                      if res:
+                          return True
+                  else:
+                      try:
+                          q = urlparse(url)
+                      except:
+                          return False
+                      else:
+                          if all([q.scheme, q.netloc, q.path]):
+                              return True
+                          else:
+                              return False
+            fail_type: retry
+        is_dedup_array: false
+      - name: content_md5
+        description: 用来去重的md5
+        data_type: varchar(1024)
+        locator: hub
+        expression: web_site
+        is_dedup_key: false
+        multi: false
+        keep_html: false
+        extend_url: false
+        is_extra: false
+        allow_invalid_expression: false
+        download_policy: not_download
+        processors: []
+        validators:
+          - method: length
+            params: 1 +inf
+            fail_type: retry
+        is_dedup_array: false
+      - name: content_url
+        description: 正文详情url
+        data_type: varchar(1024)
+        locator: xpath
+        expression: ./@href
+        is_dedup_key: false
+        multi: false
+        keep_html: false
+        extend_url: true
+        is_extra: false
+        allow_invalid_expression: false
+        download_policy: not_download
+        processors: []
+        validators:
+          - method: script
+            params: |-
+              def validate(context):
+                  """Version: 2020_07_11
+                  验证链接是否合法
+                  """
+                  import re
+                  from urllib.parse import urlparse
+
+                  url = context.strip()
+                  rules = [
+                      r"(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]",
+                      r"@^(https?|ftp)://[^\s/$.?#].[^\s]*$@iS",
+                      r"#\b(([\w-]+://?|www[.])[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/)))#iS",
+                  ]
+                  for each in rules:
+                      p = re.compile(each)
+                      res = p.findall(url)
+                      if res:
+                          return True
+                  else:
+                      try:
+                          q = urlparse(url)
+                      except:
+                          return False
+                      else:
+                          if all([q.scheme, q.netloc, q.path]):
+                              return True
+                          else:
+                              return False
+            fail_type: retry
+        is_dedup_array: false
+      - name: title
+        description: 标题
+        data_type: varchar(1024)
         locator: xpath
         expression: .
         is_dedup_key: false
@@ -524,29 +525,10 @@ rows:
           - method: script
             params: |-
               def process(text):
-                  """Version: 2020_07_11_release
-                  处理短正文: 用了挺久了, 应该稳定可用了
                   """
-                  import re
-
-                  if len(re.sub(r"\s+", "", text)) < 80:
-                      return ""
+                  标题中的省略号在附件这块就不用title验证器了直接过, 链接更重要
+                  """
                   return text
-        validators: []
-        is_dedup_array: false
-      - name: content_html
-        description: 新闻详情带html标签
-        data_type: text
-        locator: xpath
-        expression: .
-        is_dedup_key: false
-        multi: false
-        keep_html: true
-        extend_url: false
-        is_extra: false
-        allow_invalid_expression: false
-        download_policy: not_download
-        processors: []
         validators:
           - method: length
             params: 1 +inf
@@ -556,11 +538,7 @@ rows:
         description: 附件名称
         data_type: varchar(1024)
         locator: xpath
-        expression: >-
-          .//a[(contains(translate(@href, "PDF", "pdf"), ".pdf") or
-          contains(translate(@href, "XLS", "xls"), ".xls") or
-          contains(translate(@href, "DOC", "doc"), ".doc")) and
-          not(contains(@href, "file://"))]
+        expression: .
         is_dedup_key: false
         multi: true
         keep_html: false
@@ -578,11 +556,7 @@ rows:
         description: 附件地址
         data_type: varchar(1024)
         locator: xpath
-        expression: >-
-          .//a[(contains(translate(@href, "PDF", "pdf"), ".pdf") or
-          contains(translate(@href, "XLS", "xls"), ".xls") or
-          contains(translate(@href, "DOC", "doc"), ".doc")) and
-          not(contains(@href, "file://"))]/@href
+        expression: ./@href
         is_dedup_key: false
         multi: true
         keep_html: false
@@ -624,11 +598,11 @@ rows:
                               return False
             fail_type: retry
         is_dedup_array: false
-      - name: likes
-        description: 点赞数
-        data_type: bigint
-        locator: xpath
-        expression: .
+      - name: refer
+        description: "\U0001F494列表页链接上线需删除"
+        data_type: varchar(128)
+        locator: url_re
+        expression: .*
         is_dedup_key: false
         multi: false
         keep_html: false
@@ -638,48 +612,40 @@ rows:
         download_policy: not_download
         processors: []
         validators:
-          - method: length
-            params: 1 +inf
+          - method: script
+            params: |-
+              def validate(context):
+                  """Version: 2020_07_11
+                  验证链接是否合法
+                  """
+                  import re
+                  from urllib.parse import urlparse
+
+                  url = context.strip()
+                  rules = [
+                      r"(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]",
+                      r"@^(https?|ftp)://[^\s/$.?#].[^\s]*$@iS",
+                      r"#\b(([\w-]+://?|www[.])[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/)))#iS",
+                  ]
+                  for each in rules:
+                      p = re.compile(each)
+                      res = p.findall(url)
+                      if res:
+                          return True
+                  else:
+                      try:
+                          q = urlparse(url)
+                      except:
+                          return False
+                      else:
+                          if all([q.scheme, q.netloc, q.path]):
+                              return True
+                          else:
+                              return False
             fail_type: retry
         is_dedup_array: false
-      - name: hits
-        description: 点击量访问量
-        data_type: bigint
-        locator: xpath
-        expression: .
-        is_dedup_key: false
-        multi: false
-        keep_html: false
-        extend_url: false
-        is_extra: false
-        allow_invalid_expression: false
-        download_policy: not_download
-        processors: []
-        validators:
-          - method: length
-            params: 1 +inf
-            fail_type: retry
-        is_dedup_array: false
-      - name: replies
-        description: 评论数
-        data_type: bigint
-        locator: xpath
-        expression: .
-        is_dedup_key: false
-        multi: false
-        keep_html: false
-        extend_url: false
-        is_extra: false
-        allow_invalid_expression: false
-        download_policy: not_download
-        processors: []
-        validators:
-          - method: length
-            params: 1 +inf
-            fail_type: retry
-        is_dedup_array: false
-      - name: office_account
-        description: 公众号
+      - name: news_type
+        description: "\U0001F49A新闻类型（资讯，公告，纰漏）"
         data_type: varchar(1024)
         locator: xpath
         expression: .
@@ -690,14 +656,248 @@ rows:
         is_extra: false
         allow_invalid_expression: false
         download_policy: not_download
-        processors: []
+        processors:
+          - method: script
+            params: |-
+              def process(text):
+                  """
+                  处理文本, 返回处理后的文本
+                  """
+                  return text
         validators:
           - method: length
             params: 1 +inf
             fail_type: retry
         is_dedup_array: false
-      - name: office_account_info
-        description: 公众号简介
+      - name: publish_time
+        description: ❤️新闻发布时间
+        data_type: datetime
+        locator: xpath
+        expression: .
+        is_dedup_key: false
+        multi: false
+        keep_html: false
+        extend_url: false
+        is_extra: false
+        allow_invalid_expression: false
+        download_policy: not_download
+        processors:
+          - method: script
+            params: |-
+              def process(text):
+                  """Version: 2020_07_11
+                  时间提取脚本模版
+                  """
+                  import re
+                  from datetime import datetime
+                  data = text.strip()
+
+                  rules = [
+                      r"\d{4}[-年/]\d{1,2}[-月/]\d{1,2}[-日/]?[\s\d{2}:\d{2}[:\d{2}]?]?",  # 常见中文日期格式
+                      # r"\d{10}",  # TODO: 处理时间戳, 遇到再加: 15开头的10或13位数字, 其实匹配前10个就够了
+                      r"",     # 如有不是常见的日期时间格式，此处替换成案例
+                  ]
+                  # 无内容时间返回空
+                  if not data:
+                      return "error:空字符串"
+                  # 预处理，替换掉会影响正则提取的固定字符串, 如点击量的数字
+                  flags = [""]
+                  for each in flags:
+                      data = data.replace(each, "")
+                  # 提取日期时间
+                  for each in rules:
+                      p = re.compile(each)
+                      res = p.findall(data)
+                      if res:
+                          return res[0]
+                      else:
+                          continue
+                  else:
+                      return f"error:{text}"
+          - method: text2datetime
+            params: ''
+        validators:
+          - method: script
+            params: |-
+              def validate(context):
+                  """Version: 2020_07_11
+                  验证发布时间是否大于当前时间
+                  """
+                  from datetime import datetime
+
+                  if context.startswith("error:"):
+                      return False
+                  else:
+                      now = datetime.now()
+                      pt = datetime.strptime(context, "%Y-%m-%d %H:%M:%S")
+                      if pt > now:
+                          return False
+                      return True
+            fail_type: retry
+        is_dedup_array: false
+      - name: publish_org
+        description: ❤️新闻发布来源
+        data_type: varchar(1024)
+        locator: xpath
+        expression: .
+        is_dedup_key: false
+        multi: false
+        keep_html: false
+        extend_url: false
+        is_extra: false
+        allow_invalid_expression: false
+        download_policy: not_download
+        processors:
+          - method: script
+            params: |-
+              def process(text):
+                  """Version: 2020_07_12_16:23:00
+                  来源提取
+                  """
+                  import re
+                  # 预处理，替换掉会影响正则提取的固定字符串, 从验证器中更新
+                  flags = ["来源", "转自"]
+                  for each in flags:
+                      text = text.replace(each, "")
+
+                  # 来源为空
+                  if len(text.strip()) < 2:
+                      return ""
+
+                  # 按需排序
+                  rules = [
+                      r"([\u4e00-\u9fa5]+)",  # 默认提取中文, 其它格式卡住后处理
+                      # r"", # 自定义
+                      # r"([^\s/$.?].[^\s]*)", # www.railwaygazette.com
+                  ]
+
+                  # 提取来源
+                  for each in rules:
+                      p = re.compile(each)
+                      res = p.findall(text)
+                      if res:
+                          return res[0]
+                      else:
+                          continue
+                  else:
+                      return f"error:[{text}]"
+        validators:
+          - method: script
+            params: |-
+              def validate(context):
+                  """Version: 2020_07_11
+                  验证来源中是否有error: 
+                      卡住未经正确处理的请求
+                  """
+                  if context.startswith("error:"):
+                      return False
+                  return True
+            fail_type: retry
+        is_dedup_array: false
+      - name: author
+        description: ❤️作者
+        data_type: varchar(1024)
+        locator: xpath
+        expression: .
+        is_dedup_key: false
+        multi: true
+        keep_html: false
+        extend_url: false
+        is_extra: false
+        allow_invalid_expression: false
+        download_policy: not_download
+        processors:
+          - method: script
+            params: |-
+              def process(text):
+                  """Version: 2020_07_11
+                  作者提取脚本模版
+                  returns:
+                      []: 正则匹配失败
+                  """
+                  import re
+
+                  author = text.strip()
+
+                  # 按需排序
+                  rules = [
+                      r"\b([\u4e00-\u9fa5]\s?[\u4e00-\u9fa5]+)\b",  # 常见中文作者格式
+                      r"([a-zA-Z0-9]+)",  # 作者为字母和数字组合
+                      # r"",  # 如有不是常见的作者格式，此处替换成案例
+                  ]
+                  # 无内容作者返回空列表
+                  if not author:
+                      return []
+                  # 预处理，替换掉会影响正则提取的固定字符串, 从验证器中更新
+                  flags = ["记者", "撰文", "通讯员", "责任编辑", "编辑", "通讯中"]
+                  for each in flags:
+                      author = author.replace(each, "")
+                  # 提取作者
+                  for each in rules:
+                      p = re.compile(each)
+                      res = p.findall(author)
+                      if res:
+                          return [i.replace(" ", "") for i in res]
+                      else:
+                          continue
+                  else:
+                      return [f"error:{text}"]
+        validators:
+          - method: script
+            params: |-
+              def validate(context):
+                  """Version: 2020_07_11
+                  验证中文作者是否含有非法词
+                  """
+                  if context.startswith("error:"):
+                      return False
+                  elif len(context) > 4 or len(context) < 2:
+                      return False
+                  return True
+            fail_type: retry
+        is_dedup_array: false
+      - name: tag
+        description: ❤️标签
+        data_type: varchar(1024)
+        locator: xpath
+        expression: .
+        is_dedup_key: false
+        multi: true
+        keep_html: false
+        extend_url: false
+        is_extra: false
+        allow_invalid_expression: false
+        download_policy: not_download
+        processors: []
+        validators:
+          - method: script
+            params: |-
+              def validate(context):
+                  """Version: 2020_07_11
+                  TODO: 验证标签, 不同网站调整长度, 测试一段时间
+                  """
+                  import re
+
+                  text = context.strip()
+                  # 验证长度
+                  if len(text) > 5 or len(text) < 2:
+                      return False
+                  # 验证是否是含有非中文字符
+                  rules = [r"[\u4e00-\u9fa5]+"]
+                  for each in rules:
+                      p = re.compile(each)
+                      res = p.match(text)
+                      if res:
+                          if res[0] == text:
+                              return True
+                          else:
+                              return False
+                  else:
+                      return False
+            fail_type: retry
+        is_dedup_array: false
+      - name: abstract
+        description: 新闻摘要
         data_type: varchar(1024)
         locator: xpath
         expression: .
@@ -717,6 +917,7 @@ rows:
     processors:
       - method: script
         params: |-
+          # 计算content_md5, 数组字段去重, 不处理附件
           import hashlib
 
 
@@ -725,7 +926,7 @@ rows:
 
 
           def process(data):
-              """2020_07_11
+              """Version: 2020_07_12
               计算网站名发布时间标题内容详情的MD5
               """
               data["content_md5"] = md5(
@@ -734,6 +935,12 @@ rows:
                   + data["title"]
                   + data.get("content", "")  # 空字符串到这里会变成None
               )
+              # 数组字段去重, 去空
+              if data.get("tag"):
+                  data["tag"] = list(set([tag for tag in data["tag"] if tag.strip()]))
+              if data.get("author"):
+                  data["author"] = list(set([tag for tag in data["author"] if tag.strip()]))
+
               return data
     links: []
 preprocessors: []
@@ -747,17 +954,17 @@ examples:
   - method: GET
     url: ''
     data: ''
-    description: 👍配置测试保留测试链接勿删
+    description: 配置测试始终保存勿删除
     should_save_sync: false
   - method: GET
     url: ''
     data: ''
-    description: '异常测试说明:'
+    description: 异常测试说明：
     should_save_sync: false
   - method: GET
     url: ''
     data: ''
-    description: '异常测试说明:'
+    description: 异常测试说明：
     should_save_sync: false
 size: small
 global_dedup: false
