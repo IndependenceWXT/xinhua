@@ -241,7 +241,41 @@ rows:
         is_extra: false
         allow_invalid_expression: false
         download_policy: not_download
-        processors: []
+        processors:
+          - method: script
+            params: |-
+              def process(text):
+                  """Version: 2020_07_12_19:10:00
+                  标签提取脚本模版
+                  returns:
+                      []: 正则匹配失败
+                  """
+                  import re
+
+                  tag = text.strip()
+
+                  # 按需排序
+                  rules = [
+                      r"\b([\u4e00-\u9fa5]+)\b",  # 连续中文字符
+                      # r"",  # 如有不是常见的作者格式，此处替换成案例
+                  ]
+                  # 无内容返回空列表
+                  if not tag:
+                      return []
+                  # 预处理，替换掉会影响正则提取的固定字符串, 从验证器中更新
+                  flags = ["标签", "关键字", "主题分类"]
+                  for each in flags:
+                      tag = tag.replace(each, "")
+                  # 提取作者
+                  for each in rules:
+                      p = re.compile(each)
+                      res = p.findall(tag)
+                      if res:
+                          return res
+                      else:
+                          continue
+                  else:
+                      return [f"error:{text}"]
         validators:
           - method: script
             params: |-
@@ -285,14 +319,12 @@ rows:
           - method: script
             params: |-
               def process(text):
-                  """Version: 2020_07_11
+                  """Version: 2020_07_12
                   作者提取脚本模版
                   returns:
                       []: 正则匹配失败
                   """
                   import re
-
-                  author = text.strip()
 
                   # 按需排序
                   rules = [
@@ -300,13 +332,18 @@ rows:
                       r"([a-zA-Z0-9]+)",  # 作者为字母和数字组合
                       # r"",  # 如有不是常见的作者格式，此处替换成案例
                   ]
-                  # 无内容作者返回空列表
-                  if not author:
-                      return []
                   # 预处理，替换掉会影响正则提取的固定字符串, 从验证器中更新
-                  flags = ["记者", "撰文", "通讯员", "责任编辑", "编辑", "通讯中"]
+                  flags = ["作者", "记者", "撰文", "通讯员", "责任编辑", "编辑", "通讯中"]
+                  punctuations = ["【", "】", "（", "）"]
+                  flags.extend(punctuations)
                   for each in flags:
-                      author = author.replace(each, "")
+                      text = text.replace(each, "")
+
+                  # 判断是否是空作者
+                  author = text.strip()
+                  if len(author) < 2:
+                      return []
+
                   # 提取作者
                   for each in rules:
                       p = re.compile(each)
@@ -758,7 +795,7 @@ rows:
                   """
                   import re
                   # 预处理，替换掉会影响正则提取的固定字符串, 从验证器中更新
-                  flags = ["来源", "转自"]
+                  flags = ["信息来源", "来源", "转自"]
                   for each in flags:
                       text = text.replace(each, "")
 
@@ -812,14 +849,12 @@ rows:
           - method: script
             params: |-
               def process(text):
-                  """Version: 2020_07_11
+                  """Version: 2020_07_12
                   作者提取脚本模版
                   returns:
                       []: 正则匹配失败
                   """
                   import re
-
-                  author = text.strip()
 
                   # 按需排序
                   rules = [
@@ -827,13 +862,18 @@ rows:
                       r"([a-zA-Z0-9]+)",  # 作者为字母和数字组合
                       # r"",  # 如有不是常见的作者格式，此处替换成案例
                   ]
-                  # 无内容作者返回空列表
-                  if not author:
-                      return []
                   # 预处理，替换掉会影响正则提取的固定字符串, 从验证器中更新
-                  flags = ["记者", "撰文", "通讯员", "责任编辑", "编辑", "通讯中"]
+                  flags = ["作者", "记者", "撰文", "通讯员", "责任编辑", "编辑", "通讯中"]
+                  punctuations = ["【", "】", "（", "）"]
+                  flags.extend(punctuations)
                   for each in flags:
-                      author = author.replace(each, "")
+                      text = text.replace(each, "")
+
+                  # 判断是否是空作者
+                  author = text.strip()
+                  if len(author) < 2:
+                      return []
+
                   # 提取作者
                   for each in rules:
                       p = re.compile(each)
@@ -870,7 +910,41 @@ rows:
         is_extra: false
         allow_invalid_expression: false
         download_policy: not_download
-        processors: []
+        processors:
+          - method: script
+            params: |-
+              def process(text):
+                  """Version: 2020_07_12_19:10:00
+                  标签提取脚本模版
+                  returns:
+                      []: 正则匹配失败
+                  """
+                  import re
+
+                  tag = text.strip()
+
+                  # 按需排序
+                  rules = [
+                      r"\b([\u4e00-\u9fa5]+)\b",  # 连续中文字符
+                      # r"",  # 如有不是常见的作者格式，此处替换成案例
+                  ]
+                  # 无内容返回空列表
+                  if not tag:
+                      return []
+                  # 预处理，替换掉会影响正则提取的固定字符串, 从验证器中更新
+                  flags = ["标签", "关键字", "主题分类"]
+                  for each in flags:
+                      tag = tag.replace(each, "")
+                  # 提取作者
+                  for each in rules:
+                      p = re.compile(each)
+                      res = p.findall(tag)
+                      if res:
+                          return res
+                      else:
+                          continue
+                  else:
+                      return [f"error:{text}"]
         validators:
           - method: script
             params: |-
@@ -954,7 +1028,7 @@ examples:
   - method: GET
     url: ''
     data: ''
-    description: 配置测试保存做对比
+    description: "\U0001F44D配置测试保存做对比"
     should_save_sync: false
   - method: GET
     url: ''

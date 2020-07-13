@@ -333,7 +333,7 @@ rows:
                   """
                   import re
                   # 预处理，替换掉会影响正则提取的固定字符串, 从验证器中更新
-                  flags = ["来源", "转自"]
+                  flags = ["信息来源", "来源", "转自"]
                   for each in flags:
                       text = text.replace(each, "")
 
@@ -383,7 +383,41 @@ rows:
         is_extra: false
         allow_invalid_expression: false
         download_policy: not_download
-        processors: []
+        processors:
+          - method: script
+            params: |-
+              def process(text):
+                  """Version: 2020_07_12_19:10:00
+                  标签提取脚本模版
+                  returns:
+                      []: 正则匹配失败
+                  """
+                  import re
+
+                  tag = text.strip()
+
+                  # 按需排序
+                  rules = [
+                      r"\b([\u4e00-\u9fa5]+)\b",  # 连续中文字符
+                      # r"",  # 如有不是常见的作者格式，此处替换成案例
+                  ]
+                  # 无内容返回空列表
+                  if not tag:
+                      return []
+                  # 预处理，替换掉会影响正则提取的固定字符串, 从验证器中更新
+                  flags = ["标签", "关键字", "主题分类"]
+                  for each in flags:
+                      tag = tag.replace(each, "")
+                  # 提取作者
+                  for each in rules:
+                      p = re.compile(each)
+                      res = p.findall(tag)
+                      if res:
+                          return res
+                      else:
+                          continue
+                  else:
+                      return [f"error:{text}"]
         validators:
           - method: script
             params: |-
@@ -446,7 +480,7 @@ rows:
                   if not author:
                       return []
                   # 预处理，替换掉会影响正则提取的固定字符串, 从验证器中更新
-                  flags = ["记者", "撰文", "通讯员", "责任编辑", "编辑", "通讯中"]
+                  flags = ["作者", "记者", "撰文", "通讯员", "责任编辑", "编辑", "通讯中"]
                   for each in flags:
                       author = author.replace(each, "")
                   # 提取作者
@@ -560,7 +594,10 @@ rows:
         expression: >-
           .//a[(contains(translate(@href, "PDF", "pdf"), ".pdf") or
           contains(translate(@href, "XLS", "xls"), ".xls") or
-          contains(translate(@href, "DOC", "doc"), ".doc")) and
+          contains(translate(@href, "DOC", "doc"), ".doc") or
+          contains(translate(@href, "ZIP", "zip"), ".zip") or
+          contains(translate(@href, "RAR", "rar"), ".rar") or
+          contains(translate(@href, "WPS", "wps"), ".wps")) and
           not(contains(@href, "file://"))]
         is_dedup_key: false
         multi: true
@@ -582,7 +619,10 @@ rows:
         expression: >-
           .//a[(contains(translate(@href, "PDF", "pdf"), ".pdf") or
           contains(translate(@href, "XLS", "xls"), ".xls") or
-          contains(translate(@href, "DOC", "doc"), ".doc")) and
+          contains(translate(@href, "DOC", "doc"), ".doc") or
+          contains(translate(@href, "ZIP", "zip"), ".zip") or
+          contains(translate(@href, "RAR", "rar"), ".rar") or
+          contains(translate(@href, "WPS", "wps"), ".wps")) and
           not(contains(@href, "file://"))]/@href
         is_dedup_key: false
         multi: true

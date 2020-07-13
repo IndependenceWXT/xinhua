@@ -17,11 +17,11 @@ import yaml
 from tqdm import tqdm, trange
 
 users_db = {
+    17: "胡涛涛",
     16: "张豹",
-    15: "胡涛涛",
-    14: "柯玉强",
-    13: "石张毅",
-    12: "王尚文",
+    15: "柯玉强",
+    14: "石张毅",
+    13: "王尚文",
     10: "房天生",
     7: "王小婷",
     6: "唐浩",
@@ -86,7 +86,7 @@ def get_lastest_batch_result(plan_id):
     return res.json()["results"]
 
 
-def count_configured(users, today=True, ago=False, section=(1560, 1857), notify=False):
+def count_configured(users, today=True, ago=False, section=(1565, 1858), notify=False):
     """
     {
         1: [275],
@@ -121,13 +121,17 @@ def count_configured(users, today=True, ago=False, section=(1560, 1857), notify=
     for group_id in bar:
         bar.set_description(desc=f"{group_id:0>4}")
         rules = get_rule_list(group_id)
+        sleep(1)
         if len(rules) < 1:
             continue
         for rule in rules:
             if _type in rule["name"] and rule["user"] in users and rule["status"] == 0:
-                history_plan_id = rule["id"]
+                plan_id = rule["id"]
                 user = rule["user"]
-                batches = get_lastest_batch_result(history_plan_id)
+                batches = get_lastest_batch_result(plan_id)
+                if len(batches) < 1:
+                    tqdm.write(f"调度编号【{plan_id}】没有批次记录")
+                    continue
                 batch_result = {
                     k: v
                     for k, v in batches[0].items()
@@ -145,6 +149,9 @@ def count_configured(users, today=True, ago=False, section=(1560, 1857), notify=
                 group_name = rule["group_name"]
                 total = batch_result["total_count"]
                 done = batch_result["done_count"]
+                if max(int(total), int(done)) == 0:
+                    tqdm.write(f"{group_name} 调度正在启动稍后再试...")
+                    continue
                 start_time = batch_result["start_time"].strip()
                 group_name = group_name.split("_")[-1].strip()
                 res[user].append(group_name)
@@ -212,31 +219,34 @@ def report_for_user(user_id):
     """
     配置人员扫描历史配置的历史调度进度
     """
-    pass
+    users = [k for k in users_db if k == user_id]
+    res = count_configured(users, today=False, ago=True)
 
 
-def check_update(user):
+def check_update(user_id):
     """
     配置人员查看自己的历史配置的更新调度进度
     """
-    pass
+    users = [k for k in users_db if k == user_id]
+    res = count_configured(users, today=True)
 
 
-def report_for_progress(users):
+def report_for_progress():
     """
     生成markdown表格源码格式日报, 用机器人发送到叮叮群
     """
-    pass
+    users = [k for k in users_db]
+    res = count_configured(users, today=True)
 
 
-def report_all_history(users):
+def report_all_history():
     """
     扫描全部开启计划的历史调度
     """
     pass
 
 
-def report_all_update(users):
+def report_all_update():
     """
     扫描全部开启计划的更新调度
     """
@@ -244,5 +254,4 @@ def report_all_update(users):
 
 
 if __name__ == "__main__":
-    users = [k for k in users_db]
-    res = count_configured(users, today=True, section=(1511, 1884))
+    report_for_progress()

@@ -143,6 +143,11 @@ def validate_news_type(context):
         return False
 
 
+def validate_web_site(context):
+    # TODO: 验证是否全部都是中文字符
+    pass
+
+
 def test_validators():
     # TODO: 测试验证器
     pass

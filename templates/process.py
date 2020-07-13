@@ -54,7 +54,7 @@ def process_time_template(text):
         res = p.findall(data)
         res = res and res[0] and res[0][0]
         if res:
-             return res
+            return res
         else:
             continue
     else:
@@ -65,12 +65,11 @@ def process_time_test(text):
     """提取时间"""
     import re
     import dateparser
+
     post_time = "1999年06月30日 17:35:00"
-    time_re = re.compile('[年月日\s]')
-    ctime = dateparser.parse(time_re.sub(' ', text))
+    time_re = re.compile("[年月日\s]")
+    ctime = dateparser.parse(time_re.sub(" ", text))
     print(ctime)
-
-
 
 
 def process_timestamp(text):
@@ -134,14 +133,12 @@ def process_time_ambiguous(text):
 
 
 def process_author_template(text):
-    """Version: 2020_07_11
+    """Version: 2020_07_12
     作者提取脚本模版
     returns:
         []: 正则匹配失败
     """
     import re
-
-    author = text.strip()
 
     # 按需排序
     rules = [
@@ -149,13 +146,18 @@ def process_author_template(text):
         r"([a-zA-Z0-9]+)",  # 作者为字母和数字组合
         # r"",  # 如有不是常见的作者格式，此处替换成案例
     ]
-    # 无内容作者返回空列表
-    if not author:
-        return []
     # 预处理，替换掉会影响正则提取的固定字符串, 从验证器中更新
-    flags = ["记者", "撰文", "通讯员", "责任编辑", "编辑", "通讯中"]
+    flags = ["作者", "记者", "撰文", "通讯员", "责任编辑", "编辑", "通讯中"]
+    punctuations = ["【", "】", "（", "）"]
+    flags.extend(punctuations)
     for each in flags:
-        author = author.replace(each, "")
+        text = text.replace(each, "")
+
+    # 判断是否是空作者
+    author = text.strip()
+    if len(author) < 2:
+        return []
+
     # 提取作者
     for each in rules:
         p = re.compile(each)
@@ -188,7 +190,7 @@ def process_publish_org_template(text):
     import re
 
     # 预处理，替换掉会影响正则提取的固定字符串, 从验证器中更新
-    flags = ["来源", "转自", "发文机关"]
+    flags = ["信息来源", "来源", "转自", "发文机关"]
     for each in flags:
         text = text.replace(each, "")
 
@@ -341,7 +343,7 @@ if __name__ == "__main__":
     # print(process_url_query("https://www.imemo.ru/en/index.php?page_id=502&id=484&p=60&ret=498"))
     # print(process("https://videos.aarp.org/detail/videos/all-videos/video/4117187433001/top-five-money-wasters?autoStart=true"))
     # print(process_time_test("1999年06月30日 17:35:00"))
-    print(process_time_template("2020-06-30 17:35"))
+    # print(process_time_template("2020-06-30 17:35"))
     # print(process_text("27November2019"))
     # print(process_request("http://www.ebrd.com/cs/Satellite?c=Content&cid=1395242494713&pagename=EBRD%2FContent%2FDownloadDocument"))
     # text = """撰文：纪晓燕 龚丽欣 黄子慢"""
@@ -349,5 +351,5 @@ if __name__ == "__main__":
     # print(process_time("May 16, 2002Economic and Social Research Institute"))
     # print(process_time_in_url("http://www.gjbmj.gov.cn/n1/2018/1217/c409082-30471818.html"))
     # print(process_author("(：test2)"))
-    # print(process_author_template("(：test2)"))
+    print(process_author_template("（编辑：）"))
     # print(process_tag_template("主题分类：其他"))
