@@ -1,9 +1,5 @@
 """
-日报
-2020-07-10 日报
 
-xxx 16:54:41  河北省石家庄市    48%
-xxx 18:04:32   河北省唐山市    93%
 """
 
 import base64
@@ -144,7 +140,6 @@ def count_configured(users, today=True, ago=False, section=(1560, 1857), notify=
                 )
                 start_time = datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S")
 
-                
                 if today and now != start_time.date():
                     continue
                 group_name = rule["group_name"]
@@ -167,7 +162,9 @@ def count_configured(users, today=True, ago=False, section=(1560, 1857), notify=
     if notify:
         send(report)
     else:
-        with open(f"reports/{now.isoformat()}_{_type}调度{kind}.md", mode="w", encoding="utf-8") as f:
+        with open(
+            f"../reports/{now.isoformat()}_{_type}调度{kind}.md", mode="w", encoding="utf-8"
+        ) as f:
             f.write(report)
     return {k: v for k, v in res.items() if v}
 

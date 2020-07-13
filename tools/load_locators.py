@@ -1,6 +1,7 @@
 """
 TODO: 解析配置, 用新模板升级配置
     〇用新模板加载字段xpath和测试用例的备注链接
+    10387无配置异常
     √ 输出其中字段配置的xpath, 功能还是可以试试的
     √ 输出测试用例中的备注和链接
 """
@@ -78,7 +79,8 @@ def filter_xpath(rule_id, data):
     print(f"[+]【{rule_id}】开始过滤不需要的配置...")
     out_put_list = []
 
-    rows = data["rows"]
+    rows = data["rows"] or 
+
     examples = data["examples"]
 
     for each in rows:

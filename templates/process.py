@@ -28,7 +28,7 @@ def process_url(text):
 
 
 def process_time_template(text):
-    """Version: 2020_07_11
+    """Version: 2020_07_13
     时间提取脚本模版
     """
     import re
@@ -37,7 +37,7 @@ def process_time_template(text):
     data = text.strip()
 
     rules = [
-        r"\d{4}[-年/]\d{1,2}[-月/]\d{1,2}[-日/]?[\s\d{2}:\d{2}[:\d{2}]?]?",  # 常见中文日期格式
+        r"(\d{2}\d{2}([\.\-/|年月\s]{1,3}\d{1,2}){2}日?(\s?\d{2}:\d{2}(:\d{2})?)?)|(\d{1,2}\s?(分钟|小时|天)前)",  # 常见中文日期格式, 网上找的
         # r"\d{10}",  # TODO: 处理时间戳, 遇到再加: 15开头的10或13位数字, 其实匹配前10个就够了
         r"",  # 如有不是常见的日期时间格式，此处替换成案例
     ]
@@ -52,8 +52,9 @@ def process_time_template(text):
     for each in rules:
         p = re.compile(each)
         res = p.findall(data)
+        res = res and res[0] and res[0][0]
         if res:
-            return res[0]
+             return res
         else:
             continue
     else:
@@ -63,29 +64,13 @@ def process_time_template(text):
 def process_time_test(text):
     """提取时间"""
     import re
+    import dateparser
+    post_time = "1999年06月30日 17:35:00"
+    time_re = re.compile('[年月日\s]')
+    ctime = dateparser.parse(time_re.sub(' ', text))
+    print(ctime)
 
-    p = re.compile(r"\d{4}年\d{1,2}月\d{1,2}日\s\d{2}:\d{2}")
-    p0 = re.compile(r"\d{4}-\d{1,2}-\d{1,2}\s\d{2}:\d{2}:\d{2}")
-    p1 = re.compile(r"\w+\s\d{1,2},\s\d{4}")
-    p2 = re.compile(r"\w+\s\d{4}")
-    p3 = re.compile(r"\d{4}")
-    if text.strip():
-        res = p.findall(text)
-        if res:
-            return res[0]
-        res = p0.findall(text)
-        if res:
-            return res[0]
-        res = p1.findall(text)
-        if res:
-            return res[0]
-        res = p2.findall(text)
-        if res:
-            return res[0]
-        res = p3.findall(text)
-        if res:
-            return res[0]
-    return ""
+
 
 
 def process_timestamp(text):
@@ -312,14 +297,14 @@ def process(data):
     计算 网站名 发布时间 标题 内容详情 的MD5
     """
     keys = ["web_site", "publish_time", "title", "content"]
-    values = [data.get(k) if data.get(k) else "" for k in keys]
+    values = [data.get(k) or "" for k in keys]
 
     data["content_md5"] = md5("".join(values))
     # 数组字段去重, 去空
     if data.get("tag"):
-        data["tag"] = list(set([tag for tag in data["tag"] if tag.strip()]))
+        data["tag"] = list(set([tag for tag in data["tag"] if tag]))
     if data.get("author"):
-        data["author"] = list(set([tag for tag in data["author"] if tag.strip()]))
+        data["author"] = list(set([tag for tag in data["author"] if tag]))
 
     return data
 
@@ -355,7 +340,8 @@ if __name__ == "__main__":
     # print(process_url("mailto:http://www.foeg.uzh.ch/analyse/politischekommunikation/news11/Sotomostudie.pdf"))
     # print(process_url_query("https://www.imemo.ru/en/index.php?page_id=502&id=484&p=60&ret=498"))
     # print(process("https://videos.aarp.org/detail/videos/all-videos/video/4117187433001/top-five-money-wasters?autoStart=true"))
-    # print(process_time_template("2019-5-19"))
+    # print(process_time_test("1999年06月30日 17:35:00"))
+    print(process_time_template("2020-06-30 17:35"))
     # print(process_text("27November2019"))
     # print(process_request("http://www.ebrd.com/cs/Satellite?c=Content&cid=1395242494713&pagename=EBRD%2FContent%2FDownloadDocument"))
     # text = """撰文：纪晓燕 龚丽欣 黄子慢"""
@@ -364,4 +350,4 @@ if __name__ == "__main__":
     # print(process_time_in_url("http://www.gjbmj.gov.cn/n1/2018/1217/c409082-30471818.html"))
     # print(process_author("(：test2)"))
     # print(process_author_template("(：test2)"))
-    print(process_tag_template("主题分类：其他"))
+    # print(process_tag_template("主题分类：其他"))
