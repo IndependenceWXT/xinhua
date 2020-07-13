@@ -1,8 +1,6 @@
-description: >-
+description: |-
   Version: 2020_07_12
-
-  ⚠️配置前请核对版本号是否最新; 带有✔️字段开始往下的字段需要配置, 页面中没有的字段删除即可; 测试时注意核验字段值的数据准确性:
-  描述中有❤️标志的字段
+  ⚠️配置前请核对版本号是否最新; 测试时注意核验字段值的数据准确性: 描述中有❤️标志的字段
 proxy: default
 normal_status_list:
   - '200'
@@ -22,8 +20,8 @@ rows:
     description: 注意保持字段与详情页对应
     locator: xpath
     expression: >-
-      ./a[not(contains(translate(@href, "PDF", "pdf"), ".pdf") and
-      contains(translate(@href, "XLS", "xls"), ".xls") and
+      ./a[not(contains(translate(@href, "PDF", "pdf"), ".pdf") or
+      contains(translate(@href, "XLS", "xls"), ".xls") or
       contains(translate(@href, "DOC", "doc"), ".doc"))]
     storage_id: -1
     if_match: ''
@@ -179,17 +177,18 @@ rows:
           - method: script
             params: |-
               def process(text):
-                  """Version: 2020_07_11
+                  """Version: 2020_07_13
                   时间提取脚本模版
                   """
                   import re
                   from datetime import datetime
+
                   data = text.strip()
 
                   rules = [
-                      r"\d{4}[-年/]\d{1,2}[-月/]\d{1,2}[-日/]?[\s\d{2}:\d{2}[:\d{2}]?]?",  # 常见中文日期格式
+                      r"(\d{2}\d{2}([\.\-/|年月\s]{1,3}\d{1,2}){2}日?(\s?\d{2}:\d{2}(:\d{2})?)?)|(\d{1,2}\s?(分钟|小时|天)前)",  # 常见中文日期格式, 网上找的
                       # r"\d{10}",  # TODO: 处理时间戳, 遇到再加: 15开头的10或13位数字, 其实匹配前10个就够了
-                      r"",     # 如有不是常见的日期时间格式，此处替换成案例
+                      r"",  # 如有不是常见的日期时间格式，此处替换成案例
                   ]
                   # 无内容时间返回空
                   if not data:
@@ -202,8 +201,9 @@ rows:
                   for each in rules:
                       p = re.compile(each)
                       res = p.findall(data)
+                      res = res and res[0] and res[0][0]
                       if res:
-                          return res[0]
+                           return res
                       else:
                           continue
                   else:
@@ -373,8 +373,8 @@ rows:
     description: 解析文件链接
     locator: xpath
     expression: >-
-      ./a[(contains(translate(@href, "PDF", "pdf"), ".pdf") or
-      contains(translate(@href, "XLS", "xls"), ".xls") or
+      ./a[(contains(translate(@href, "XLS", "xls"), ".xls") or
+      contains(translate(@href, "PDF", "pdf"), ".pdf") or
       contains(translate(@href, "DOC", "doc"), ".doc")) and not(contains(@href,
       "file://"))]
     storage_id: 10270
@@ -645,7 +645,7 @@ rows:
             fail_type: retry
         is_dedup_array: false
       - name: news_type
-        description: "\U0001F49A新闻类型（资讯，公告，纰漏）"
+        description: "\U0001F49A新闻类型"
         data_type: varchar(1024)
         locator: xpath
         expression: .
@@ -685,17 +685,18 @@ rows:
           - method: script
             params: |-
               def process(text):
-                  """Version: 2020_07_11
+                  """Version: 2020_07_13
                   时间提取脚本模版
                   """
                   import re
                   from datetime import datetime
+
                   data = text.strip()
 
                   rules = [
-                      r"\d{4}[-年/]\d{1,2}[-月/]\d{1,2}[-日/]?[\s\d{2}:\d{2}[:\d{2}]?]?",  # 常见中文日期格式
+                      r"(\d{2}\d{2}([\.\-/|年月\s]{1,3}\d{1,2}){2}日?(\s?\d{2}:\d{2}(:\d{2})?)?)|(\d{1,2}\s?(分钟|小时|天)前)",  # 常见中文日期格式, 网上找的
                       # r"\d{10}",  # TODO: 处理时间戳, 遇到再加: 15开头的10或13位数字, 其实匹配前10个就够了
-                      r"",     # 如有不是常见的日期时间格式，此处替换成案例
+                      r"",  # 如有不是常见的日期时间格式，此处替换成案例
                   ]
                   # 无内容时间返回空
                   if not data:
@@ -708,8 +709,9 @@ rows:
                   for each in rules:
                       p = re.compile(each)
                       res = p.findall(data)
+                      res = res and res[0] and res[0][0]
                       if res:
-                          return res[0]
+                           return res
                       else:
                           continue
                   else:
@@ -930,14 +932,14 @@ rows:
               计算 网站名 发布时间 标题 内容详情 的MD5
               """
               keys = ["web_site", "publish_time", "title", "content"]
-              values = [data.get(k) if data.get(k) else "" for k in keys]
+              values = [data.get(k) or "" for k in keys]
 
               data["content_md5"] = md5("".join(values))
               # 数组字段去重, 去空
               if data.get("tag"):
-                  data["tag"] = list(set([tag for tag in data["tag"] if tag.strip()]))
+                  data["tag"] = list(set([tag for tag in data["tag"] if tag]))
               if data.get("author"):
-                  data["author"] = list(set([tag for tag in data["author"] if tag.strip()]))
+                  data["author"] = list(set([tag for tag in data["author"] if tag]))
 
               return data
     links: []
