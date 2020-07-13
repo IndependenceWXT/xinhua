@@ -1,5 +1,5 @@
 description: |-
-  Version: 2020_07_12
+  Version: 2020_07_13
   ⚠️配置前请核对版本号是否最新; 测试时注意核验字段值的数据准确性: 描述中有❤️标志的字段
 proxy: default
 normal_status_list:
@@ -57,8 +57,17 @@ rows:
         download_policy: not_download
         processors: []
         validators:
-          - method: length
-            params: 1 +inf
+          - method: script
+            params: |-
+              def validate(context):
+                  """2020_07_13
+                  验证网站名是否复制带了空格
+                  """
+                  import re
+
+                  if len(context) == len(context.strip()):
+                      return True
+                  return False
             fail_type: retry
         is_dedup_array: false
       - name: web_site_url
@@ -308,8 +317,30 @@ rows:
         download_policy: not_download
         processors: []
         validators:
-          - method: length
-            params: 1 +inf
+          - method: script
+            params: |-
+              def validate(context):
+                  """Version: 2020_07_11
+                  验证新闻类型
+                  """
+                  import re
+
+                  text = context.strip()
+                  # 验证长度
+                  if len(text) > 5 or len(text) < 2:
+                      return False
+
+                  rules = [r"[\u4e00-\u9fa5]+"]
+                  for each in rules:
+                      p = re.compile(each)
+                      res = p.match(text)
+                      if res:
+                          if res[0] == text:
+                              return True
+                          else:
+                              return False
+                  else:
+                      return False
             fail_type: retry
         is_dedup_array: false
       - name: publish_org
@@ -328,12 +359,13 @@ rows:
           - method: script
             params: |-
               def process(text):
-                  """Version: 2020_07_12_16:23:00
+                  """Version: 2020_07_13_23:53:00
                   来源提取
                   """
                   import re
+
                   # 预处理，替换掉会影响正则提取的固定字符串, 从验证器中更新
-                  flags = ["信息来源", "来源", "转自"]
+                  flags = ["文章来源", "信息来源", "来源", "转自", "发文机关"]
                   for each in flags:
                       text = text.replace(each, "")
 
@@ -461,14 +493,12 @@ rows:
           - method: script
             params: |-
               def process(text):
-                  """Version: 2020_07_11
+                  """Version: 2020_07_12
                   作者提取脚本模版
                   returns:
                       []: 正则匹配失败
                   """
                   import re
-
-                  author = text.strip()
 
                   # 按需排序
                   rules = [
@@ -476,13 +506,18 @@ rows:
                       r"([a-zA-Z0-9]+)",  # 作者为字母和数字组合
                       # r"",  # 如有不是常见的作者格式，此处替换成案例
                   ]
-                  # 无内容作者返回空列表
-                  if not author:
-                      return []
                   # 预处理，替换掉会影响正则提取的固定字符串, 从验证器中更新
                   flags = ["作者", "记者", "撰文", "通讯员", "责任编辑", "编辑", "通讯中"]
+                  punctuations = ["【", "】", "（", "）"]
+                  flags.extend(punctuations)
                   for each in flags:
-                      author = author.replace(each, "")
+                      text = text.replace(each, "")
+
+                  # 判断是否是空作者
+                  author = text.strip()
+                  if len(author) < 2:
+                      return []
+
                   # 提取作者
                   for each in rules:
                       p = re.compile(each)

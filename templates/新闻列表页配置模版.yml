@@ -1,5 +1,5 @@
 description: |-
-  Version: 2020_07_12
+  Version: 2020_07_13
   ⚠️配置前请核对版本号是否最新; 测试时注意核验字段值的数据准确性: 描述中有❤️标志的字段
 proxy: default
 normal_status_list:
@@ -22,7 +22,11 @@ rows:
     expression: >-
       ./a[not(contains(translate(@href, "PDF", "pdf"), ".pdf") or
       contains(translate(@href, "XLS", "xls"), ".xls") or
-      contains(translate(@href, "DOC", "doc"), ".doc"))]
+      contains(translate(@href, "DOC", "doc"), ".doc") or
+      contains(translate(@href, "ZIP", "zip"), ".zip") or
+      contains(translate(@href, "RAR", "rar"), ".rar") or
+      contains(translate(@href, "WPS", "wps"), ".wps")) and not(contains(@href,
+      "file://"))]
     storage_id: -1
     if_match: ''
     if_url_match: ''
@@ -40,7 +44,19 @@ rows:
         allow_invalid_expression: false
         download_policy: not_download
         processors: []
-        validators: []
+        validators:
+          - method: script
+            params: |-
+              def validate(context):
+                  """Version: 2020_07_13
+                  验证网站名是否复制带了空格
+                  """
+                  import re
+
+                  if len(context) == len(context.strip()):
+                      return True
+                  return False
+            fail_type: retry
         is_dedup_array: false
       - name: web_site_url
         description: 来源网站地址
@@ -59,13 +75,17 @@ rows:
           - method: script
             params: |-
               def validate(context):
-                  """Version: 2020_07_11
+                  """Version: 2020_07_13
                   验证链接是否合法
                   """
                   import re
                   from urllib.parse import urlparse
 
                   url = context.strip()
+                  # 调度中可能复制带了空格
+                  if len(url) != context:
+                      return False
+
                   rules = [
                       r"(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]",
                       r"@^(https?|ftp)://[^\s/$.?#].[^\s]*$@iS",
@@ -410,10 +430,13 @@ rows:
     description: 解析文件链接
     locator: xpath
     expression: >-
-      ./a[(contains(translate(@href, "XLS", "xls"), ".xls") or
-      contains(translate(@href, "PDF", "pdf"), ".pdf") or
-      contains(translate(@href, "DOC", "doc"), ".doc")) and not(contains(@href,
-      "file://"))]
+      ./a[(contains(translate(@href, "PDF", "pdf"), ".pdf") or
+      contains(translate(@href, "XLS", "xls"), ".xls") or
+      contains(translate(@href, "DOC", "doc"), ".doc") or
+      contains(translate(@href, "ZIP", "zip"), ".zip") or
+      contains(translate(@href, "RAR", "rar"), ".rar") or
+      contains(translate(@href, "WPS", "wps"), ".wps")) and not(contains(@href,
+      "file://"))]/href
     storage_id: 10270
     if_match: ''
     if_url_match: ''
@@ -432,8 +455,17 @@ rows:
         download_policy: not_download
         processors: []
         validators:
-          - method: length
-            params: 1 +inf
+          - method: script
+            params: |-
+              def validate(context):
+                  """2020_07_13
+                  验证网站名是否复制带了空格
+                  """
+                  import re
+
+                  if len(context) == len(context.strip()):
+                      return True
+                  return False
             fail_type: retry
         is_dedup_array: false
       - name: web_site_url
@@ -702,8 +734,30 @@ rows:
                   """
                   return text
         validators:
-          - method: length
-            params: 1 +inf
+          - method: script
+            params: |-
+              def validate(context):
+                  """Version: 2020_07_11
+                  验证新闻类型
+                  """
+                  import re
+
+                  text = context.strip()
+                  # 验证长度
+                  if len(text) > 5 or len(text) < 2:
+                      return False
+
+                  rules = [r"[\u4e00-\u9fa5]+"]
+                  for each in rules:
+                      p = re.compile(each)
+                      res = p.match(text)
+                      if res:
+                          if res[0] == text:
+                              return True
+                          else:
+                              return False
+                  else:
+                      return False
             fail_type: retry
         is_dedup_array: false
       - name: publish_time
@@ -790,12 +844,13 @@ rows:
           - method: script
             params: |-
               def process(text):
-                  """Version: 2020_07_12_16:23:00
+                  """Version: 2020_07_13_23:53:00
                   来源提取
                   """
                   import re
+
                   # 预处理，替换掉会影响正则提取的固定字符串, 从验证器中更新
-                  flags = ["信息来源", "来源", "转自"]
+                  flags = ["文章来源", "信息来源", "来源", "转自", "发文机关"]
                   for each in flags:
                       text = text.replace(each, "")
 

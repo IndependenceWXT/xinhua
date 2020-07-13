@@ -184,13 +184,13 @@ def process_author_test(text):
 
 
 def process_publish_org_template(text):
-    """Version: 2020_07_12_16:23:00
+    """Version: 2020_07_13_23:53:00
     来源提取
     """
     import re
 
     # 预处理，替换掉会影响正则提取的固定字符串, 从验证器中更新
-    flags = ["信息来源", "来源", "转自", "发文机关"]
+    flags = ["文章来源", "信息来源", "来源", "转自", "发文机关"]
     for each in flags:
         text = text.replace(each, "")
 

@@ -53,13 +53,17 @@ def validate_publish_org(context):
 
 
 def validate_url(context):
-    """Version: 2020_07_11
+    """Version: 2020_07_13
     验证链接是否合法
     """
     import re
     from urllib.parse import urlparse
 
     url = context.strip()
+    # 调度中可能复制带了空格
+    if len(url) != context:
+        return False
+
     rules = [
         r"(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]",
         r"@^(https?|ftp)://[^\s/$.?#].[^\s]*$@iS",
@@ -120,7 +124,7 @@ def validate_title(context):
 
 
 def validate_news_type(context):
-    """2020_07_11
+    """Version: 2020_07_11
     验证新闻类型
     """
     import re
@@ -144,8 +148,14 @@ def validate_news_type(context):
 
 
 def validate_web_site(context):
-    # TODO: 验证是否全部都是中文字符
-    pass
+    """2020_07_13
+    验证网站名是否复制带了空格
+    """
+    import re
+
+    if len(context) == len(context.strip()):
+        return True
+    return False
 
 
 def test_validators():

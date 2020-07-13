@@ -1,5 +1,5 @@
 description: |-
-  Version: 2020_07_12_release
+  Version: 2020_07_13_release
   配置完成后先启用更新调度的计划手动触发, 排错完成后开始历史调度, 开始下一个配置
 doc_rate: 1
 batch_start:
@@ -18,16 +18,13 @@ expression: |
       web_site_url = "请替换此处为栏目的链接"
       hub_fields = {"web_site": web_site, "web_site_url": web_site_url}
 
-      # 只有一条列表页
       yield {"url": web_site_url, "page_rule_id": None, "hub_fields": hub_fields}
 
-      # 列表页分页为GET请求
       for page in range(None):
           page = f"_{page}" if page else ""
           url = f"请替换此处为列表页链接然后修改为格式化字符串"
           yield {"url": url, "page_rule_id": None, "hub_fields": hub_fields}
 
-      # 列表页分页为POST请求: 请先尝试转换为GET方式是否可行
       url = ""
       for page in range(None):
           page = f"_{page}" if page else ""
@@ -40,7 +37,6 @@ expression: |
               "hub_fields": hub_fields,
           }
 
-      # 栏目链接相似度较高的列表页
       cates = [
           {"cate": "请替换此处为栏目链接的差异部分", "pages": None},
           {"cate": "请替换此处为栏目链接的差异部分", "pages": None},

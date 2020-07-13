@@ -79,7 +79,10 @@ def filter_xpath(rule_id, data):
     print(f"[+]【{rule_id}】开始过滤不需要的配置...")
     out_put_list = []
 
-    rows = data["rows"] or 
+    rows = data["rows"] or []
+    if not rows:
+        print(f"[+]【{rule_id}】没有配置可用, 联系配置人员, 备注情况")
+        return
 
     examples = data["examples"]
 
