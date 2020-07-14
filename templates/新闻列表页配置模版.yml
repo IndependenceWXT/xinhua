@@ -436,7 +436,7 @@ rows:
       contains(translate(@href, "ZIP", "zip"), ".zip") or
       contains(translate(@href, "RAR", "rar"), ".rar") or
       contains(translate(@href, "WPS", "wps"), ".wps")) and not(contains(@href,
-      "file://"))]/href
+      "file://"))]
     storage_id: 10270
     if_match: ''
     if_url_match: ''
