@@ -53,7 +53,7 @@ def validate_publish_org(context):
 
 
 def validate_url(context):
-    """Version: 2020_07_13
+    """Version: 2020_07_14
     验证链接是否合法
     """
     import re
@@ -61,7 +61,7 @@ def validate_url(context):
 
     url = context.strip()
     # 调度中可能复制带了空格
-    if len(url) != context:
+    if len(url) != len(context):
         return False
 
     rules = [

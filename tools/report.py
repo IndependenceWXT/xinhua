@@ -15,6 +15,7 @@ from urllib.parse import quote_plus, urlsplit
 import requests
 import yaml
 from tqdm import tqdm, trange
+import fire
 
 users_db = {
     17: "胡涛涛",
@@ -112,6 +113,11 @@ def count_configured(users, today=True, ago=False, section=(1565, 1858), notify=
         now = now.date()
         kind = "扫描报告"
         report.append(f"{_type}调度扫描报告[{now.isoformat()}]\n")
+    elif not today and ago:
+        now = now.date()
+        user_id = users_db[users[0]]
+        kind = f"{user_id}配置"
+        report.append(f"[{kind}]{_type}调度扫描报告\n")
 
     thead = ["配置者", "完成时间", f"{_type}进度", "网站名"]
     report.append(f"|\t{thead[0]}\t|\t{thead[1]}\t|\t{thead[2]}\t|\t{thead[3]}\t|")
@@ -223,6 +229,15 @@ def report_for_user(user_id):
     res = count_configured(users, today=False, ago=True)
 
 
+def check_today(users):
+    """
+    配置人员扫描今天开始的更新调度进度
+    # TODO 精确时间判断
+    """
+    users = [k for k in users_db if k in users]
+    res = count_configured(users, today=True, ago=False)
+
+
 def check_update(user_id):
     """
     配置人员查看自己的历史配置的更新调度进度
@@ -254,4 +269,10 @@ def report_all_update():
 
 
 if __name__ == "__main__":
-    report_for_progress()
+    fire.Fire(
+        {
+            "report_daily": report_for_progress,
+            "check_today": check_today,
+            "check_user": report_for_user,
+        }
+    )

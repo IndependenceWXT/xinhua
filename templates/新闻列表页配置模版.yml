@@ -75,7 +75,7 @@ rows:
           - method: script
             params: |-
               def validate(context):
-                  """Version: 2020_07_13
+                  """Version: 2020_07_14
                   验证链接是否合法
                   """
                   import re
@@ -83,7 +83,7 @@ rows:
 
                   url = context.strip()
                   # 调度中可能复制带了空格
-                  if len(url) != context:
+                  if len(url) != len(context):
                       return False
 
                   rules = [
@@ -339,7 +339,7 @@ rows:
           - method: script
             params: |-
               def process(text):
-                  """Version: 2020_07_12
+                  """Version: 2020_07_14
                   作者提取脚本模版
                   returns:
                       []: 正则匹配失败
@@ -353,7 +353,7 @@ rows:
                       # r"",  # 如有不是常见的作者格式，此处替换成案例
                   ]
                   # 预处理，替换掉会影响正则提取的固定字符串, 从验证器中更新
-                  flags = ["作者", "记者", "撰文", "通讯员", "责任编辑", "编辑", "通讯中"]
+                  flags = ["作者", "记者", "撰文", "通讯员", "责任编辑", "编辑", "通讯中", "发布者"]
                   punctuations = ["【", "】", "（", "）"]
                   flags.extend(punctuations)
                   for each in flags:
@@ -485,13 +485,17 @@ rows:
           - method: script
             params: |-
               def validate(context):
-                  """Version: 2020_07_11
+                  """Version: 2020_07_14
                   验证链接是否合法
                   """
                   import re
                   from urllib.parse import urlparse
 
                   url = context.strip()
+                  # 调度中可能复制带了空格
+                  if len(url) != len(context):
+                      return False
+
                   rules = [
                       r"(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]",
                       r"@^(https?|ftp)://[^\s/$.?#].[^\s]*$@iS",
@@ -638,13 +642,17 @@ rows:
           - method: script
             params: |-
               def validate(context):
-                  """Version: 2020_07_11
+                  """Version: 2020_07_14
                   验证链接是否合法
                   """
                   import re
                   from urllib.parse import urlparse
 
                   url = context.strip()
+                  # 调度中可能复制带了空格
+                  if len(url) != len(context):
+                      return False
+
                   rules = [
                       r"(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]",
                       r"@^(https?|ftp)://[^\s/$.?#].[^\s]*$@iS",
@@ -684,13 +692,17 @@ rows:
           - method: script
             params: |-
               def validate(context):
-                  """Version: 2020_07_11
+                  """Version: 2020_07_14
                   验证链接是否合法
                   """
                   import re
                   from urllib.parse import urlparse
 
                   url = context.strip()
+                  # 调度中可能复制带了空格
+                  if len(url) != len(context):
+                      return False
+
                   rules = [
                       r"(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]",
                       r"@^(https?|ftp)://[^\s/$.?#].[^\s]*$@iS",
@@ -844,13 +856,13 @@ rows:
           - method: script
             params: |-
               def process(text):
-                  """Version: 2020_07_13_23:53:00
+                  """Version: 2020_07_14
                   来源提取
                   """
                   import re
 
                   # 预处理，替换掉会影响正则提取的固定字符串, 从验证器中更新
-                  flags = ["文章来源", "信息来源", "来源", "转自", "发文机关"]
+                  flags = ["文章来源", "信息来源", "文字来源", "来源", "转自", "发文机关", "发布人", "发布者"]
                   for each in flags:
                       text = text.replace(each, "")
 
@@ -904,7 +916,7 @@ rows:
           - method: script
             params: |-
               def process(text):
-                  """Version: 2020_07_12
+                  """Version: 2020_07_14
                   作者提取脚本模版
                   returns:
                       []: 正则匹配失败
@@ -918,7 +930,7 @@ rows:
                       # r"",  # 如有不是常见的作者格式，此处替换成案例
                   ]
                   # 预处理，替换掉会影响正则提取的固定字符串, 从验证器中更新
-                  flags = ["作者", "记者", "撰文", "通讯员", "责任编辑", "编辑", "通讯中"]
+                  flags = ["作者", "记者", "撰文", "通讯员", "责任编辑", "编辑", "通讯中", "发布者"]
                   punctuations = ["【", "】", "（", "）"]
                   flags.extend(punctuations)
                   for each in flags:

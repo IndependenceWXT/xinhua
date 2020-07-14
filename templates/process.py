@@ -133,7 +133,7 @@ def process_time_ambiguous(text):
 
 
 def process_author_template(text):
-    """Version: 2020_07_12
+    """Version: 2020_07_14
     作者提取脚本模版
     returns:
         []: 正则匹配失败
@@ -147,7 +147,7 @@ def process_author_template(text):
         # r"",  # 如有不是常见的作者格式，此处替换成案例
     ]
     # 预处理，替换掉会影响正则提取的固定字符串, 从验证器中更新
-    flags = ["作者", "记者", "撰文", "通讯员", "责任编辑", "编辑", "通讯中"]
+    flags = ["作者", "记者", "撰文", "通讯员", "责任编辑", "编辑", "通讯中", "发布者"]
     punctuations = ["【", "】", "（", "）"]
     flags.extend(punctuations)
     for each in flags:
@@ -184,13 +184,13 @@ def process_author_test(text):
 
 
 def process_publish_org_template(text):
-    """Version: 2020_07_13_23:53:00
+    """Version: 2020_07_14
     来源提取
     """
     import re
 
     # 预处理，替换掉会影响正则提取的固定字符串, 从验证器中更新
-    flags = ["文章来源", "信息来源", "来源", "转自", "发文机关"]
+    flags = ["文章来源", "信息来源", "文字来源", "来源", "转自", "发文机关", "发布人", "发布者"]
     for each in flags:
         text = text.replace(each, "")
 
