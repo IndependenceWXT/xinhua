@@ -1,32 +1,49 @@
 def start_requests(**kwargs):
-    web_site = "克拉玛依市人民政府"
+    web_site = "请替换此处为网站名"
 
-    web_site_url = "https://www.klmy.gov.cn/010/010005/secondpage.html"
+    web_site_url = "请替换此处为栏目的链接"
     hub_fields = {"web_site": web_site, "web_site_url": web_site_url}
+    for page in range(None):
+        page = f"_{page}" if page else ""
+        url = f"请替换此处为列表页链接然后修改为格式化字符串"
+        yield {"url": url, "page_rule_id": None, "hub_fields": hub_fields}
+
+    web_site = "请替换此处为网站名"
+
+    web_site_url = "请替换此处为栏目的链接"
+    hub_fields = {"web_site": web_site, "web_site_url": web_site_url}
+    for page in range(None):
+        page = f"_{page}" if page else ""
+        url = f"请替换此处为列表页链接然后修改为格式化字符串"
+        yield {"url": url, "page_rule_id": None, "hub_fields": hub_fields}
+
+    yield {"url": web_site_url, "page_rule_id": None, "hub_fields": hub_fields}
+
+    url = ""
+    for page in range(None):
+        page = f"_{page}" if page else ""
+        data = f""
+        yield {
+            "url": url,
+            "page_rule_id": None,
+            "data": data,
+            "method": "POST",
+            "hub_fields": hub_fields,
+        }
+
     cates = [
-        {
-            "cate": f"http://www.wuhai.gov.cn/wuhai/xxgk4/jbxxgk46/813704/4c76f15a-{page}.html",
-            "pages": 2,
-            "web_site": "乌海市政府",
-            "web_site_url": "http://www.wuhai.gov.cn/wuhai/xxgk4/jbxxgk46/813704/index.html",
-            "page_rule_id": 10927,
-        },
-        {
-            "cate": f"http://fgw.wuhai.gov.cn/eportal/ui?currentPage={page}&pageId=507579&moduleId=6ac003d7d6614ea796cb07915cb3687e",
-            "pages": 2,
-            "web_site": "乌海市发改委",
-            "web_site_url": "http://fgw.wuhai.gov.cn/eportal/ui?pageId=507579&currentPage=1&moduleId=6ac003d7d6614ea796cb07915cb3687e",
-            "page_rule_id": 10929,
-        },
+        {"cate": "请替换此处为栏目链接的差异部分", "pages": None},
+        {"cate": "请替换此处为栏目链接的差异部分", "pages": None},
     ]
     for each in cates:
         cate = each["cate"]
         pages = each["pages"]
-        hub_fields = {"web_site": each["web_site"], "web_site_url": each["web_site_url"]}
+        web_site_url = f"请替换此处为栏目的链接格式化"
+        hub_fields = {"web_site": web_site, "web_site_url": web_site_url}
         for page in range(pages):
-            page = page + 1
-            url = cate
-            yield {"url": url, "page_rule_id": each["page_rule_id"], "hub_fields": hub_fields}
+            page = f"_{page}" if page else ""
+            url = f""
+            yield {"url": url, "page_rule_id": None, "hub_fields": hub_fields}
 
 
 if __name__ == "__main__":

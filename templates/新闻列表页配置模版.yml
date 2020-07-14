@@ -1,5 +1,5 @@
 description: |-
-  Version: 2020_07_13
+  Version: 2020_07_14
   ⚠️配置前请核对版本号是否最新; 测试时注意核验字段值的数据准确性: 描述中有❤️标志的字段
 proxy: default
 normal_status_list:
@@ -125,13 +125,17 @@ rows:
           - method: script
             params: |-
               def validate(context):
-                  """Version: 2020_07_11
+                  """Version: 2020_07_14
                   验证链接是否合法
                   """
                   import re
                   from urllib.parse import urlparse
 
                   url = context.strip()
+                  # 调度中可能复制带了空格
+                  if len(url) != len(context):
+                      return False
+
                   rules = [
                       r"(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]",
                       r"@^(https?|ftp)://[^\s/$.?#].[^\s]*$@iS",
@@ -553,13 +557,17 @@ rows:
           - method: script
             params: |-
               def validate(context):
-                  """Version: 2020_07_11
+                  """Version: 2020_07_14
                   验证链接是否合法
                   """
                   import re
                   from urllib.parse import urlparse
 
                   url = context.strip()
+                  # 调度中可能复制带了空格
+                  if len(url) != len(context):
+                      return False
+
                   rules = [
                       r"(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]",
                       r"@^(https?|ftp)://[^\s/$.?#].[^\s]*$@iS",
@@ -882,6 +890,7 @@ rows:
                       p = re.compile(each)
                       res = p.findall(text)
                       if res:
+                          res = sorted(res, key=len, reverse=True)
                           return res[0]
                       else:
                           continue

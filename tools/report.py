@@ -229,12 +229,12 @@ def report_for_user(user_id):
     res = count_configured(users, today=False, ago=True)
 
 
-def check_today(users):
+def check_today():
     """
     配置人员扫描今天开始的更新调度进度
     # TODO 精确时间判断
     """
-    users = [k for k in users_db if k in users]
+    users = [k for k in users_db]
     res = count_configured(users, today=True, ago=False)
 
 

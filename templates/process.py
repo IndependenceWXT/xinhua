@@ -210,6 +210,7 @@ def process_publish_org_template(text):
         p = re.compile(each)
         res = p.findall(text)
         if res:
+            res = sorted(res, key=len, reverse=True)
             return res[0]
         else:
             continue
@@ -227,7 +228,7 @@ def process_publish_org_test(text):
     # p = re.compile(r"([\w]+)")
     res = p.findall(text)
     if res:
-        return res[0]
+        return res
     else:
         return ""
 
@@ -264,6 +265,35 @@ def process_tag_template(text):
             continue
     else:
         return [f"error:{text}"]
+
+
+def process_news_type_template(text):
+    """Version: 2020_07_14
+    来源新闻类型
+    """
+    import re
+
+    # 为空
+    if len(text.strip()) < 2:
+        return ""
+
+    # 按需排序
+    rules = [
+        r"([\u4e00-\u9fa5]+)",  # 默认提取中文, 其它格式卡住后处理
+        # r"", # 自定义
+        # r"([^\s/$.?].[^\s]*)", # www.railwaygazette.com
+    ]
+
+    # 提取
+    for each in rules:
+        p = re.compile(each)
+        res = p.findall(text)
+        if res:
+            return res[0]
+        else:
+            continue
+    else:
+        return f"error:[{text}]"
 
 
 def update_url_query(text, **kwargs):
@@ -351,5 +381,6 @@ if __name__ == "__main__":
     # print(process_time("May 16, 2002Economic and Social Research Institute"))
     # print(process_time_in_url("http://www.gjbmj.gov.cn/n1/2018/1217/c409082-30471818.html"))
     # print(process_author("(：test2)"))
-    print(process_author_template("（编辑：）"))
+    # print(process_author_template("（编辑：）"))
     # print(process_tag_template("主题分类：其他"))
+    print(process_publish_org_template("来源 中关村"))
