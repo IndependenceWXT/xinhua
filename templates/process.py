@@ -28,7 +28,7 @@ def process_url(text):
 
 
 def process_time_template(text):
-    """Version: 2020_07_13
+    """Version: 2020_07_15
     时间提取脚本模版
     """
     import re
@@ -45,7 +45,7 @@ def process_time_template(text):
     if not data:
         return "error:空字符串"
     # 预处理，替换掉会影响正则提取的固定字符串, 如点击量的数字
-    flags = [""]
+    flags = ["发布时间", ]
     for each in flags:
         data = data.replace(each, "")
     # 提取日期时间
@@ -53,7 +53,7 @@ def process_time_template(text):
         p = re.compile(each)
         res = p.findall(data)
         # res.reverse()
-        res = reversed(res)
+        # res = reversed(res)
         res = res and res[0] and res[0][0]
         if res:
             return res
@@ -398,4 +398,4 @@ if __name__ == "__main__":
     # print(process_author_template("（编辑：）"))
     # print(process_tag_template("主题分类：其他"))
     # print(process_publish_org_template("来源 中关村"))
-    print(process_time_template("2020年1月3日 1999年3月3日"))
+    print(process_time_template("发布时间：\n 2020-\n 06-\n 17 17:09"))
