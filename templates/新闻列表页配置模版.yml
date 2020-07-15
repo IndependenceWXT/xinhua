@@ -1,5 +1,5 @@
 description: |-
-  Version: 2020_07_14
+  Version: 2020_07_15
   ⚠️配置前请核对版本号是否最新; 测试时注意核验字段值的数据准确性: 描述中有❤️标志的字段
 proxy: default
 normal_status_list:
@@ -201,7 +201,7 @@ rows:
           - method: script
             params: |-
               def process(text):
-                  """Version: 2020_07_13
+                  """Version: 2020_07_14
                   时间提取脚本模版
                   """
                   import re
@@ -218,7 +218,7 @@ rows:
                   if not data:
                       return "error:空字符串"
                   # 预处理，替换掉会影响正则提取的固定字符串, 如点击量的数字
-                  flags = [""]
+                  flags = ["发布时间", ]
                   for each in flags:
                       data = data.replace(each, "")
                   # 提取日期时间
@@ -796,7 +796,7 @@ rows:
           - method: script
             params: |-
               def process(text):
-                  """Version: 2020_07_13
+                  """Version: 2020_07_14
                   时间提取脚本模版
                   """
                   import re
@@ -813,7 +813,7 @@ rows:
                   if not data:
                       return "error:空字符串"
                   # 预处理，替换掉会影响正则提取的固定字符串, 如点击量的数字
-                  flags = [""]
+                  flags = ["发布时间", ]
                   for each in flags:
                       data = data.replace(each, "")
                   # 提取日期时间
