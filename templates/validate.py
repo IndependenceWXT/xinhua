@@ -113,14 +113,14 @@ def validate_tag(context):
 
 
 def validate_title(context):
-    """Version: 2020_07_11
-    验证标题是否是省略过的
+    """Version: 2020_07_14
+    验证标题是否是省略过的, 并且是否超过一定长度的
+    TODO：统计已有数据中标题的长度
     """
     text = context.strip()
-    if text and text.endswith("..."):
-        return False
-    else:
+    if len(text) > 10 and not text.endswith("..."):
         return True
+    return False
 
 
 def validate_news_type(context):

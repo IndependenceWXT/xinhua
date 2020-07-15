@@ -837,7 +837,7 @@ rows:
 preprocessors: []
 prevalidators:
   - method: regex
-    params: '^(?!.*[200|code]).*$'
+    params: '^(?!.*200|200).*$'
     fail_type: success
     succ_type: ignore
     target: status_code

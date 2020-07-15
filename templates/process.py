@@ -52,6 +52,8 @@ def process_time_template(text):
     for each in rules:
         p = re.compile(each)
         res = p.findall(data)
+        # res.reverse()
+        res = reversed(res)
         res = res and res[0] and res[0][0]
         if res:
             return res
@@ -316,6 +318,18 @@ def process_time_in_url(text):
     return ""
 
 
+def process_title_template(text):
+    """Version: 2020_07_11_release
+    处理标题，取一个稍微小的平均的标题长度，5左右
+    TODO: 统计一下数据库
+    """
+    import re
+
+    if len(re.sub(r"\s+", "", text)) < 5:
+        return f"error:{text}"
+    return text
+
+
 # 计算content_md5, 数组字段去重, 不处理附件
 import hashlib
 
@@ -383,4 +397,5 @@ if __name__ == "__main__":
     # print(process_author("(：test2)"))
     # print(process_author_template("（编辑：）"))
     # print(process_tag_template("主题分类：其他"))
-    print(process_publish_org_template("来源 中关村"))
+    # print(process_publish_org_template("来源 中关村"))
+    print(process_time_template("2020年1月3日 1999年3月3日"))
