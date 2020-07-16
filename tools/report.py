@@ -149,6 +149,9 @@ def count_configured(users, today=True, ago=False, section=(1565, 1858), notify=
                     else "1970-01-01 00:00:00"
                 )
                 start_time = datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S")
+                passed = datetime.now() - start_time
+                if today and passed > timedelta(hours=15):
+                    continue
 
                 if today and now != start_time.date():
                     continue
@@ -272,7 +275,7 @@ def report_all_update():
 if __name__ == "__main__":
     fire.Fire(
         {
-            "report_daily": report_for_progress,
+            "today": report_for_progress,
             "check_today": check_today,
             "check": report_for_user,
             "all": report_all_history,

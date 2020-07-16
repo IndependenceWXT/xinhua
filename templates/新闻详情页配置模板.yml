@@ -646,7 +646,7 @@ rows:
           contains(translate(@href, "ZIP", "zip"), ".zip") or
           contains(translate(@href, "RAR", "rar"), ".rar") or
           contains(translate(@href, "WPS", "wps"), ".wps")) and
-          not(contains(@href, "file://"))]
+          not(contains(@href, "file://") or contains(@href, "c:\"))]
         is_dedup_key: false
         multi: true
         keep_html: false
@@ -671,7 +671,7 @@ rows:
           contains(translate(@href, "ZIP", "zip"), ".zip") or
           contains(translate(@href, "RAR", "rar"), ".rar") or
           contains(translate(@href, "WPS", "wps"), ".wps")) and
-          not(contains(@href, "file://"))]/@href
+          not(contains(@href, "file://") or contains(@href, "c:\"))]/@href
         is_dedup_key: false
         multi: true
         keep_html: false
@@ -837,7 +837,7 @@ rows:
 preprocessors: []
 prevalidators:
   - method: regex
-    params: '^(?!.*200|200).*$'
+    params: ^(?!.*200|200).*$
     fail_type: success
     succ_type: ignore
     target: status_code

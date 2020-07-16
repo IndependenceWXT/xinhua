@@ -20,13 +20,13 @@ rows:
     description: 注意保持字段与详情页对应
     locator: xpath
     expression: >-
-      ./a[not(contains(translate(@href, "PDF", "pdf"), ".pdf") or
+      .//a[not(contains(translate(@href, "PDF", "pdf"), ".pdf") or
       contains(translate(@href, "XLS", "xls"), ".xls") or
       contains(translate(@href, "DOC", "doc"), ".doc") or
       contains(translate(@href, "ZIP", "zip"), ".zip") or
       contains(translate(@href, "RAR", "rar"), ".rar") or
       contains(translate(@href, "WPS", "wps"), ".wps")) and not(contains(@href,
-      "file://"))]
+      "file://") or contains(@href, "c:\"))]
     storage_id: -1
     if_match: ''
     if_url_match: ''
@@ -434,13 +434,13 @@ rows:
     description: 解析文件链接
     locator: xpath
     expression: >-
-      ./a[(contains(translate(@href, "PDF", "pdf"), ".pdf") or
+      .//a[(contains(translate(@href, "PDF", "pdf"), ".pdf") or
       contains(translate(@href, "XLS", "xls"), ".xls") or
       contains(translate(@href, "DOC", "doc"), ".doc") or
       contains(translate(@href, "ZIP", "zip"), ".zip") or
       contains(translate(@href, "RAR", "rar"), ".rar") or
       contains(translate(@href, "WPS", "wps"), ".wps")) and not(contains(@href,
-      "file://"))]
+      "file://") or contains(@href, "c:\"))]
     storage_id: 10270
     if_match: ''
     if_url_match: ''
@@ -1096,7 +1096,7 @@ rows:
 preprocessors: []
 prevalidators:
   - method: regex
-    params: '^(?!.*200|200).*$'
+    params: ^(?!.*200|200).*$
     fail_type: success
     succ_type: ignore
     target: status_code
