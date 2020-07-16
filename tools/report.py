@@ -114,9 +114,9 @@ def count_configured(users, today=True, ago=False, section=(1565, 1858), notify=
         kind = "扫描报告"
         report.append(f"{_type}调度扫描报告[{now.isoformat()}]\n")
     elif not today and ago:
-        now = now.date()
+        now = datetime.now().date()
         user_id = users_db[users[0]]
-        kind = f"{user_id}配置"
+        kind = f"配置"
         report.append(f"[{kind}]{_type}调度扫描报告\n")
 
     thead = ["配置者", "完成时间", f"{_type}进度", "网站名"]
@@ -176,7 +176,7 @@ def count_configured(users, today=True, ago=False, section=(1565, 1858), notify=
         send(report)
     else:
         with open(
-            f"../reports/{now.isoformat()}_{_type}调度{kind}.md", mode="w", encoding="utf-8"
+            f"../reports/{now.isoformat()}_{_type}调度扫描报告.md", mode="w", encoding="utf-8"
         ) as f:
             f.write(report)
     return {k: v for k, v in res.items() if v}
@@ -238,11 +238,11 @@ def check_today():
     res = count_configured(users, today=True, ago=False)
 
 
-def check_update(user_id):
+def check_update():
     """
     配置人员查看自己的历史配置的更新调度进度
     """
-    users = [k for k in users_db if k == user_id]
+    users = [k for k in users_db]
     res = count_configured(users, today=True)
 
 
@@ -258,7 +258,8 @@ def report_all_history():
     """
     扫描全部开启计划的历史调度
     """
-    pass
+    users = [k for k in users_db]
+    res = count_configured(users, today=False, ago=True)
 
 
 def report_all_update():
@@ -273,6 +274,7 @@ if __name__ == "__main__":
         {
             "report_daily": report_for_progress,
             "check_today": check_today,
-            "check_user": report_for_user,
+            "check": report_for_user,
+            "all": report_all_history,
         }
     )
