@@ -45,7 +45,9 @@ def process_time_template(text):
     if not data:
         return "error:空字符串"
     # 预处理，替换掉会影响正则提取的固定字符串, 如点击量的数字
-    flags = ["发布时间", ]
+    flags = [
+        "发布时间",
+    ]
     for each in flags:
         data = data.replace(each, "")
     # 提取日期时间
@@ -135,7 +137,7 @@ def process_time_ambiguous(text):
 
 
 def process_author_template(text):
-    """Version: 2020_07_14
+    """Version: 2020_07_17
     作者提取脚本模版
     returns:
         []: 正则匹配失败
@@ -149,6 +151,9 @@ def process_author_template(text):
         # r"",  # 如有不是常见的作者格式，此处替换成案例
     ]
     # 预处理，替换掉会影响正则提取的固定字符串, 从验证器中更新
+    #自定义
+    text = text
+
     flags = ["作者", "记者", "撰文", "通讯员", "责任编辑", "编辑", "通讯中", "发布者"]
     punctuations = ["【", "】", "（", "）"]
     flags.extend(punctuations)
@@ -156,14 +161,14 @@ def process_author_template(text):
         text = text.replace(each, "")
 
     # 判断是否是空作者
-    author = text.strip()
-    if len(author) < 2:
+    text = text.strip()
+    if len(text) < 2:
         return []
 
     # 提取作者
     for each in rules:
         p = re.compile(each)
-        res = p.findall(author)
+        res = p.findall(text)
         if res:
             return [i.replace(" ", "") for i in res]
         else:

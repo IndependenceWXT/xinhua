@@ -32,12 +32,12 @@ def validate_publish_time(context):
 
 
 def validate_author(context):
-    """Version: 2020_07_11
+    """Version: 2020_07_17
     验证中文作者是否含有非法词
     """
     if context.startswith("error:"):
         return False
-    elif len(context) > 4 or len(context) < 2:
+    elif len(context) > 4:
         return False
     return True
 
@@ -113,12 +113,14 @@ def validate_tag(context):
 
 
 def validate_title(context):
-    """Version: 2020_07_14
-    验证标题是否是省略过的, 并且是否超过一定长度的
-    TODO：统计已有数据中标题的长度
+    """Version: 2020_07_16
+    验证标题是否是省略过的, 并且文本长度是否在区间内
     """
+    import re
+    
     text = context.strip()
-    if len(text) > 10 and not text.endswith("..."):
+    length = len(re.sub(r"\s+", "", text))
+    if 100 > length > 2 and not text.endswith("..."):
         return True
     return False
 
