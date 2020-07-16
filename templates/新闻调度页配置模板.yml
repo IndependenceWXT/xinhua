@@ -1,5 +1,5 @@
 description: |-
-  Version: 2020_07_15
+  Version: 2020_07_16
   配置完成后先启用更新调度的计划手动触发, 排错完成后开始历史调度, 开始下一个配置
 doc_rate: 1
 batch_start:
