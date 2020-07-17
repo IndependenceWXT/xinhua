@@ -117,7 +117,7 @@ def validate_title(context):
     验证标题是否是省略过的, 并且文本长度是否在区间内
     """
     import re
-    
+
     text = context.strip()
     length = len(re.sub(r"\s+", "", text))
     if 100 > length > 2 and not text.endswith("..."):
@@ -126,27 +126,14 @@ def validate_title(context):
 
 
 def validate_news_type(context):
-    """Version: 2020_07_11
+    """Version: 2020_07_18
     验证新闻类型
     """
-    import re
-
-    text = context.strip()
-    # 验证长度
-    if len(text) > 5 or len(text) < 2:
+    if context.startswith("error:"):
         return False
-
-    rules = [r"[\u4e00-\u9fa5]+"]
-    for each in rules:
-        p = re.compile(each)
-        res = p.match(text)
-        if res:
-            if res[0] == text:
-                return True
-            else:
-                return False
-    else:
+    elif len(context) > 7:
         return False
+    return True
 
 
 def validate_web_site(context):
@@ -167,4 +154,4 @@ def test_validators():
 
 if __name__ == "__main__":
     # print(validate_url("http:/10.40.35.103:8090/?a=1"))
-    print(validate_tag(""))
+    print(validate_url("https://www.sg.gov.cn/zw/zcfg/gjszcfg/"))

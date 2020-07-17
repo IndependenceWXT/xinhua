@@ -1,43 +1,26 @@
 def start_requests(**kwargs):
-    web_site = "营口市政府"
-    web_site_url = "http://www.yingkou.gov.cn/dynamic/zw/openlist.html?categorynum=001001003"
-    cates = [
-        {"cate": "001001003001", "pages": 2},
-        {"cate": "001001003002", "pages": 19},
-        {"cate": "001001003003", "pages": 32},
-        {"cate": "001001003004", "pages": 0},
-        {"cate": "001001003005", "pages": 0},
-    ]
-    for each in cates:
-        cate = each["cate"]
-        pages = each["pages"]
-        hub_fields = {"web_site": web_site, "web_site_url": web_site_url}
-        url = "http://www.yingkou.gov.cn/EWB_YK_Mid/rest/lightfrontaction/getgovinfolist"
-        for p in range(pages):
-            data = {
-                "token": "",
-                "params": {
-                    "deptcode": "",
-                    "categorynum": cate,
-                    "pageIndex": p,
-                    "pageSize": 15,
-                    "siteGuid": "7eb5f7f1-9041-43ad-8e13-8fcb82ea831a",
-                },
-            }
-            yield {
-                "url": url,
-                "page_rule_id": 11542,
-                "data": data,
-                "method": "POST",
-                "hub_fields": hub_fields,
-            }
+    web_site = "无锡市政府"
 
-    web_site = "营口市发改委"
-    web_site_url = "http://fgw.yingkou.gov.cn/dynamic/zw/openlist.html?categorynum=003015"
-    hub_fields = {"web_site": web_site, "web_site_url": web_site_url}
-    for p in range(1):
-        url = f"http://fgw.yingkou.gov.cn/dynamic/zw/openlist.html?categorynum=003015"
-        yield {"url": url, "page_rule_id": 11544, "hub_fields": hub_fields}
+    web_site_url = "http://www.wuxi.gov.cn/zfxxgk/szfxxgkml/fgwjjjd/index.shtml"
+    hub_fields = {
+        "web_site": web_site,
+        "web_site_url": web_site_url
+    }
+    for page in range(250):
+        page = f"_{page+1}" if page else ""
+        url = f"http://www.wuxi.gov.cn/zfxxgk/szfxxgkml/fgwjjjd/index{page}.shtml"
+        yield {"url": url, "page_rule_id": 10713, "hub_fields": hub_fields}
+    
+    web_site = "无锡市发改委"
+    web_site_url = "http://dpc.wuxi.gov.cn/zfxxgk/xxgkml/fgwjjjd/index.shtml"
+    hub_fields = {
+        "web_site": web_site,
+        "web_site_url": web_site_url
+    }
+    for page in range(11):
+        page = f"_{page+1}" if page else ""
+        url = f"http://dpc.wuxi.gov.cn/zfxxgk/xxgkml/fgwjjjd/index{page}.shtml"
+        yield {"url": url, "page_rule_id": 10715, "hub_fields": hub_fields}
 
 
 if __name__ == "__main__":
