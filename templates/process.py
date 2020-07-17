@@ -17,7 +17,6 @@ def process_url(text):
     query = urlsplit(url)
 
     scheme = query.scheme
-    print(query)
     if scheme in {"http", "https"}:
         return url
     else:
@@ -151,7 +150,7 @@ def process_author_template(text):
         # r"",  # 如有不是常见的作者格式，此处替换成案例
     ]
     # 预处理，替换掉会影响正则提取的固定字符串, 从验证器中更新
-    #自定义
+    # 自定义
     text = text
 
     flags = ["作者", "记者", "撰文", "通讯员", "责任编辑", "编辑", "通讯中", "发布者"]
@@ -159,11 +158,6 @@ def process_author_template(text):
     flags.extend(punctuations)
     for each in flags:
         text = text.replace(each, "")
-
-    # 判断是否是空作者
-    text = text.strip()
-    if len(text) < 2:
-        return []
 
     # 提取作者
     for each in rules:
@@ -174,6 +168,8 @@ def process_author_template(text):
         else:
             continue
     else:
+        if len(re.sub(r"\s+", "", text)) < 2:
+            return []
         return [f"error:{text}"]
 
 
@@ -201,10 +197,6 @@ def process_publish_org_template(text):
     for each in flags:
         text = text.replace(each, "")
 
-    # 来源为空
-    if len(text.strip()) < 2:
-        return ""
-
     # 按需排序
     rules = [
         r"([\u4e00-\u9fa5]+)",  # 默认提取中文, 其它格式卡住后处理
@@ -222,6 +214,9 @@ def process_publish_org_template(text):
         else:
             continue
     else:
+        # 来源为空
+        if len(re.sub(r"\s+", "", text)) < 2:
+            return ""
         return f"error:[{text}]"
 
 
@@ -248,29 +243,30 @@ def process_tag_template(text):
     """
     import re
 
-    tag = text.strip()
+    text = text.strip()
 
     # 按需排序
     rules = [
         r"\b([\u4e00-\u9fa5]+)\b",  # 连续中文字符
         # r"",  # 如有不是常见的作者格式，此处替换成案例
     ]
-    # 无内容返回空列表
-    if not tag:
-        return []
+
     # 预处理，替换掉会影响正则提取的固定字符串, 从验证器中更新
     flags = ["标签", "关键字", "主题分类"]
     for each in flags:
-        tag = tag.replace(each, "")
+        text = text.replace(each, "")
     # 提取作者
     for each in rules:
         p = re.compile(each)
-        res = p.findall(tag)
+        res = p.findall(text)
         if res:
             return res
         else:
             continue
     else:
+        # 无内容返回空列表
+        if len(re.sub(r"\s+", "", text)) < 2:
+            return []
         return [f"error:{text}"]
 
 
@@ -385,6 +381,15 @@ def check_author():
             text = line.strip()
             res = process_author_template(text)
             print(f"/{res}/")
+
+
+def process_files(filenames, links):
+    data = []
+    for filename, link in zip(filenames, links):
+        if data.get(link):
+            data[link] = filename
+    else:
+        return [{k: v} for k, v in data.items()]
 
 
 if __name__ == "__main__":

@@ -109,6 +109,21 @@ rows:
                               return False
             fail_type: retry
         is_dedup_array: false
+      - name: source_type
+        description: 资讯来源分类（1. 网站）
+        data_type: varchar(128)
+        locator: hub
+        expression: source_type
+        is_dedup_key: false
+        multi: false
+        keep_html: false
+        extend_url: false
+        is_extra: false
+        allow_invalid_expression: false
+        is_dedup_array: false
+        download_policy: not_download
+        processors: []
+        validators: []
       - name: refer
         description: "\U0001F494列表页链接上线需删除"
         data_type: varchar(128)
@@ -548,6 +563,21 @@ rows:
             params: 1 +inf
             fail_type: retry
         is_dedup_array: false
+      - name: source_type
+        description: 资讯来源分类(1. 网站)
+        data_type: varchar(128)
+        locator: hub
+        expression: source_type
+        is_dedup_key: false
+        multi: false
+        keep_html: false
+        extend_url: false
+        is_extra: false
+        allow_invalid_expression: false
+        is_dedup_array: false
+        download_policy: not_download
+        processors: []
+        validators: []
       - name: content_url
         description: 正文详情url
         data_type: varchar(1024)
@@ -636,10 +666,7 @@ rows:
         allow_invalid_expression: true
         download_policy: not_download
         processors: []
-        validators:
-          - method: length
-            params: 1 +inf
-            fail_type: retry
+        validators: []
         is_dedup_array: false
       - name: article_file_url
         description: 附件地址
