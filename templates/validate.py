@@ -131,7 +131,7 @@ def validate_news_type(context):
     """
     if context.startswith("error:"):
         return False
-    elif len(context) > 7:
+    elif len(context) > 8:
         return False
     return True
 
