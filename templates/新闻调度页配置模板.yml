@@ -1,5 +1,5 @@
 description: |-
-  Version: 2020_07_16
+  Version: 2020_07_18
   配置完成后先启用更新调度的计划手动触发, 排错完成后开始历史调度, 开始下一个配置
 doc_rate: 1
 batch_start:
@@ -13,10 +13,17 @@ type: script
 use_incr_id: false
 expression: |
   def start_requests(**kwargs):
+      source_type = 1
+      copyright = 0
       web_site = "网站名"
 
       web_site_url = "栏目的链接"
-      hub_fields = {"web_site": web_site, "web_site_url": web_site_url}
+      hub_fields = {
+          "web_site": web_site,
+          "web_site_url": web_site_url,
+          "source_type": source_type,
+          "copyright": copyright,
+      }
       for p in range(None):
           p = f"_{p}" if p else ""
           url = f"列表页链接然后修改为格式化字符串"
@@ -25,7 +32,12 @@ expression: |
       web_site = "网站名"
 
       web_site_url = "栏目的链接"
-      hub_fields = {"web_site": web_site, "web_site_url": web_site_url}
+      hub_fields = {
+          "web_site": web_site,
+          "web_site_url": web_site_url,
+          "source_type": source_type,
+          "copyright": copyright,
+      }
       for p in range(None):
           p = f"_{p}" if p else ""
           url = f"列表页链接然后修改为格式化字符串"
@@ -53,7 +65,12 @@ expression: |
           cate = each["cate"]
           pages = each["pages"]
           web_site_url = f"栏目的链接格式化"
-          hub_fields = {"web_site": web_site, "web_site_url": web_site_url}
+          hub_fields = {
+              "web_site": web_site,
+              "web_site_url": web_site_url,
+              "source_type": source_type,
+              "copyright": copyright,
+          }
           for p in range(pages):
               p = f"_{p}" if p else ""
               url = f""

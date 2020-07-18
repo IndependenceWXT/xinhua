@@ -26,53 +26,103 @@ def process_url(text):
             return urlunsplit(SplitResult("http", *[*query][1:]))
 
 
+def parse(text):
+    import re
+    import datetime
+
+    release_time = text.strip()
+
+    if "年前" in release_time:
+        years = re.compile(r"(\d+)年前").findall(release_time)
+        years_ago = datetime.datetime.now() - datetime.timedelta(days=int(years[0]) * 365)
+        release_time = years_ago.strftime("%Y-%m-%d %H:%M:%S")
+
+    elif "月前" in release_time:
+        months = re.compile(r"(\d+)月前").findall(release_time)
+        months_ago = datetime.datetime.now() - datetime.timedelta(days=int(months[0]) * 30)
+        release_time = months_ago.strftime("%Y-%m-%d %H:%M:%S")
+
+    elif "周前" in release_time:
+        weeks = re.compile(r"(\d+)周前").findall(release_time)
+        weeks_ago = datetime.datetime.now() - datetime.timedelta(days=int(weeks[0]) * 7)
+        release_time = weeks_ago.strftime("%Y-%m-%d %H:%M:%S")
+
+    elif "天前" in release_time:
+        ndays = re.compile(r"(\d+)天前").findall(release_time)
+        days_ago = datetime.datetime.now() - datetime.timedelta(days=int(ndays[0]))
+        release_time = days_ago.strftime("%Y-%m-%d %H:%M:%S")
+
+    elif "小时前" in release_time:
+        nhours = re.compile(r"(\d+)小时前").findall(release_time)
+        hours_ago = datetime.datetime.now() - datetime.timedelta(hours=int(nhours[0]))
+        release_time = hours_ago.strftime("%Y-%m-%d %H:%M:%S")
+
+    elif "分钟前" in release_time:
+        nminutes = re.compile(r"(\d+)分钟前").findall(release_time)
+        minutes_ago = datetime.datetime.now() - datetime.timedelta(minutes=int(nminutes[0]))
+        release_time = minutes_ago.strftime("%Y-%m-%d %H:%M:%S")
+
+    elif "昨天" in release_time or "昨日" in release_time:
+        today = datetime.date.today()
+        yesterday = today - datetime.timedelta(days=1)
+        release_time = release_time.replace("昨天", str(yesterday))
+
+    elif "今天" in release_time:
+        release_time = release_time.replace("今天", get_current_date("%Y-%m-%d"))
+
+    elif "刚刚" in release_time:
+        release_time = get_current_date()
+
+    elif re.search(r"^\d\d:\d\d", release_time):
+        release_time = get_current_date("%Y-%m-%d") + " " + release_time
+
+    elif not re.compile(r"\d{4}").findall(release_time):
+        month = re.compile(r"\d{1,2}").findall(release_time)
+        if month:
+            if int(month[0]) <= int(get_current_date("%m")):
+                release_time = get_current_date("%Y") + "-" + release_time
+            else:
+                release_time = str(int(get_current_date("%Y")) - 1) + "-" + release_time
+
+    return release_time
+
+
 def process_time_template(text):
-    """Version: 2020_07_15
+    """Version: 2020_07_18
     时间提取脚本模版
     """
     import re
     from datetime import datetime
 
-    data = text.strip()
+    text = text.strip()
 
     rules = [
         r"(\d{2}\d{2}([\.\-/|年月\s]{1,3}\d{1,2}){2}日?(\s?\d{2}:\d{2}(:\d{2})?)?)|(\d{1,2}\s?(分钟|小时|天)前)",  # 常见中文日期格式, 网上找的
         # r"\d{10}",  # TODO: 处理时间戳, 遇到再加: 15开头的10或13位数字, 其实匹配前10个就够了
-        r"",  # 如有不是常见的日期时间格式，此处替换成案例
+        # r"",  # 如有不是常见的日期时间格式，此处替换成案例
     ]
-    # 无内容时间返回空
-    if not data:
-        return "error:空字符串"
     # 预处理，替换掉会影响正则提取的固定字符串, 如点击量的数字
     flags = [
         "发布时间",
     ]
     for each in flags:
-        data = data.replace(each, "")
+        text = text.replace(each, "")
+    # 无内容时间返回空
+    length = len(re.sub(r"\s+", "", text))
+    if length < 6:
+        return f"error:{text}"
     # 提取日期时间
     for each in rules:
         p = re.compile(each)
-        res = p.findall(data)
-        # res.reverse()
-        # res = reversed(res)
-        res = res and res[0] and res[0][0]
+        res = p.findall(text)
+        print(res)
+        res = sorted([i for i in res[0]], key=len, reverse=True)
         if res:
-            return res
+            return parse(res[0])
         else:
             continue
     else:
         return f"error:{text}"
-
-
-def process_time_test(text):
-    """提取时间"""
-    import re
-    import dateparser
-
-    post_time = "1999年06月30日 17:35:00"
-    time_re = re.compile("[年月日\s]")
-    ctime = dateparser.parse(time_re.sub(" ", text))
-    print(ctime)
 
 
 def process_timestamp(text):
@@ -136,10 +186,11 @@ def process_time_ambiguous(text):
 
 
 def process_author_template(text):
-    """Version: 2020_07_17
+    """Version: 2020_07_18
     作者提取脚本模版
     returns:
-        []: 正则匹配失败
+        [error:text]: 正则提取失败
+        []: 无作者
     """
     import re
 
@@ -150,15 +201,14 @@ def process_author_template(text):
         # r"",  # 如有不是常见的作者格式，此处替换成案例
     ]
     # 预处理，替换掉会影响正则提取的固定字符串, 从验证器中更新
-    # 自定义
-    text = text
-
     flags = ["作者", "记者", "撰文", "通讯员", "责任编辑", "编辑", "通讯中", "发布者"]
     punctuations = ["【", "】", "（", "）"]
     flags.extend(punctuations)
     for each in flags:
         text = text.replace(each, "")
-
+    # 无作者
+    if len(re.sub(r"\s+", "", text)) < 2:
+        return []
     # 提取作者
     for each in rules:
         p = re.compile(each)
@@ -168,8 +218,6 @@ def process_author_template(text):
         else:
             continue
     else:
-        if len(re.sub(r"\s+", "", text)) < 2:
-            return []
         return [f"error:{text}"]
 
 
@@ -187,15 +235,10 @@ def process_author_test(text):
 
 
 def process_publish_org_template(text):
-    """Version: 2020_07_14
+    """Version: 2020_07_18
     来源提取
     """
     import re
-
-    # 预处理，替换掉会影响正则提取的固定字符串, 从验证器中更新
-    flags = ["文章来源", "信息来源", "文字来源", "来源", "转自", "发文机关", "发布人", "发布者"]
-    for each in flags:
-        text = text.replace(each, "")
 
     # 按需排序
     rules = [
@@ -203,7 +246,13 @@ def process_publish_org_template(text):
         # r"", # 自定义
         # r"([^\s/$.?].[^\s]*)", # www.railwaygazette.com
     ]
-
+    # 预处理，替换掉会影响正则提取的固定字符串, 从验证器中更新
+    flags = ["文章来源", "信息来源", "文字来源", "来源", "转自", "发文机关", "发布人", "发布者"]
+    for each in flags:
+        text = text.replace(each, "")
+    # 来源为空
+    if len(re.sub(r"\s+", "", text)) < 2:
+        return ""
     # 提取来源
     for each in rules:
         p = re.compile(each)
@@ -214,9 +263,6 @@ def process_publish_org_template(text):
         else:
             continue
     else:
-        # 来源为空
-        if len(re.sub(r"\s+", "", text)) < 2:
-            return ""
         return f"error:[{text}]"
 
 
@@ -236,26 +282,28 @@ def process_publish_org_test(text):
 
 
 def process_tag_template(text):
-    """Version: 2020_07_12_19:10:00
+    """Version: 2020_07_18
     标签提取脚本模版
     returns:
-        []: 正则匹配失败
+        []: 无
+        ["error:text"]: 提取失败
     """
     import re
 
     text = text.strip()
-
     # 按需排序
     rules = [
         r"\b([\u4e00-\u9fa5]+)\b",  # 连续中文字符
         # r"",  # 如有不是常见的作者格式，此处替换成案例
     ]
-
     # 预处理，替换掉会影响正则提取的固定字符串, 从验证器中更新
     flags = ["标签", "关键字", "主题分类"]
     for each in flags:
         text = text.replace(each, "")
-    # 提取作者
+    # 无内容返回空列表
+    if len(re.sub(r"\s+", "", text)) < 2:
+        return []
+    # 提取
     for each in rules:
         p = re.compile(each)
         res = p.findall(text)
@@ -264,9 +312,6 @@ def process_tag_template(text):
         else:
             continue
     else:
-        # 无内容返回空列表
-        if len(re.sub(r"\s+", "", text)) < 2:
-            return []
         return [f"error:{text}"]
 
 
@@ -320,9 +365,8 @@ def process_time_in_url(text):
 
 
 def process_title_template(text):
-    """Version: 2020_07_11_release
+    """Version: 2020_07_18
     处理标题，取一个稍微小的平均的标题长度，5左右
-    TODO: 统计一下数据库
     """
     import re
 
@@ -331,8 +375,9 @@ def process_title_template(text):
     return text
 
 
-# 计算content_md5, 数组字段去重, 不处理附件
+# 计算content_md5, 数组字段去重
 import hashlib
+from itertools import zip_longest
 
 
 def md5(text):
@@ -340,8 +385,9 @@ def md5(text):
 
 
 def process(data):
-    """Version: 2020_07_12
-    计算 网站名 发布时间 标题 内容详情 的MD5
+    """Version: 2020_07_18
+    - 计算 网站名 发布时间 标题 内容详情 的MD5
+    - 数组字段去重复
     """
     keys = ["web_site", "publish_time", "title", "content"]
     values = [data.get(k) or "" for k in keys]
@@ -352,8 +398,29 @@ def process(data):
         data["tag"] = list(set([tag for tag in data["tag"] if tag]))
     if data.get("author"):
         data["author"] = list(set([tag for tag in data["author"] if tag]))
+    # 附件根据链接去重复
+    dedup = {}
+    for filename, url in zip_longest(
+        data["article_file_name"], data["article_file_url"], fillvalue=""
+    ):
+        filename = filename or ""
+        if not dedup.get(url) or len(filename) > len(url):
+            dedup[url] = filename
+    else:
+        data["article_file_name"] = [v for k, v in dedup.items()]
+        data["article_file_url"] = [k for k, v in dedup.items()]
 
     return data
+
+
+def process_files(filenames, links):
+    data = {}
+    for filename, link in zip(filenames, links):
+        print(filename, link)
+        if not data.get(link) and len(filename) > len(data.get(link)):
+            data[link] = filename
+    else:
+        return [v for k, v in data.items()], [k for k, v in data.items()]
 
 
 def process_short_content(text):
@@ -383,15 +450,6 @@ def check_author():
             print(f"/{res}/")
 
 
-def process_files(filenames, links):
-    data = []
-    for filename, link in zip(filenames, links):
-        if data.get(link):
-            data[link] = filename
-    else:
-        return [{k: v} for k, v in data.items()]
-
-
 if __name__ == "__main__":
     # print(process_url("mailto:http://www.foeg.uzh.ch/analyse/politischekommunikation/news11/Sotomostudie.pdf"))
     # print(process_url_query("https://www.imemo.ru/en/index.php?page_id=502&id=484&p=60&ret=498"))
@@ -408,4 +466,12 @@ if __name__ == "__main__":
     # print(process_author_template("（编辑：）"))
     # print(process_tag_template("主题分类：其他"))
     # print(process_publish_org_template("来源 中关村"))
-    print(process_time_template("发布时间：\n 2020-\n 06-\n 17 17:09"))
+    print(process_time_template("1999年06月30日 17:35:00"))
+    data = {}
+    data["article_file_name"] = ["1.《山东省乡村建设规划许可管理办法》", "2.乡村建设规划许可证申请表（样表）", ""]
+    data["article_file_url"] = [
+        "http://app.shandong.gov.cn/attach/2017/35/83-2.pdf",
+        "http://app.shandong.gov.cn/attach/2017/35/83-2.pdf",
+        "http://app.shandong.gov.cn/attach/2017/35/83-2.pdf",
+    ]
+    print(process(data))

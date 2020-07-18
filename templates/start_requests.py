@@ -1,21 +1,33 @@
 def start_requests(**kwargs):
-    web_site = "邯郸市政府"
+    source_type = 1
+    copyright = 0
+    web_site = "网站名"
 
-    web_site_url = "http://hdzfxxgk.hd.gov.cn/zfwj/szfwj/"
-    hub_fields = {"web_site": web_site, "web_site_url": web_site_url}
-    for p in range(33):
+    web_site_url = "栏目的链接"
+    hub_fields = {
+        "web_site": web_site,
+        "web_site_url": web_site_url,
+        "source_type": source_type,
+        "copyright": copyright,
+    }
+    for p in range(None):
         p = f"_{p}" if p else ""
-        url = f"http://hdzfxxgk.hd.gov.cn/zfwj/szfwj/index{p}.html"
-        yield {"url": url, "page_rule_id": 11574, "hub_fields": hub_fields}
+        url = f"列表页链接然后修改为格式化字符串"
+        yield {"url": url, "page_rule_id": None, "hub_fields": hub_fields}
 
-    web_site = "邯郸市发改委"
+    web_site = "网站名"
 
-    web_site_url = "http://www.hd.gov.cn/fgw/zwgk/yfxz/zcfg/"
-    hub_fields = {"web_site": web_site, "web_site_url": web_site_url}
-    for p in range(4):
+    web_site_url = "栏目的链接"
+    hub_fields = {
+        "web_site": web_site,
+        "web_site_url": web_site_url,
+        "source_type": source_type,
+        "copyright": copyright,
+    }
+    for p in range(None):
         p = f"_{p}" if p else ""
-        url = f"http://www.hd.gov.cn/fgw/zwgk/yfxz/zcfg/index{p}.html"
-        yield {"url": url, "page_rule_id": 11576, "hub_fields": hub_fields}
+        url = f"列表页链接然后修改为格式化字符串"
+        yield {"url": url, "page_rule_id": None, "hub_fields": hub_fields}
 
     yield {"url": web_site_url, "page_rule_id": None, "hub_fields": hub_fields}
 
@@ -39,7 +51,12 @@ def start_requests(**kwargs):
         cate = each["cate"]
         pages = each["pages"]
         web_site_url = f"栏目的链接格式化"
-        hub_fields = {"web_site": web_site, "web_site_url": web_site_url}
+        hub_fields = {
+            "web_site": web_site,
+            "web_site_url": web_site_url,
+            "source_type": source_type,
+            "copyright": copyright,
+        }
         for p in range(pages):
             p = f"_{p}" if p else ""
             url = f""

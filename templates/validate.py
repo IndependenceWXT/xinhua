@@ -32,7 +32,7 @@ def validate_publish_time(context):
 
 
 def validate_author(context):
-    """Version: 2020_07_17
+    """Version: 2020_07_18
     验证中文作者是否含有非法词
     """
     if context.startswith("error:"):
@@ -43,25 +43,27 @@ def validate_author(context):
 
 
 def validate_publish_org(context):
-    """Version: 2020_07_11
+    """Version: 2020_07_18
     验证来源中是否有error: 
         卡住未经正确处理的请求
     """
     if context.startswith("error:"):
         return False
+    elif len(context) > 15:
+        return False
     return True
 
 
 def validate_url(context):
-    """Version: 2020_07_14
+    """Version: 2020_07_18
     验证链接是否合法
     """
     import re
     from urllib.parse import urlparse
 
-    url = context.strip()
+    text = context.strip()
     # 调度中可能复制带了空格
-    if len(url) != len(context):
+    if len(text) != len(context):
         return False
 
     rules = [
@@ -71,12 +73,12 @@ def validate_url(context):
     ]
     for each in rules:
         p = re.compile(each)
-        res = p.findall(url)
+        res = p.findall(text)
         if res:
             return True
     else:
         try:
-            q = urlparse(url)
+            q = urlparse(text)
         except:
             return False
         else:
@@ -87,8 +89,8 @@ def validate_url(context):
 
 
 def validate_tag(context):
-    """Version: 2020_07_12
-    TODO: 验证标签, 不同网站调整长度, 测试一段时间
+    """Version: 2020_07_18
+    验证标签, 不同网站调整长度
     """
     import re
 
@@ -96,33 +98,24 @@ def validate_tag(context):
     if text.startswith("error:"):
         return False
     # 验证长度
-    if len(text) > 5 or len(text) < 2:
+    if len(text) > 10:
         return False
-    # 验证是否是含有非中文字符
-    rules = [r"[\u4e00-\u9fa5]+"]
-    for each in rules:
-        p = re.compile(each)
-        res = p.match(text)
-        if res:
-            if res[0] == text:
-                return True
-            else:
-                return False
-    else:
-        return False
+    return True
 
 
 def validate_title(context):
-    """Version: 2020_07_16
-    验证标题是否是省略过的, 并且文本长度是否在区间内
+    """Version: 2020_07_18
+    验证标题是否是省略过的, 并且文本长度是否在100内
     """
     import re
 
     text = context.strip()
     length = len(re.sub(r"\s+", "", text))
-    if 100 > length > 2 and not text.endswith("..."):
-        return True
-    return False
+    if text.endswith("..."):
+        return False
+    elif length > 150:
+        return False
+    return True
 
 
 def validate_news_type(context):
@@ -146,6 +139,25 @@ def validate_web_site(context):
         return True
     return False
 
+
+def validate_source_type(context):
+    """Version: 2020_07_18
+    验证资源类型字段是否设置
+    """
+    if context in ["1", "2", "3", "4"]:
+        return True
+    else:
+        return False
+
+
+def validate_copyright(context):
+    """Version: 2020_07_18
+    验证版权字段是否设置
+    """
+    if context in ["0", "1"]:
+        return True
+    else:
+        return False
 
 def test_validators():
     # TODO: 测试验证器

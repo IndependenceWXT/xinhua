@@ -1,4 +1,9 @@
-def process(text):
-    text = text.split("-")
-    text = "-".join(text[1:])
-    return "http://121.18.64.252/zwgkcontent-" + text
+from atlassian import Confluence
+from pprint import pprint
+
+confluence = Confluence(
+    url='http://10.40.35.103:8090/',
+    username='fangtiansheng',
+    password='fangtiansheng123')
+
+res = confluence.get_page_by_id(328080, expand=True)
