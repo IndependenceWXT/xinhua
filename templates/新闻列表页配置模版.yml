@@ -25,7 +25,6 @@ rows:
       contains(translate(@href, "DOC", "doc"), ".doc") or
       contains(translate(@href, "ZIP", "zip"), ".zip") or
       contains(translate(@href, "RAR", "rar"), ".rar") or
-      contains(translate(@href, "MP4", "mp4"), ".mp4") or
       contains(translate(@href, "WPS", "wps"), ".wps")) and not(contains(@href,
       "file://") or contains(@href, "c:\"))]
     storage_id: -1
@@ -178,15 +177,15 @@ rows:
           - method: script
             params: |-
               def validate(context):
-                  """Version: 2020_07_14
+                  """Version: 2020_07_18
                   验证链接是否合法
                   """
                   import re
                   from urllib.parse import urlparse
 
-                  url = context.strip()
+                  text = context.strip()
                   # 调度中可能复制带了空格
-                  if len(url) != len(context):
+                  if len(text) != len(context):
                       return False
 
                   rules = [
@@ -196,12 +195,12 @@ rows:
                   ]
                   for each in rules:
                       p = re.compile(each)
-                      res = p.findall(url)
+                      res = p.findall(text)
                       if res:
                           return True
                   else:
                       try:
-                          q = urlparse(url)
+                          q = urlparse(text)
                       except:
                           return False
                       else:
@@ -268,6 +267,44 @@ rows:
         processors:
           - method: script
             params: |-
+              def process(text):
+                  """Version: 2020_07_18
+                  时间提取脚本模版
+                  """
+                  import re
+                  from datetime import datetime
+
+                  text = text.strip()
+
+                  rules = [
+                      r"(\d{2}\d{2}([\.\-/|年月\s]{1,3}\d{1,2}){2}日?(\s?\d{2}:\d{2}(:\d{2})?)?)|(\d{1,2}\s?(分钟|小时|天)前)",  # 常见中文日期格式, 网上找的
+                      # r"\d{10}",  # TODO: 处理时间戳, 遇到再加: 15开头的10或13位数字, 其实匹配前10个就够了
+                      # r"",  # 如有不是常见的日期时间格式，此处替换成案例
+                  ]
+                  # 预处理，替换掉会影响正则提取的固定字符串, 如点击量的数字
+                  flags = [
+                      "发布时间",
+                  ]
+                  for each in flags:
+                      text = text.replace(each, "")
+                  # 无内容时间返回空
+                  length = len(re.sub(r"\s+", "", text))
+                  if length < 6:
+                      return f"error:{text}"
+                  # 提取日期时间
+                  for each in rules:
+                      p = re.compile(each)
+                      res = p.findall(text)
+                      print(res)
+                      res = sorted([i for i in res[0]], key=len, reverse=True)
+                      if res:
+                          return parse(res[0])
+                      else:
+                          continue
+                  else:
+                      return f"error:{text}"
+
+
               def parse(text):
                   import re
                   import datetime
@@ -327,44 +364,6 @@ rows:
                               release_time = str(int(get_current_date("%Y")) - 1) + "-" + release_time
 
                   return release_time
-
-
-              def process(text):
-                  """Version: 2020_07_18
-                  时间提取脚本模版
-                  """
-                  import re
-                  from datetime import datetime
-
-                  text = text.strip()
-
-                  rules = [
-                      r"(\d{2}\d{2}([\.\-/|年月\s]{1,3}\d{1,2}){2}日?(\s?\d{2}:\d{2}(:\d{2})?)?)|(\d{1,2}\s?(分钟|小时|天)前)",  # 常见中文日期格式, 网上找的
-                      # r"\d{10}",  # TODO: 处理时间戳, 遇到再加: 15开头的10或13位数字, 其实匹配前10个就够了
-                      # r"",  # 如有不是常见的日期时间格式，此处替换成案例
-                  ]
-                  # 预处理，替换掉会影响正则提取的固定字符串, 如点击量的数字
-                  flags = [
-                      "发布时间",
-                  ]
-                  for each in flags:
-                      data = data.replace(each, "")
-                  # 无内容时间返回空
-                  length = len(re.sub(r"\s+", "", text))
-                  if length < 6:
-                      return f"error:{text}"
-                  # 提取日期时间
-                  for each in rules:
-                      p = re.compile(each)
-                      res = p.findall(data)
-                      print(res)
-                      res = sorted([i for i in res[0]], key=len, reverse=True)
-                      if res:
-                          return parse(res[0])
-                      else:
-                          continue
-                  else:
-                      return f"error:{text}"
           - method: text2datetime
             params: ''
         validators:
@@ -402,31 +401,31 @@ rows:
           - method: script
             params: |-
               def process(text):
-                  """Version: 2020_07_12_19:10:00
+                  """Version: 2020_07_18
                   标签提取脚本模版
                   returns:
-                      []: 正则匹配失败
+                      []: 无
+                      ["error:text"]: 提取失败
                   """
                   import re
 
-                  tag = text.strip()
-
+                  text = text.strip()
                   # 按需排序
                   rules = [
                       r"\b([\u4e00-\u9fa5]+)\b",  # 连续中文字符
                       # r"",  # 如有不是常见的作者格式，此处替换成案例
                   ]
-                  # 无内容返回空列表
-                  if not tag:
-                      return []
                   # 预处理，替换掉会影响正则提取的固定字符串, 从验证器中更新
                   flags = ["标签", "关键字", "主题分类"]
                   for each in flags:
-                      tag = tag.replace(each, "")
-                  # 提取作者
+                      text = text.replace(each, "")
+                  # 无内容返回空列表
+                  if len(re.sub(r"\s+", "", text)) < 2:
+                      return []
+                  # 提取
                   for each in rules:
                       p = re.compile(each)
-                      res = p.findall(tag)
+                      res = p.findall(text)
                       if res:
                           return res
                       else:
@@ -437,27 +436,18 @@ rows:
           - method: script
             params: |-
               def validate(context):
-                  """Version: 2020_07_11
-                  TODO: 验证标签, 不同网站调整长度, 测试一段时间
+                  """Version: 2020_07_18
+                  验证标签, 不同网站调整长度
                   """
                   import re
 
                   text = context.strip()
+                  if text.startswith("error:"):
+                      return False
                   # 验证长度
-                  if len(text) > 5 or len(text) < 2:
+                  if len(text) > 10:
                       return False
-                  # 验证是否是含有非中文字符
-                  rules = [r"[\u4e00-\u9fa5]+"]
-                  for each in rules:
-                      p = re.compile(each)
-                      res = p.match(text)
-                      if res:
-                          if res[0] == text:
-                              return True
-                          else:
-                              return False
-                  else:
-                      return False
+                  return True
             fail_type: retry
         is_dedup_array: false
       - name: author
@@ -571,7 +561,6 @@ rows:
       contains(translate(@href, "DOC", "doc"), ".doc") or
       contains(translate(@href, "ZIP", "zip"), ".zip") or
       contains(translate(@href, "RAR", "rar"), ".rar") or
-      contains(translate(@href, "MP4", "mp4"), ".mp4") or
       contains(translate(@href, "WPS", "wps"), ".wps")) and not(contains(@href,
       "file://") or contains(@href, "c:\"))]
     storage_id: 10270
@@ -882,15 +871,15 @@ rows:
           - method: script
             params: |-
               def validate(context):
-                  """Version: 2020_07_14
+                  """Version: 2020_07_18
                   验证链接是否合法
                   """
                   import re
                   from urllib.parse import urlparse
 
-                  url = context.strip()
+                  text = context.strip()
                   # 调度中可能复制带了空格
-                  if len(url) != len(context):
+                  if len(text) != len(context):
                       return False
 
                   rules = [
@@ -900,12 +889,12 @@ rows:
                   ]
                   for each in rules:
                       p = re.compile(each)
-                      res = p.findall(url)
+                      res = p.findall(text)
                       if res:
                           return True
                   else:
                       try:
-                          q = urlparse(url)
+                          q = urlparse(text)
                       except:
                           return False
                       else:
@@ -932,7 +921,7 @@ rows:
             params: |-
               def process(text):
                   """
-                  处理文本, 返回处理后的文本
+                  处理替换多余字符
                   """
                   return text
         validators:
@@ -964,6 +953,44 @@ rows:
         processors:
           - method: script
             params: |-
+              def process(text):
+                  """Version: 2020_07_18
+                  时间提取脚本模版
+                  """
+                  import re
+                  from datetime import datetime
+
+                  text = text.strip()
+
+                  rules = [
+                      r"(\d{2}\d{2}([\.\-/|年月\s]{1,3}\d{1,2}){2}日?(\s?\d{2}:\d{2}(:\d{2})?)?)|(\d{1,2}\s?(分钟|小时|天)前)",  # 常见中文日期格式, 网上找的
+                      # r"\d{10}",  # TODO: 处理时间戳, 遇到再加: 15开头的10或13位数字, 其实匹配前10个就够了
+                      # r"",  # 如有不是常见的日期时间格式，此处替换成案例
+                  ]
+                  # 预处理，替换掉会影响正则提取的固定字符串, 如点击量的数字
+                  flags = [
+                      "发布时间",
+                  ]
+                  for each in flags:
+                      text = text.replace(each, "")
+                  # 无内容时间返回空
+                  length = len(re.sub(r"\s+", "", text))
+                  if length < 6:
+                      return f"error:{text}"
+                  # 提取日期时间
+                  for each in rules:
+                      p = re.compile(each)
+                      res = p.findall(text)
+                      print(res)
+                      res = sorted([i for i in res[0]], key=len, reverse=True)
+                      if res:
+                          return parse(res[0])
+                      else:
+                          continue
+                  else:
+                      return f"error:{text}"
+
+
               def parse(text):
                   import re
                   import datetime
@@ -1023,44 +1050,6 @@ rows:
                               release_time = str(int(get_current_date("%Y")) - 1) + "-" + release_time
 
                   return release_time
-
-
-              def process(text):
-                  """Version: 2020_07_18
-                  时间提取脚本模版
-                  """
-                  import re
-                  from datetime import datetime
-
-                  text = text.strip()
-
-                  rules = [
-                      r"(\d{2}\d{2}([\.\-/|年月\s]{1,3}\d{1,2}){2}日?(\s?\d{2}:\d{2}(:\d{2})?)?)|(\d{1,2}\s?(分钟|小时|天)前)",  # 常见中文日期格式, 网上找的
-                      # r"\d{10}",  # TODO: 处理时间戳, 遇到再加: 15开头的10或13位数字, 其实匹配前10个就够了
-                      # r"",  # 如有不是常见的日期时间格式，此处替换成案例
-                  ]
-                  # 预处理，替换掉会影响正则提取的固定字符串, 如点击量的数字
-                  flags = [
-                      "发布时间",
-                  ]
-                  for each in flags:
-                      data = data.replace(each, "")
-                  # 无内容时间返回空
-                  length = len(re.sub(r"\s+", "", text))
-                  if length < 6:
-                      return f"error:{text}"
-                  # 提取日期时间
-                  for each in rules:
-                      p = re.compile(each)
-                      res = p.findall(data)
-                      print(res)
-                      res = sorted([i for i in res[0]], key=len, reverse=True)
-                      if res:
-                          return parse(res[0])
-                      else:
-                          continue
-                  else:
-                      return f"error:{text}"
           - method: text2datetime
             params: ''
         validators:
@@ -1221,31 +1210,31 @@ rows:
           - method: script
             params: |-
               def process(text):
-                  """Version: 2020_07_12_19:10:00
+                  """Version: 2020_07_18
                   标签提取脚本模版
                   returns:
-                      []: 正则匹配失败
+                      []: 无
+                      ["error:text"]: 提取失败
                   """
                   import re
 
-                  tag = text.strip()
-
+                  text = text.strip()
                   # 按需排序
                   rules = [
                       r"\b([\u4e00-\u9fa5]+)\b",  # 连续中文字符
                       # r"",  # 如有不是常见的作者格式，此处替换成案例
                   ]
-                  # 无内容返回空列表
-                  if not tag:
-                      return []
                   # 预处理，替换掉会影响正则提取的固定字符串, 从验证器中更新
                   flags = ["标签", "关键字", "主题分类"]
                   for each in flags:
-                      tag = tag.replace(each, "")
-                  # 提取作者
+                      text = text.replace(each, "")
+                  # 无内容返回空列表
+                  if len(re.sub(r"\s+", "", text)) < 2:
+                      return []
+                  # 提取
                   for each in rules:
                       p = re.compile(each)
-                      res = p.findall(tag)
+                      res = p.findall(text)
                       if res:
                           return res
                       else:
@@ -1256,27 +1245,18 @@ rows:
           - method: script
             params: |-
               def validate(context):
-                  """Version: 2020_07_11
-                  TODO: 验证标签, 不同网站调整长度, 测试一段时间
+                  """Version: 2020_07_18
+                  验证标签, 不同网站调整长度
                   """
                   import re
 
                   text = context.strip()
+                  if text.startswith("error:"):
+                      return False
                   # 验证长度
-                  if len(text) > 5 or len(text) < 2:
+                  if len(text) > 10:
                       return False
-                  # 验证是否是含有非中文字符
-                  rules = [r"[\u4e00-\u9fa5]+"]
-                  for each in rules:
-                      p = re.compile(each)
-                      res = p.match(text)
-                      if res:
-                          if res[0] == text:
-                              return True
-                          else:
-                              return False
-                  else:
-                      return False
+                  return True
             fail_type: retry
         is_dedup_array: false
       - name: abstract
@@ -1335,17 +1315,17 @@ examples:
   - method: GET
     url: ''
     data: ''
-    description: "\U0001F44D配置测试保存做对比"
+    description: "\U0001F7E2配置测试保存做对比"
     should_save_sync: false
   - method: GET
     url: ''
     data: ''
-    description: 异常测试说明：
+    description: "\U0001F534异常测试说明:"
     should_save_sync: false
   - method: GET
     url: ''
     data: ''
-    description: 异常测试说明：
+    description: "\U0001F534异常测试说明:"
     should_save_sync: false
 size: small
 global_dedup: false

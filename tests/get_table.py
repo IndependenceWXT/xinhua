@@ -74,5 +74,7 @@ for each in web_sites:
         "if_online": online_status,
         "online_date": online_date
     }
-    db.add(record, table_name="progress")
+    # db.add(record, table_name="progress")
+    condition = {"web_site": web_site}
+    db.update(record, condition=condition, table_name="progress")
 db.close()
