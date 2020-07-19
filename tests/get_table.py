@@ -4,27 +4,16 @@ import requests
 from bs4 import BeautifulSoup
 from pyecharts.charts import Map
 from pyecharts import options as opts
-
+from atlassian import Confluence
 from spider.network.selector import Selector
 from spider.db import DB
 
-db = DB().create("mysql://xinhuaspider:toor@localhost:3306/shangjian")
+db = DB().create("mysql://root:toor@localhost:3306/shangjian")
 
-url = "http://10.40.35.103:8090/rest/api/content/328080?expand=body.storage"
-
-headers = {
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-    "Accept-Encoding": "gzip, deflate",
-    "Accept-Language": "en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7",
-    "Cache-Control": "no-cache",
-    "Connection": "keep-alive",
-    "Cookie": "seraph.confluence=360461%3Ad8989475925afb34f076f55ae6ad0593ba430cba; JSESSIONID=AEA6E70EDBB99064A4ED5FA0FEBD55E1",
-    "DNT": "1",
-    "Host": "10.40.35.103:8090",
-    "Pragma": "no-cache",
-    "Upgrade-Insecure-Requests": "1",
-    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36",
-}
+confluence = Confluence(
+    url='http://10.40.35.103:8090/',
+    username='fangtiansheng',
+    password='fangtiansheng123')
 
 users = {
     "2c918083730fcf020173135f0972000d": "张豹",
@@ -34,18 +23,11 @@ users = {
     "2c918083730fcf020173135fb401000e": "胡涛涛",
 }
 
-res = requests.get(url, headers=headers)
-data = res.json()["body"]["storage"]["value"]
-# print(data)
+res = confluence.get_page_by_id(328080, expand="body.storage")
+data = res["body"]["storage"]["value"]
 soup = BeautifulSoup(data, "html.parser")
 web_sites = soup.find_all("tr")
 
-data = Counter()
-china = Map()
-conf_completed = Counter()
-submit_completed = Counter()
-approved_completed = Counter()
-online_completed = Counter()
 for each in web_sites:
     td = each.find_all("td")
     if not td:
@@ -79,21 +61,7 @@ for each in web_sites:
         online_status,
         online_date,
     )
-    city = web_site.replace("市政府", "").replace("市发改委", "")
-    # if conf_status:
-    #     conf_completed.append((city, 1))
-    # if submit_status:
-    #     submit_completed.append((city, 1))
-    # if approved_status:
-    #     approved_completed.append((city, 1))
-    # if online_status:
-    #     online_completed.append((city, 1))
-    data.update()
 
-    conf_completed.update({city: conf_status if conf_status else 0})
-    submit_completed.update({city: submit_status if submit_status else 0})
-    approved_completed.update({city: approved_status if approved_status else 0})
-    online_completed.update({city: online_status if online_status else 0})
     record = {
         "web_site": web_site,
         "user": user,
@@ -102,36 +70,9 @@ for each in web_sites:
         "if_submit": submit_status,
         "submit_date": submit_date,
         "if_approved": approved_status,
-        "approved_date": approved_date
+        "approved_date": approved_date,
+        "if_online": online_status,
+        "online_date": online_date
     }
     db.add(record, table_name="progress")
-
-
-china.add(
-    "配置完成",
-    [(k, v) for k, v in conf_completed.items()],
-    "china-cities",
-    label_opts=opts.LabelOpts(is_show=False),
-)
-china.add(
-    "提交完成",
-    [(k, v) for k, v in submit_completed.items()],
-    "china-cities",
-    label_opts=opts.LabelOpts(is_show=False),
-)
-china.add(
-    "审核完成",
-    [(k, v) for k, v in approved_completed.items()],
-    "china-cities",
-    label_opts=opts.LabelOpts(is_show=False),
-)
-china.add(
-    "上线完成",
-    [(k, v) for k, v in online_completed.items()],
-    "china-cities",
-    label_opts=opts.LabelOpts(is_show=False),
-)
-china.set_global_opts(
-    title_opts=opts.TitleOpts(title="地级市"), visualmap_opts=opts.VisualMapOpts(),
-)
-china.render("china.html")
+db.close()
