@@ -933,7 +933,7 @@ rows:
                   """
                   if context.startswith("error:"):
                       return False
-                  elif len(context) > 8:
+                  elif len(context) > 10:
                       return False
                   return True
             fail_type: retry
