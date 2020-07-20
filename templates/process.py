@@ -466,12 +466,13 @@ if __name__ == "__main__":
     # print(process_author_template("（编辑：）"))
     # print(process_tag_template("主题分类：其他"))
     # print(process_publish_org_template("来源 中关村"))
-    print(process_time_template("1999年06月30日 17:35:00"))
-    data = {}
-    data["article_file_name"] = ["1.《山东省乡村建设规划许可管理办法》", "2.乡村建设规划许可证申请表（样表）", ""]
-    data["article_file_url"] = [
-        "http://app.shandong.gov.cn/attach/2017/35/83-2.pdf",
-        "http://app.shandong.gov.cn/attach/2017/35/83-2.pdf",
-        "http://app.shandong.gov.cn/attach/2017/35/83-2.pdf",
-    ]
-    print(process(data))
+    # print(process_time_template("1999年06月30日 17:35:00"))
+    # data = {}
+    # data["article_file_name"] = ["1.《山东省乡村建设规划许可管理办法》", "2.乡村建设规划许可证申请表（样表）", ""]
+    # data["article_file_url"] = [
+    #     "http://app.shandong.gov.cn/attach/2017/35/83-2.pdf",
+    #     "http://app.shandong.gov.cn/attach/2017/35/83-2.pdf",
+    #     "http://app.shandong.gov.cn/attach/2017/35/83-2.pdf",
+    # ]
+    # print(process(data))
+    print(process_request("http://dpc.xz.gov.cn/fgw/cyzc/20141121/026_5568e22f-df8d-4e01-99e6-c91f4a312267.htm"))
