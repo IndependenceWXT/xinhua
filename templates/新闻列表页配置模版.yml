@@ -295,7 +295,6 @@ rows:
                   for each in rules:
                       p = re.compile(each)
                       res = p.findall(text)
-                      print(res)
                       res = sorted([i for i in res[0]], key=len, reverse=True)
                       if res:
                           return parse(res[0])
@@ -364,6 +363,11 @@ rows:
                               release_time = str(int(get_current_date("%Y")) - 1) + "-" + release_time
 
                   return release_time
+
+
+              def get_current_date(date_format="%Y-%m-%d %H:%M:%S"):
+                  import datetime
+                  return datetime.datetime.now().strftime(date_format)
           - method: text2datetime
             params: ''
         validators:
@@ -981,7 +985,6 @@ rows:
                   for each in rules:
                       p = re.compile(each)
                       res = p.findall(text)
-                      print(res)
                       res = sorted([i for i in res[0]], key=len, reverse=True)
                       if res:
                           return parse(res[0])
@@ -1050,6 +1053,11 @@ rows:
                               release_time = str(int(get_current_date("%Y")) - 1) + "-" + release_time
 
                   return release_time
+
+
+              def get_current_date(date_format="%Y-%m-%d %H:%M:%S"):
+                  import datetime
+                  return datetime.datetime.now().strftime(date_format)
           - method: text2datetime
             params: ''
         validators:

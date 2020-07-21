@@ -5,6 +5,7 @@ import re
 import requests
 import time
 from dateutil.parser import parse as datetime_parse
+from spider.utils.tools import get_curr
 
 
 def process_url(text):
@@ -24,6 +25,50 @@ def process_url(text):
             return urlunsplit(SplitResult("https", *[*query][1:]))
         else:
             return urlunsplit(SplitResult("http", *[*query][1:]))
+
+
+
+
+def process_time_template(text):
+    """Version: 2020_07_18
+    时间提取脚本模版
+    """
+    import re
+    from datetime import datetime
+
+    text = text.strip()
+
+    rules = [
+        r"(\d{2}\d{2}([\.\-/|年月\s]{1,3}\d{1,2}){2}日?(\s?\d{2}:\d{2}(:\d{2})?)?)|(\d{1,2}\s?(分钟|小时|天)前)",  # 常见中文日期格式, 网上找的
+        # r"\d{10}",  # TODO: 处理时间戳, 遇到再加: 15开头的10或13位数字, 其实匹配前10个就够了
+        # r"",  # 如有不是常见的日期时间格式，此处替换成案例
+    ]
+    # 预处理，替换掉会影响正则提取的固定字符串, 如点击量的数字
+    flags = [
+        "发布时间",
+    ]
+    for each in flags:
+        text = text.replace(each, "")
+    # 无内容时间返回空
+    length = len(re.sub(r"\s+", "", text))
+    if length < 6:
+        return f"error:{text}"
+    # 提取日期时间
+    for each in rules:
+        p = re.compile(each)
+        res = p.findall(text)
+        if res:
+            res = sorted([i for i in res[0]], key=len, reverse=True)
+            return parse(res[0])
+        else:
+            continue
+    else:
+        return f"error:{text}"
+
+
+def get_current_date(date_format="%Y-%m-%d %H:%M:%S"):
+    import datetime
+    return datetime.datetime.now().strftime(date_format)
 
 
 def parse(text):
@@ -87,44 +132,6 @@ def parse(text):
     return release_time
 
 
-def process_time_template(text):
-    """Version: 2020_07_18
-    时间提取脚本模版
-    """
-    import re
-    from datetime import datetime
-
-    text = text.strip()
-
-    rules = [
-        r"(\d{2}\d{2}([\.\-/|年月\s]{1,3}\d{1,2}){2}日?(\s?\d{2}:\d{2}(:\d{2})?)?)|(\d{1,2}\s?(分钟|小时|天)前)",  # 常见中文日期格式, 网上找的
-        # r"\d{10}",  # TODO: 处理时间戳, 遇到再加: 15开头的10或13位数字, 其实匹配前10个就够了
-        # r"",  # 如有不是常见的日期时间格式，此处替换成案例
-    ]
-    # 预处理，替换掉会影响正则提取的固定字符串, 如点击量的数字
-    flags = [
-        "发布时间",
-    ]
-    for each in flags:
-        text = text.replace(each, "")
-    # 无内容时间返回空
-    length = len(re.sub(r"\s+", "", text))
-    if length < 6:
-        return f"error:{text}"
-    # 提取日期时间
-    for each in rules:
-        p = re.compile(each)
-        res = p.findall(text)
-        print(res)
-        res = sorted([i for i in res[0]], key=len, reverse=True)
-        if res:
-            return parse(res[0])
-        else:
-            continue
-    else:
-        return f"error:{text}"
-
-
 def process_timestamp(text):
     "时间戳转字符串"
     from datetime import datetime
@@ -186,7 +193,7 @@ def process_time_ambiguous(text):
 
 
 def process_author_template(text):
-    """Version: 2020_07_18
+    """Version: 2020_07_21
     作者提取脚本模版
     returns:
         [error:text]: 正则提取失败
@@ -214,7 +221,7 @@ def process_author_template(text):
         p = re.compile(each)
         res = p.findall(text)
         if res:
-            return [i.replace(" ", "") for i in res]
+            return [i.replace(" ", "") for i in res if 1 < len(i) < 5]
         else:
             continue
     else:
