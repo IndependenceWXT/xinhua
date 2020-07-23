@@ -725,11 +725,15 @@ rows:
           - method: script
             params: |-
               def process(text):
-                  """Version: 2020_07_11_release
-                  处理短正文: 用了挺久了, 应该稳定可用了
+                  """Version: 2020_07_23
+                  抽取json字段返回的html，提取其文字内容
+                  短正文置空处理
                   """
                   import re
+                  from lxml import etree
 
+                  root = etree.HTML(text)
+                  text = root.xpath("string(.)")
                   if len(re.sub(r"\s+", "", text)) < 80:
                       return ""
                   return text
