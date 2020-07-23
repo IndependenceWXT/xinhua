@@ -27,8 +27,6 @@ def process_url(text):
             return urlunsplit(SplitResult("http", *[*query][1:]))
 
 
-
-
 def process_time_template(text):
     """Version: 2020_07_18
     时间提取脚本模版
@@ -68,6 +66,7 @@ def process_time_template(text):
 
 def get_current_date(date_format="%Y-%m-%d %H:%M:%S"):
     import datetime
+
     return datetime.datetime.now().strftime(date_format)
 
 
@@ -431,11 +430,15 @@ def process_files(filenames, links):
 
 
 def process_short_content(text):
-    """Version: 2020_07_11_release
-    处理短正文, 用了挺久了, 应该稳定可用了
+    """Version: 2020_07_23
+    抽取json字段返回的html，提取其文字内容
+    短正文置空处理
     """
     import re
+    from lxml import etree
 
+    root = etree.HTML(text)
+    text = root.xpath("string(.)")
     if len(re.sub(r"\s+", "", text)) < 80:
         return ""
     return text
@@ -482,4 +485,9 @@ if __name__ == "__main__":
     #     "http://app.shandong.gov.cn/attach/2017/35/83-2.pdf",
     # ]
     # print(process(data))
-    print(process_request("http://dpc.xz.gov.cn/fgw/cyzc/20141121/026_5568e22f-df8d-4e01-99e6-c91f4a312267.htm"))
+    print(
+        process_request(
+            "http://dpc.xz.gov.cn/fgw/cyzc/20141121/026_5568e22f-df8d-4e01-99e6-c91f4a312267.htm"
+        )
+    )
+

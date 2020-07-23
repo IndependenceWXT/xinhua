@@ -1,19 +1,24 @@
-from pprint import pprint
 from collections import Counter
-import requests
-from bs4 import BeautifulSoup
-from pyecharts.charts import Map
-from pyecharts import options as opts
-from atlassian import Confluence
-from spider.network.selector import Selector
-from spider.db import DB
+from pprint import pprint
+from urllib.parse import quote_plus, unquote_plus
 
-db = DB().create("mysql://root:toor@localhost:3306/shangjian")
+import requests
+from atlassian import Confluence
+from bs4 import BeautifulSoup
+from pyecharts import options as opts
+from pyecharts.charts import Map
+
+from spider.db import DB
+from spider.network.selector import Selector
+
+
+mysql_uri = "mysql://xinhuaspider:xinhuaspider@123@rm-2ze3450z16n1c2msxco.mysql.rds.aliyuncs.com:3306/xinhuaspider"
+# mysql_uri = "mysql://root:toor@localhost:3306/shangjian"
+db = DB().create(mysql_uri)
 
 confluence = Confluence(
-    url='http://10.40.35.103:8090/',
-    username='fangtiansheng',
-    password='fangtiansheng123')
+    url="http://10.40.35.103:8090/", username="fangtiansheng", password="fangtiansheng123"
+)
 
 users = {
     "2c918083730fcf020173135f0972000d": "张豹",
@@ -21,6 +26,7 @@ users = {
     "2c918083730fcf020173102de444000a": "石张毅",
     "2c918083730fcf020173102d487d0009": "王尚文",
     "2c918083730fcf020173135fb401000e": "胡涛涛",
+    "2c918083730fcf0201736a0de66d000f": "江港林",
 }
 
 res = confluence.get_page_by_id(328080, expand="body.storage")
@@ -72,9 +78,9 @@ for each in web_sites:
         "if_approved": approved_status,
         "approved_date": approved_date,
         "if_online": online_status,
-        "online_date": online_date
+        "online_date": online_date,
     }
-    # db.add(record, table_name="progress")
+    db.add(record, table_name="progress")
     condition = {"web_site": web_site}
     db.update(record, condition=condition, table_name="progress")
 db.close()
