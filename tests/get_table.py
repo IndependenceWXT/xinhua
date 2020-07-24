@@ -8,6 +8,7 @@ from atlassian import Confluence
 from bs4 import BeautifulSoup
 from pyecharts import options as opts
 from pyecharts.charts import Map
+from tqdm import tqdm
 
 from spider.db import DB
 from spider.network.selector import Selector
@@ -36,7 +37,7 @@ data = res["body"]["storage"]["value"]
 soup = BeautifulSoup(data, "html.parser")
 web_sites = soup.find_all("tr")
 
-for each in web_sites:
+for each in tqdm(web_sites):
     td = each.find_all("td")
     if not td:
         continue
@@ -56,19 +57,6 @@ for each in web_sites:
     approved_date = td[8].find("time").get("datetime")
     online_status = True if td[9].find("ac:task-status").text == "complete" else False
     online_date = td[9].find("time").get("datetime")
-    print(
-        _id,
-        web_site,
-        conf_status,
-        conf_date,
-        submit_status,
-        submit_date,
-        user,
-        approved_status,
-        approved_date,
-        online_status,
-        online_date,
-    )
 
     record = {
         "web_site": web_site,

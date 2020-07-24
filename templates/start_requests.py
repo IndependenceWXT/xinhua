@@ -1,32 +1,23 @@
 def start_requests(**kwargs):
-    source_type = 1
-    copyright = 0
-    web_site = "国家核安全局"
-    cates = [
-        {"cate": "zhxx_8953/yjzx", "pages": 46},
-        {"cate": "zhxx_8953/gzdt", "pages": 100},
-        {"cate": "zcfg_8964", "pages": 2},
-        {"cate": "zcfg_8964/bz", "pages": 9},
-        {"cate": "zhxx_8953/haqnb", "pages": 2},
-        {"cate": "zcfg_8964/fg", "pages": 5},
-        {"cate": "zcfg_8964/gh", "pages": 1},
-    ]
-    for each in cates:
-        cate = each["cate"]
-        pages = each["pages"]
-        web_site_url = f"http://nnsa.mee.gov.cn/{cate}/"
-        hub_fields = {
-            "web_site": web_site,
-            "web_site_url": web_site_url,
-            "source_type": source_type,
-            "copyright": copyright,
-        }
-        for page in range(pages):
-            page = f"_{page}" if page else ""
-            url = f"http://nnsa.mee.gov.cn/{cate}/index{page}.html"
-            yield {"url": url, "page_rule_id": 9944, "hub_fields": hub_fields}
+    web_site = "遵义市政府"
 
-      
+    web_site_url = "http://www.zunyi.gov.cn/zwgk/jcxxgk/flfg/zfl_63284/"
+    hub_fields = {"web_site": web_site, "web_site_url": web_site_url}
+    for page in range(3):
+        page = f"_{page}.html" if page else ""
+        url = f"http://www.zunyi.gov.cn/zwgk/jcxxgk/flfg/zfl_63284/index{page}.html"
+        yield {"url": url, "page_rule_id": 10999, "hub_fields": hub_fields}
+
+
+    web_site = "遵义市发改委"
+
+    web_site_url = "http://fgw.zunyi.gov.cn/xxgk/zpfl/fgwj/dfxfg/"
+    hub_fields = {"web_site": web_site, "web_site_url": web_site_url}
+    for page in range(17):
+        page = f"_{page}" if page else ""
+        url = f"http://fgw.zunyi.gov.cn/xxgk/zpfl/fgwj/dfxfg/list{page}.html"
+        yield {"url": url, "page_rule_id": 11001, "hub_fields": hub_fields}
+
 
 if __name__ == "__main__":
     for each in start_requests():
