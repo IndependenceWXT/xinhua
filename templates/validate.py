@@ -159,6 +159,17 @@ def validate_copyright(context):
     else:
         return False
 
+def validate_hits(context):
+    """Version: 2020_07_25
+    验证点击量是否是整数
+    """
+    if context.isdigit():
+        return True
+    elif context == "上线删除":
+        return True
+    return False
+
+
 def test_validators():
     # TODO: 测试验证器
     pass
@@ -166,4 +177,4 @@ def test_validators():
 
 if __name__ == "__main__":
     # print(validate_url("http:/10.40.35.103:8090/?a=1"))
-    print(validate_url("https://www.sg.gov.cn/zw/zcfg/gjszcfg/"))
+    print(validate_hits("点击量"))

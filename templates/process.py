@@ -446,6 +446,20 @@ def process_short_content(text):
     return text
 
 
+def process_hits(text):
+    """Version: 2020_07_25
+    提取点击量数字
+    """
+    import re
+
+    p = re.compile(r'(\d+)')
+    res = p.findall(text)
+    if res:
+        return res[0]
+    else:
+        return f"error:{text}"
+
+
 def check_publish_org():
     with open("publish_org.txt", mode="r", encoding="utf-8") as f:
         for line in f:
