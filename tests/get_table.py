@@ -1,3 +1,4 @@
+import os
 from collections import Counter
 from pprint import pprint
 from urllib.parse import quote_plus, unquote_plus
@@ -11,8 +12,9 @@ from pyecharts.charts import Map
 from spider.db import DB
 from spider.network.selector import Selector
 
-
-mysql_uri = "mysql://xinhuaspider:xinhuaspider@123@rm-2ze3450z16n1c2msxco.mysql.rds.aliyuncs.com:3306/xinhuaspider"
+usr = os.getenv("mysql_usr")
+pwd = os.getenv("mysql_pwd")
+mysql_uri = f"mysql://{usr}:{pwd}@rm-2ze3450z16n1c2msxco.mysql.rds.aliyuncs.com:3306/xinhuaspider"
 # mysql_uri = "mysql://root:toor@localhost:3306/shangjian"
 db = DB().create(mysql_uri)
 
@@ -80,7 +82,7 @@ for each in web_sites:
         "if_online": online_status,
         "online_date": online_date,
     }
-    db.add(record, table_name="progress")
+    # db.add(record, table_name="progress")
     condition = {"web_site": web_site}
     db.update(record, condition=condition, table_name="progress")
 db.close()
