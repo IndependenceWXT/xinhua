@@ -437,10 +437,12 @@ def process_short_content(text):
     import re
     from lxml import etree
 
-    root = etree.HTML(text)
-    text = root.xpath("string(.)")
+
     if len(re.sub(r"\s+", "", text)) < 80:
         return ""
+    else:
+        root = etree.HTML(text)
+        text = root.xpath("string(.)")
     return text
 
 
