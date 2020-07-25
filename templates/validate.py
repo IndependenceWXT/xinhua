@@ -165,7 +165,7 @@ def validate_hits(context):
     """
     if context.isdigit():
         return True
-    elif context == "上线删除":
+    elif not context.startswith("error:"):
         return True
     return False
 
