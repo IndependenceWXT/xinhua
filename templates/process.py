@@ -5,7 +5,6 @@ import re
 import requests
 import time
 from dateutil.parser import parse as datetime_parse
-from spider.utils.tools import get_curr
 
 
 def process_url(text):
@@ -28,7 +27,7 @@ def process_url(text):
 
 
 def process_time_template(text):
-    """Version: 2020_07_18
+    """Version: 2020_07_25
     时间提取脚本模版
     """
     import re
@@ -37,7 +36,7 @@ def process_time_template(text):
     text = text.strip()
 
     rules = [
-        r"(\d{2}\d{2}([\.\-/|年月\s]{1,3}\d{1,2}){2}日?(\s?\d{2}:\d{2}(:\d{2})?)?)|(\d{1,2}\s?(分钟|小时|天)前)",  # 常见中文日期格式, 网上找的
+        r"(\d{2}\d{2}([\.\-/|年月\s]{1,3}\d{1,2}){2}日?(\s?\d{1,2}:\d{1,2}(:\d{1,2})?)?)|(\d{1,2}\s?(分钟|小时|天)前)",  # 常见中文日期格式, 网上找的
         # r"\d{10}",  # TODO: 处理时间戳, 遇到再加: 15开头的10或13位数字, 其实匹配前10个就够了
         # r"",  # 如有不是常见的日期时间格式，此处替换成案例
     ]
@@ -55,6 +54,7 @@ def process_time_template(text):
     for each in rules:
         p = re.compile(each)
         res = p.findall(text)
+        print(res)
         if res:
             res = sorted([i for i in res[0]], key=len, reverse=True)
             return parse(res[0])
@@ -492,18 +492,5 @@ if __name__ == "__main__":
     # print(process_author_template("（编辑：）"))
     # print(process_tag_template("主题分类：其他"))
     # print(process_publish_org_template("来源 中关村"))
-    # print(process_time_template("1999年06月30日 17:35:00"))
-    # data = {}
-    # data["article_file_name"] = ["1.《山东省乡村建设规划许可管理办法》", "2.乡村建设规划许可证申请表（样表）", ""]
-    # data["article_file_url"] = [
-    #     "http://app.shandong.gov.cn/attach/2017/35/83-2.pdf",
-    #     "http://app.shandong.gov.cn/attach/2017/35/83-2.pdf",
-    #     "http://app.shandong.gov.cn/attach/2017/35/83-2.pdf",
-    # ]
-    # print(process(data))
-    print(
-        process_request(
-            "http://dpc.xz.gov.cn/fgw/cyzc/20141121/026_5568e22f-df8d-4e01-99e6-c91f4a312267.htm"
-        )
-    )
+    print(process_time_template("2017/1/11 9:12:55"))
 

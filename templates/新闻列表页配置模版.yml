@@ -1,5 +1,5 @@
 description: |-
-  Version: 2020_07_18
+  Version: 2020_07_25
   ⚠️配置前请核对版本号是否最新; 测试时注意核验字段值的数据准确性: 描述中有❤️标志的字段
 proxy: default
 normal_status_list:
@@ -268,7 +268,7 @@ rows:
           - method: script
             params: |-
               def process(text):
-                  """Version: 2020_07_18
+                  """Version: 2020_07_25
                   时间提取脚本模版
                   """
                   import re
@@ -277,7 +277,7 @@ rows:
                   text = text.strip()
 
                   rules = [
-                      r"(\d{2}\d{2}([\.\-/|年月\s]{1,3}\d{1,2}){2}日?(\s?\d{2}:\d{2}(:\d{2})?)?)|(\d{1,2}\s?(分钟|小时|天)前)",  # 常见中文日期格式, 网上找的
+                      r"(\d{2}\d{2}([\.\-/|年月\s]{1,3}\d{1,2}){2}日?(\s?\d{1,2}:\d{1,2}(:\d{1,2})?)?)|(\d{1,2}\s?(分钟|小时|天)前)",  # 常见中文日期格式, 网上找的
                       # r"\d{10}",  # TODO: 处理时间戳, 遇到再加: 15开头的10或13位数字, 其实匹配前10个就够了
                       # r"",  # 如有不是常见的日期时间格式，此处替换成案例
                   ]
@@ -295,8 +295,9 @@ rows:
                   for each in rules:
                       p = re.compile(each)
                       res = p.findall(text)
-                      res = sorted([i for i in res[0]], key=len, reverse=True)
+                      print(res)
                       if res:
+                          res = sorted([i for i in res[0]], key=len, reverse=True)
                           return parse(res[0])
                       else:
                           continue
@@ -958,7 +959,7 @@ rows:
           - method: script
             params: |-
               def process(text):
-                  """Version: 2020_07_18
+                  """Version: 2020_07_25
                   时间提取脚本模版
                   """
                   import re
@@ -967,7 +968,7 @@ rows:
                   text = text.strip()
 
                   rules = [
-                      r"(\d{2}\d{2}([\.\-/|年月\s]{1,3}\d{1,2}){2}日?(\s?\d{2}:\d{2}(:\d{2})?)?)|(\d{1,2}\s?(分钟|小时|天)前)",  # 常见中文日期格式, 网上找的
+                      r"(\d{2}\d{2}([\.\-/|年月\s]{1,3}\d{1,2}){2}日?(\s?\d{1,2}:\d{1,2}(:\d{1,2})?)?)|(\d{1,2}\s?(分钟|小时|天)前)",  # 常见中文日期格式, 网上找的
                       # r"\d{10}",  # TODO: 处理时间戳, 遇到再加: 15开头的10或13位数字, 其实匹配前10个就够了
                       # r"",  # 如有不是常见的日期时间格式，此处替换成案例
                   ]
@@ -985,8 +986,9 @@ rows:
                   for each in rules:
                       p = re.compile(each)
                       res = p.findall(text)
-                      res = sorted([i for i in res[0]], key=len, reverse=True)
+                      print(res)
                       if res:
+                          res = sorted([i for i in res[0]], key=len, reverse=True)
                           return parse(res[0])
                       else:
                           continue
