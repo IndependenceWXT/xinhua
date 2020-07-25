@@ -6,8 +6,6 @@ from urllib.parse import quote_plus, unquote_plus
 import requests
 from atlassian import Confluence
 from bs4 import BeautifulSoup
-from pyecharts import options as opts
-from pyecharts.charts import Map
 from tqdm import tqdm
 
 from spider.db import DB
