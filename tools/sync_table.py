@@ -15,7 +15,6 @@ from spider.network.selector import Selector
 usr = os.getenv("mysql_usr")
 pwd = os.getenv("mysql_pwd")
 mysql_uri = f"mysql://{usr}:{pwd}@rm-2ze3450z16n1c2msxco.mysql.rds.aliyuncs.com:3306/xinhuaspider"
-# mysql_uri = "mysql://root:toor@localhost:3306/shangjian"
 db = DB().create(mysql_uri)
 
 confluence = Confluence(
