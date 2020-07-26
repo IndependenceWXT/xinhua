@@ -459,6 +459,13 @@ def process_hits(text):
     else:
         return f"error:{text}"
 
+def process_hits_test(text):
+    """Version: 2020_07_26
+    测试库不开启浏览器下载，忽略采集点击量验证
+    上线需删除
+    """
+    return "0" if text.startswith("error:") else text
+
 
 def check_publish_org():
     with open("publish_org.txt", mode="r", encoding="utf-8") as f:
