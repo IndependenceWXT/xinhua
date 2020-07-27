@@ -295,7 +295,6 @@ rows:
                   for each in rules:
                       p = re.compile(each)
                       res = p.findall(text)
-                      print(res)
                       if res:
                           res = sorted([i for i in res[0]], key=len, reverse=True)
                           return parse(res[0])
@@ -986,7 +985,6 @@ rows:
                   for each in rules:
                       p = re.compile(each)
                       res = p.findall(text)
-                      print(res)
                       if res:
                           res = sorted([i for i in res[0]], key=len, reverse=True)
                           return parse(res[0])

@@ -177,4 +177,4 @@ def test_validators():
 
 if __name__ == "__main__":
     # print(validate_url("http:/10.40.35.103:8090/?a=1"))
-    print(validate_hits("点击量"))
+    print(validate_url("http://www.wuhai.gov.cn/wuhai/xxgk4/jbxxgk46/813704/index.html"))

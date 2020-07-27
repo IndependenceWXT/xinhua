@@ -431,18 +431,16 @@ def process_files(filenames, links):
 
 def process_short_content(text):
     """Version: 2020_07_23
-    抽取json字段返回的html，提取其文字内容
+    返回的html，提取其文字内容
     短正文置空处理
     """
     import re
     from lxml import etree
 
-
+    root = etree.HTML(text)
+    text = root.xpath("string(.)")
     if len(re.sub(r"\s+", "", text)) < 80:
         return ""
-    else:
-        root = etree.HTML(text)
-        text = root.xpath("string(.)")
     return text
 
 
@@ -452,12 +450,13 @@ def process_hits(text):
     """
     import re
 
-    p = re.compile(r'(\d+)')
+    p = re.compile(r"(\d+)")
     res = p.findall(text)
     if res:
         return res[0]
     else:
         return f"error:{text}"
+
 
 def process_hits_test(text):
     """Version: 2020_07_26
