@@ -1,19 +1,19 @@
 def start_requests(**kwargs):
     source_type = 1
     copyright = 0
-    web_site = "陕西统计局"
+    web_site = "中国牧草网"
 
-    web_site_url = "http://tjj.shaanxi.gov.cn/site/1/html/126/111/list.htm"
+    web_site_url = "http://www.zgmcwz.com/news/"
     hub_fields = {
         "web_site": web_site,
         "web_site_url": web_site_url,
         "source_type": source_type,
         "copyright": copyright,
     }
-    for p in range(20):
+    for p in range(1):
         p += 1
-        url = f"http://tjj.shaanxi.gov.cn/contListCommon_111_{p}.html"
-        yield {"url": url, "page_rule_id": None, "hub_fields": hub_fields}
+        url = f"http://www.zgmcwz.com/news/page-{p}.shtml"
+        yield {"url": url, "page_rule_id": 12807, "hub_fields": hub_fields}
 
     web_site = "网站名"
 
