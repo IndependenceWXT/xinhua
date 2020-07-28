@@ -1,16 +1,14 @@
-from atlassian import Confluence
-from pprint import pprint
+import requests
+import demjson
+import json
 
-confluence = Confluence(
-    url='http://10.40.35.103:8090/',
-    username='fangtiansheng',
-    password='fangtiansheng123')
+url = "http://www.fuzhou.gov.cn/was5/web/search?channelid=290792&templet=&sortfield=-docorderpri%2C-docreltime&classsql=chnlid%3D5727&random=0.12469431547384024&prepage=10&page=3"
 
-res = confluence.get_page_by_id(328080, expand="body.storage")
-print(type(res))
-# pprint(res)
-res = confluence.get_page_properties(328080)
-# pprint(res)
-
-res = confluence.get_user_details_by_userkey("2c918083730fcf020173135f0972000d")
+res = requests.get(url)
+text = res.text
+# text = text.replace("'###pypy###'", '""')
+# text = text.replace("'###dydy###'", '""')
+print(text)
+# res = demjson.decode(text, encoding="urf-8")
+res = json.loads(text, encoding="utf-8")
 print(res)

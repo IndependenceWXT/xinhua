@@ -1,3 +1,5 @@
+import requests
+
 def extract(context):
     """
     抽取函数
@@ -7,6 +9,21 @@ def extract(context):
 
     return []
 
+def extract_from_script(context):
+    import re
+    p = re.compile(r"urls\[i\]='(.*?)'")
+    body = context["body"]
+    res = p.findall(body)
+    if res:
+        return res
+
+
 
 if __name__ == '__main__':
-    print(extract("test"))
+    url = "http://www.fuzhou.gov.cn/was5/web/search?channelid=290792&templet=advsch.jsp&sortfield=-docorderpri%2C-docreltime&classsql=chnlid%3D5727&random=0.653659668892808&prepage=10&page=3"
+    res = requests.get(url)
+    print(res.text)
+    context = {}
+    context["body"] = res.text
+    print(extract_from_script(context))
+    

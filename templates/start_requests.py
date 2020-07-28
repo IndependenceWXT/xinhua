@@ -1,66 +1,24 @@
 def start_requests(**kwargs):
+    from datetime import datetime, timedelta
     source_type = 1
     copyright = 0
-    web_site = "中国牧草网"
+    web_site = "西安日报"
+    today = datetime.now().date()
 
-    web_site_url = "http://www.zgmcwz.com/news/"
+    web_site_url = "http://epaper.xiancn.com/newxarb/html/2020-06/29/node_23.htm"
     hub_fields = {
         "web_site": web_site,
         "web_site_url": web_site_url,
         "source_type": source_type,
         "copyright": copyright,
+        "publish_time": f"{today}"
     }
-    for p in range(1):
-        p += 1
-        url = f"http://www.zgmcwz.com/news/page-{p}.shtml"
-        yield {"url": url, "page_rule_id": 12807, "hub_fields": hub_fields}
+    
+    month = today.strftime("%Y-%m")
+    day = today.strftime("%d")
+    url = f"http://epaper.xiancn.com/newxarb/html/{month}/{day}/node_23.htm"
+    yield {"url": url, "page_rule_id": 12823, "hub_fields": hub_fields}
 
-    web_site = "网站名"
-
-    web_site_url = "栏目的链接"
-    hub_fields = {
-        "web_site": web_site,
-        "web_site_url": web_site_url,
-        "source_type": source_type,
-        "copyright": copyright,
-    }
-    for p in range(None):
-        p = f"_{p}" if p else ""
-        url = f"列表页链接然后修改为格式化字符串"
-        yield {"url": url, "page_rule_id": None, "hub_fields": hub_fields}
-
-    yield {"url": web_site_url, "page_rule_id": None, "hub_fields": hub_fields}
-
-    url = ""
-    for p in range(None):
-        p = f"_{p}" if p else ""
-        data = f""
-        yield {
-            "url": url,
-            "page_rule_id": None,
-            "data": data,
-            "method": "POST",
-            "hub_fields": hub_fields,
-        }
-
-    cates = [
-        {"cate": "栏目链接的差异部分", "pages": None},
-        {"cate": "栏目链接的差异部分", "pages": None},
-    ]
-    for each in cates:
-        cate = each["cate"]
-        pages = each["pages"]
-        web_site_url = f"栏目的链接格式化"
-        hub_fields = {
-            "web_site": web_site,
-            "web_site_url": web_site_url,
-            "source_type": source_type,
-            "copyright": copyright,
-        }
-        for p in range(pages):
-            p = f"_{p}" if p else ""
-            url = f""
-            yield {"url": url, "page_rule_id": None, "hub_fields": hub_fields}
 
 
 if __name__ == "__main__":
