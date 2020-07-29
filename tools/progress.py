@@ -46,7 +46,7 @@ res = db.query_all(sql_detail)
 for each in res:
     user, configured, submit, to_sub, approved, online, score = each
     reports.append(
-        f"| {user} | {configured} | {submit} | {to_sub} | {approved} | {online} | {score} |"
+        f"| {user} | {configured} | {submit} | {to_sub} | {int(approved)} | {online} | {score} |"
     )
 else:
     with open("../reports/progress.md", mode="w", encoding="utf-8") as r:
@@ -58,7 +58,7 @@ reports.append("|----|----|----|----|")
 res = db.query_all(sql_total)
 for each in res:
     configured, submit, approved, online = each
-    reports.append(f"| {configured} | {submit} | {approved} | {online} |")
+    reports.append(f"| {configured} | {submit} | {int(approved)} | {online} |")
 else:
     with open("../reports/progress.md", mode="a", encoding="utf-8") as r:
         r.write("\n".join(reports))
