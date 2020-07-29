@@ -1,19 +1,19 @@
 def start_requests(**kwargs):
     source_type = 1
     copyright = 0
-    web_site = "中国投融资担保股份有限公司"
+    web_site = "三峡担保集团"
 
-    web_site_url = "http://www.guaranty.com.cn/gtztb/xwzx/mtbd/A050204index_1.htm?tab=3"
+    web_site_url = "http://www.cqsxdb.com/news/1/"
     hub_fields = {
         "web_site": web_site,
         "web_site_url": web_site_url,
         "source_type": source_type,
         "copyright": copyright,
     }
-    for p in range(4):
+    for p in range(141):
         p += 1
-        url = f"http://www.guaranty.com.cn/gtztb/xwzx/mtbd/A050204index_{p}.htm?tab=3"
-        yield {"url": url, "page_rule_id": 12914, "hub_fields": hub_fields}
+        url = f"http://www.cqsxdb.com/comp/xnews/list.do?compId=xnews_list-15707862447447213&cid=1&pageSize=5&currentPage={p}"
+        yield {"url": url, "page_rule_id": 13021, "hub_fields": hub_fields}
 
     web_site = "网站名"
 
@@ -61,7 +61,6 @@ def start_requests(**kwargs):
             p = f"_{p}" if p else ""
             url = f""
             yield {"url": url, "page_rule_id": None, "hub_fields": hub_fields}
-
 
 
 if __name__ == "__main__":
