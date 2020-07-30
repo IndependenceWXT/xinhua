@@ -867,7 +867,7 @@ rows:
         multi: false
         keep_html: false
         extend_url: false
-        is_extra: false
+        is_extra: true
         allow_invalid_expression: false
         download_policy: not_download
         processors: []
