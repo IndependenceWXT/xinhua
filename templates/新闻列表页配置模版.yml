@@ -1301,7 +1301,7 @@ rows:
     processors:
       - method: script
         params: |-
-          # 计算content_md5, 数组字段去重, 暂时不处理附件相关字段
+          # 计算content_md5, 数组字段去重, 不处理附件相关字段
           import hashlib
           from itertools import zip_longest
 
