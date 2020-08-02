@@ -1,20 +1,6 @@
 def start_requests(**kwargs):
     source_type = 1
     copyright = 0
-    web_site = "太平人寿"
-
-    web_site_url = "http://life.cntaiping.com/news-gsxw/"
-    hub_fields = {
-        "web_site": web_site,
-        "web_site_url": web_site_url,
-        "source_type": source_type,
-        "copyright": copyright,
-    }
-    for p in range(16):
-        p = f"-{p+1}" if p else ""
-        url = f"http://life.cntaiping.com/news-gsxw{p}/"
-        yield {"url": url, "page_rule_id": None, "hub_fields": hub_fields}
-
     web_site = "网站名"
 
     web_site_url = "栏目的链接"

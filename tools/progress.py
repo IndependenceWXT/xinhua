@@ -22,7 +22,7 @@ SELECT
 FROM
     progress
 WHERE
-     conf_date BETWEEN "2020-07-27"
+     conf_date BETWEEN "2020-07-1"
  AND "2020-07-31"
 GROUP BY `user`"""
 
