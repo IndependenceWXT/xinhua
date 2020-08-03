@@ -785,7 +785,7 @@ rows:
             params: |-
               def process(text):
                   """
-                  标题中的省略号在附件这块就不用title验证器了直接过, 链接更重要
+                  标题中的省略号在附件这块就不用title处理器了直接过, 链接更重要
                   """
                   return text
         validators:
