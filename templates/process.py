@@ -54,7 +54,6 @@ def process_time_template(text):
     for each in rules:
         p = re.compile(each)
         res = p.findall(text)
-        print(res)
         if res:
             res = sorted([i for i in res[0]], key=len, reverse=True)
             return parse(res[0])
@@ -422,7 +421,6 @@ def process(data):
 def process_files(filenames, links):
     data = {}
     for filename, link in zip(filenames, links):
-        print(filename, link)
         if not data.get(link) and len(filename) > len(data.get(link)):
             data[link] = filename
     else:
@@ -481,6 +479,13 @@ def check_author():
             res = process_author_template(text)
             print(f"/{res}/")
 
+def process_article_file_name(text):
+    """Version: 2020_08_04
+    文件名处理，提取链接中的文件名
+    """
+    if text.endswith(".mp4"):
+        return text.split("/")[-1]
+    return text
 
 if __name__ == "__main__":
     # print(process_url("mailto:http://www.foeg.uzh.ch/analyse/politischekommunikation/news11/Sotomostudie.pdf"))
@@ -498,5 +503,7 @@ if __name__ == "__main__":
     # print(process_author_template("（编辑：）"))
     # print(process_tag_template("主题分类：其他"))
     # print(process_publish_org_template("来源 中关村"))
-    print(process_time_template("2017/1/11 9:12:55"))
+    # print(process_time_template("2017/1/11 9:12:55"))
+    print(process_article_file_name("阿里巴巴"))
+
 

@@ -170,6 +170,18 @@ def validate_hits(context):
     return False
 
 
+def validate_abstract(context):
+    """Version: 2020_08_04
+    验证摘要是否是完整的内容
+    """
+    import re
+
+    text = context.strip()
+    if text.endswith("..."):
+        return False
+    return True
+
+
 def test_validators():
     # TODO: 测试验证器
     pass

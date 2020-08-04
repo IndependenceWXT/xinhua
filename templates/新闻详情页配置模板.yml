@@ -767,7 +767,7 @@ rows:
           not(contains(@href, "file://") or contains(@href, "c:\") or
           contains(@href, "C:\"))] | .//*[contains(translate(@src, "MP4",
           "mp4"), ".mp4") and not(contains(@src, "file://") or contains(@src,
-          "c:\") or contains(@src, "C:\"))]
+          "c:\") or contains(@src, "C:\"))]/@src
         is_dedup_key: false
         multi: true
         keep_html: false
@@ -775,7 +775,16 @@ rows:
         is_extra: false
         allow_invalid_expression: true
         download_policy: not_download
-        processors: []
+        processors:
+          - method: script
+            params: |-
+              def process(text):
+                  """Version: 2020_08_04
+                  文件名处理，提取链接中的文件名
+                  """
+                  if text.endswith(".mp4"):
+                      return text.split("/")[-1]
+                  return text
         validators: []
         is_dedup_array: false
       - name: article_file_url
