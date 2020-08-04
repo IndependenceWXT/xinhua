@@ -1,18 +1,18 @@
 def start_requests(**kwargs):
     source_type = 1
     copyright = 0
-    web_site = "世研智库"
+    web_site = "清研智库"
 
-    web_site_url = "http://pmoafa61c.sz.wmcom.net/page65.html"
+    web_site_url = "http://www.tsingyanresearch.com/?cat=2"
     hub_fields = {
         "web_site": web_site,
         "web_site_url": web_site_url,
         "source_type": source_type,
         "copyright": copyright,
     }
-    for p in range(2):
+    for p in range(14):
         p += 1
-        url = f"http://pmoafa61c.sz.wmcom.net/index.php?_m=article_list&_a=get_page&layer_id=layer1306C004B26F400EF15168096D644B98&page={p}"
+        url = f"http://www.tsingyanresearch.com/?cat=2&paged={p}"
         yield {"url": url, "page_rule_id": None, "hub_fields": hub_fields}
 
     yield {"url": web_site_url, "page_rule_id": None, "hub_fields": hub_fields}

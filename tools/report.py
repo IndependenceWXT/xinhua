@@ -162,7 +162,8 @@ def count_configured(users, today=True, ago=False, section=(1565, 1858), notify=
                 if max(int(total), int(done)) == 0:
                     tqdm.write(f"{group_name} 调度正在启动稍后再试...")
                     continue
-                start_time = batch_result["start_time"].strip()
+                start_time = batch_result["start_time"]
+                start_time = start_time.strip() if start_time else "0000-00-00 00:00:00"
                 group_name = group_name.split("_")[-1].strip()
                 res[user].append(group_name)
                 progress = int((done / total) * 100)
@@ -270,7 +271,8 @@ def report_all_update():
     """
     扫描全部开启计划的更新调度
     """
-    pass
+    users = [k for k in users_db]
+    res = count_configured(users, today=False)
 
 
 if __name__ == "__main__":
@@ -280,5 +282,6 @@ if __name__ == "__main__":
             "check_today": check_today,
             "check": report_for_user,
             "all": report_all_history,
+            "update": report_all_update,
         }
     )
