@@ -7,6 +7,7 @@ import requests
 from atlassian import Confluence
 from bs4 import BeautifulSoup
 from tqdm import tqdm
+from colorama import Fore
 
 from spider.db import DB
 from spider.network.selector import Selector
@@ -35,7 +36,7 @@ data = res["body"]["storage"]["value"]
 soup = BeautifulSoup(data, "html.parser")
 web_sites = soup.find_all("tr")
 
-for each in tqdm(web_sites):
+for each in tqdm(web_sites, bar_format="{l_bar}%s{bar}%s{r_bar}" % (Fore.MAGENTA, Fore.RESET)):
     td = each.find_all("td")
     if not td:
         continue
