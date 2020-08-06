@@ -1,14 +1,7 @@
-import requests
-import demjson
-import json
+import re
+p = re.compile(r'/files/article/pics/(?P<year>\d{4})(?P<month>\d{2})/(?P<day>\d{2})/')
 
-url = "http://www.fuzhou.gov.cn/was5/web/search?channelid=290792&templet=&sortfield=-docorderpri%2C-docreltime&classsql=chnlid%3D5727&random=0.12469431547384024&prepage=10&page=3"
+text = "/files/article/pics/201808/07/1533630466_101.jpg"
+res = p.findall(text)
+print(res[0])
 
-res = requests.get(url)
-text = res.text
-# text = text.replace("'###pypy###'", '""')
-# text = text.replace("'###dydy###'", '""')
-print(text)
-# res = demjson.decode(text, encoding="urf-8")
-res = json.loads(text, encoding="utf-8")
-print(res)

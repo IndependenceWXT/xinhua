@@ -1,20 +1,15 @@
 def start_requests(**kwargs):
     source_type = 1
     copyright = 0
-    web_site = "清研智库"
+    web_site = "百度数说"
 
-    web_site_url = "http://www.tsingyanresearch.com/?cat=2"
+    web_site_url = "https://shushuo.baidu.com/#dynamic"
     hub_fields = {
         "web_site": web_site,
         "web_site_url": web_site_url,
         "source_type": source_type,
         "copyright": copyright,
     }
-    for p in range(14):
-        p += 1
-        url = f"http://www.tsingyanresearch.com/?cat=2&paged={p}"
-        yield {"url": url, "page_rule_id": None, "hub_fields": hub_fields}
-
     yield {"url": web_site_url, "page_rule_id": None, "hub_fields": hub_fields}
 
     url = ""
