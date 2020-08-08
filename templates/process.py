@@ -371,11 +371,11 @@ def process_time_in_url(text):
 
 def process_title_template(text):
     """Version: 2020_07_18
-    处理标题，取一个稍微小的平均的标题长度，5左右
+    处理标题，取一个稍微小的平均的标题长度
     """
     import re
 
-    if len(re.sub(r"\s+", "", text)) < 5:
+    if len(re.sub(r"\s+", "", text)) < 2:
         return f"error:{text}"
     return text
 
