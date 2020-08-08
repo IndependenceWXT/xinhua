@@ -1,15 +1,20 @@
 def start_requests(**kwargs):
     source_type = 1
-    copyright = 0
-    web_site = "百度数说"
+    copyright = 1
+    web_site = "IT时报"
 
-    web_site_url = "https://shushuo.baidu.com/#dynamic"
+    web_site_url = "http://www.it-times.com.cn/a/xinwen/tuijian/index.html"
     hub_fields = {
         "web_site": web_site,
         "web_site_url": web_site_url,
         "source_type": source_type,
         "copyright": copyright,
     }
+    yield {"url": web_site_url, "page_rule_id": None, "hub_fields": hub_fields}
+    for offset in range(0, 11435, 10):
+        url = f"http://www.it-times.com.cn/plus/mainlist.php?ajax=&typeid=21&offset={offset}&pagesize=10"
+        yield {"url": url, "page_rule_id": None, "hub_fields": hub_fields}
+
     yield {"url": web_site_url, "page_rule_id": None, "hub_fields": hub_fields}
 
     url = ""
