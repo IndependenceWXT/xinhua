@@ -705,8 +705,18 @@ rows:
         download_policy: not_download
         processors: []
         validators:
-          - method: length
-            params: 1 +inf
+          - method: script
+            params: |-
+              def validate(context):
+                  """Version: 2020_08_04
+                  验证摘要是否是完整的内容
+                  """
+                  import re
+
+                  text = context.strip()
+                  if text.endswith("..."):
+                      return False
+                  return True
             fail_type: retry
         is_dedup_array: false
       - name: content

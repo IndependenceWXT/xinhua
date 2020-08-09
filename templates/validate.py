@@ -36,8 +36,10 @@ def validate_author(context):
     验证中文作者是否含有非法词
     """
     if context.startswith("error:"):
+        raise ValueError(f"{context!r} author process failed")
         return False
     elif len(context) > 4:
+        raise ValueError(f"{context!r} author length overflow")
         return False
     return True
 
