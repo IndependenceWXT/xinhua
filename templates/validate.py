@@ -39,7 +39,7 @@ def validate_author(context):
         raise ValueError(f"{context!r} author process failed")
         return False
     elif len(context) > 4:
-        raise ValueError(f"{context!r} author length overflow")
+        raise ValueError(f"{context!r} author length:{len(context)} overflow")
         return False
     return True
 
@@ -91,16 +91,19 @@ def validate_url(context):
 
 
 def validate_tag(context):
-    """Version: 2020_07_18
+    """Version: 2020_08_11
     验证标签, 不同网站调整长度
     """
     import re
+    import logging
 
     text = context.strip()
     if text.startswith("error:"):
+        raise ValueError(f"tag extract failed: {text!r}")
         return False
     # 验证长度
     if len(text) > 10:
+        raise ValueError(f"tag length {len(context)!r} overflow: {context!r}")
         return False
     return True
 
@@ -160,6 +163,7 @@ def validate_copyright(context):
         return True
     else:
         return False
+
 
 def validate_hits(context):
     """Version: 2020_07_25

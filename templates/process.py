@@ -36,7 +36,7 @@ def process_time_template(text):
     text = text.strip()
 
     rules = [
-        r"(\d{2}\d{2}([\.\-/|年月\s]{1,3}\d{1,2}){2}日?(\s?\d{1,2}:\d{1,2}(:\d{1,2})?)?)|(\d{1,2}\s?(分钟|小时|天)前)|昨天|前天",  # 常见中文日期格式, 网上找的
+        r"(\d{2}\d{2}([\.\-/|年月\s]{1,3}\d{1,2}){2}日?(\s?\d{1,2}:\d{1,2}(:\d{1,2})?)?)|(\d{1,2}\s?(分钟|小时|天|周)前)|昨天|前天",  # 常见中文日期格式, 网上找的
         # r"\d{10}",  # TODO: 处理时间戳, 遇到再加: 15开头的10或13位数字, 其实匹配前10个就够了
         # r"",  # 如有不是常见的日期时间格式，此处替换成案例
     ]
@@ -299,7 +299,7 @@ def process_tag_template(text):
     # 按需排序
     rules = [
         r"\b([\u4e00-\u9fa5]+)\b",  # 连续中文字符
-        # r"",  # 如有不是常见的作者格式，此处替换成案例
+        r"\w+",  # 如有不是常见的格式，此处替换成案例
     ]
     # 预处理，替换掉会影响正则提取的固定字符串, 从验证器中更新
     flags = ["标签", "关键字", "主题分类"]
@@ -487,6 +487,21 @@ def process_article_file_name(text):
         return text.split("/")[-1]
     return text
 
+def process_dem_json(text):
+    import demjson
+    import json
+    data = demjson.decode(text, encoding="unicode")
+    res = []
+    for each in data["list"]:
+        item = {
+            "columnName": each["columnName"],
+            "desc": each["desc"],
+            "time": each["time"],
+            "title": each["title"],
+            "titleLink": each["titleLink"],
+        }
+    return data
+
 if __name__ == "__main__":
     # print(process_url("mailto:http://www.foeg.uzh.ch/analyse/politischekommunikation/news11/Sotomostudie.pdf"))
     # print(process_url_query("https://www.imemo.ru/en/index.php?page_id=502&id=484&p=60&ret=498"))
@@ -504,6 +519,14 @@ if __name__ == "__main__":
     # print(process_tag_template("主题分类：其他"))
     # print(process_publish_org_template("来源 中关村"))
     # print(process_time_template("2017/1/11 9:12:55"))
-    print(process_article_file_name("阿里巴巴"))
+    import requests
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36"
+    }
+    url = "http://roll.hexun.com/roolNews_listRool.action?type=all&ids=100,101,103,125,105,124,162,194,108,122,121,119,107,116,114,115,182,120,169,170,177,180,118,190,200,155,130,117,153,106&page=493&tempTime="
 
+    res = requests.get(url, headers=headers)
+    print(
+        process_dem_json(res.text)
+    )
 
