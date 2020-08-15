@@ -12,7 +12,7 @@ mysql_uri = f"mysql://{usr}:{pwd}@rm-2ze3450z16n1c2msxco.mysql.rds.aliyuncs.com:
 db = DB().create(mysql_uri)
 
 
-def progress(table_name):
+def progress(table_name="dijishi"):
     sql_week = """/* 统计配置人员配置数量 */
     SELECT
         `user` AS "用户",
@@ -67,7 +67,7 @@ def progress(table_name):
             f"| {user} | {configured} | {submit} | {to_sub} | {int(approved)} | {online} | {score} |"
         )
     else:
-        with open("../reports/progress.md", mode="w", encoding="utf-8") as r:
+        with open(f"../reports/{table_name}.md", mode="w", encoding="utf-8") as r:
             r.write("\n".join(reports) + "\n" * 5)
 
     reports = []
@@ -80,7 +80,7 @@ def progress(table_name):
             f"| {user} | {configured} | {submit} | {to_sub} | {int(approved)} | {online} | {score} |"
         )
     else:
-        with open("../reports/progress.md", mode="a", encoding="utf-8") as r:
+        with open(f"../reports/{table_name}.md", mode="a", encoding="utf-8") as r:
             r.write("\n".join(reports) + "\n" * 5)
 
     reports = []
@@ -91,7 +91,7 @@ def progress(table_name):
         configured, submit, approved, online = each
         reports.append(f"| {configured} | {submit} | {int(approved)} | {online} |")
     else:
-        with open("../reports/progress.md", mode="a", encoding="utf-8") as r:
+        with open(f"../reports/{table_name}.md", mode="a", encoding="utf-8") as r:
             r.write("\n".join(reports))
 
 

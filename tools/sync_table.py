@@ -24,20 +24,15 @@ users = {
     "2c918083730fcf020173102d487d0009": "王尚文",
     "2c918083730fcf020173135fb401000e": "胡涛涛",
     "2c918083730fcf0201736a0de66d000f": "江港林",
+    "2c918083730fcf0201731025c8800003": "房天生",
 }
 tasks = {
     "dijishi": 328080,
-    "wangxinban": 329573,
+    "wangxinban": 3212315,
 }
 
-# 地级市
-# res = confluence.get_page_by_id(328080, expand="body.storage")
 
-# 网信办
-# res = confluence.get_page_by_id(329573, expand="body.storage")
-
-
-def main(table_name="wangxinban"):
+def main(table_name="dijishi"):
     page_id = tasks[table_name]
     res = confluence.get_page_by_id(page_id, expand="body.storage")
 
@@ -53,18 +48,21 @@ def main(table_name="wangxinban"):
         web_site = td[1].text
         conf_task = td[2].find("ac:task-status")
         if conf_task:
-            conf_status = True if conf_task.text == "complete" else 2
+            conf_status = True if conf_task.text == "complete" else False
         else:
             continue
         conf_date = td[2].find("time").get("datetime")
-        submit_status = True if td[4].find("ac:task-status").text == "complete" else 2
-        submit_date = td[4].find("time").get("datetime")
-        configer = td[5].find("ri:user").get("ri:userkey")
+        print(td[4])
+
+        submit_status = True if td[3].find("ac:task-status").text == "complete" else False
+        submit_date = td[3].find("time").get("datetime")
+        configer = td[4].find("ri:user").get("ri:userkey")
         user = users[configer]
-        approved_status = True if td[8].find("ac:task-status").text == "complete" else 2
-        approved_date = td[8].find("time").get("datetime")
-        online_status = True if td[9].find("ac:task-status").text == "complete" else 2
-        online_date = td[9].find("time").get("datetime")
+
+        approved_status = True if td[7].find("ac:task-status").text == "complete" else False
+        approved_date = td[7].find("time").get("datetime")
+        online_status = True if td[8].find("ac:task-status").text == "complete" else False
+        online_date = td[8].find("time").get("datetime")
 
         record = {
             "web_site": web_site,
@@ -78,9 +76,8 @@ def main(table_name="wangxinban"):
             "if_online": online_status,
             "online_date": online_date,
         }
-        # db.add(record, table_name="progress")
         condition = {"web_site": web_site}
-        # db.update(record, condition=condition, table_name="progress")
+        # db.add(record, condition=condition, table_name=table_name)
         db.update(record, condition=condition, table_name=table_name)
     db.close()
 
