@@ -109,14 +109,14 @@ def validate_tag(context):
 
 
 def validate_title(context):
-    """Version: 2020_07_31
+    """Version: 2020_08_16
     验证标题是否是省略过的, 并且文本长度是否在100内
     """
     import re
 
     text = context.strip()
     length = len(re.sub(r"\s+", "", text))
-    if text.endswith("...") or text.startswith("error:"):
+    if text.endswith("...") or text.startswith("error:") or "&" in text:
         return False
     elif length > 150:
         return False
