@@ -32,26 +32,34 @@ def validate_publish_time(context):
 
 
 def validate_author(context):
-    """Version: 2020_07_18
+    """Version: 2020_08_16
     验证中文作者是否含有非法词
     """
+    max_length = 4
     if context.startswith("error:"):
-        raise ValueError(f"{context!r} author process failed")
+        msg = f"🔥 [processor] field author validate failed {context!r}"
+        print(msg)
         return False
-    elif len(context) > 4:
-        raise ValueError(f"{context!r} author length:{len(context)} overflow")
+    elif len(context) > max_length:
+        msg = f"🔥 [validator] field author validate failed {context!r} length {len(context)} > {max_length}"
+        print(msg)
         return False
     return True
 
 
 def validate_publish_org(context):
-    """Version: 2020_07_18
+    """Version: 2020_08_16
     验证来源中是否有error: 
         卡住未经正确处理的请求
     """
+    max_length = 20
     if context.startswith("error:"):
+        msg = f"🔥 [processor] field publish_org validate failed {context!r}"
+        print(msg)
         return False
-    elif len(context) > 15:
+    elif len(context) > max_length:
+        msg = f"🔥 [validator] field publish_org validate failed {context!r} length {len(context)} > {max_length}"
+        print(msg)
         return False
     return True
 
@@ -91,19 +99,18 @@ def validate_url(context):
 
 
 def validate_tag(context):
-    """Version: 2020_08_11
+    """Version: 2020_08_16
     验证标签, 不同网站调整长度
     """
-    import re
-    import logging
-
-    text = context.strip()
-    if text.startswith("error:"):
-        raise ValueError(f"tag extract failed: {text!r}")
+    max_length = 10
+    if context.startswith("error:"):
+        msg = f"🔥 [processor] field tag validate failed {context!r}"
+        print(msg)
         return False
     # 验证长度
-    if len(text) > 10:
-        raise ValueError(f"tag length {len(context)!r} overflow: {context!r}")
+    if len(context) > max_length:
+        msg = f"🔥 [validator] field tag validate failed {context!r} length {len(context)} > {max_length}"
+        print(msg)
         return False
     return True
 
@@ -114,22 +121,31 @@ def validate_title(context):
     """
     import re
 
-    text = context.strip()
+    max_length = 150
     length = len(re.sub(r"\s+", "", text))
     if text.endswith("...") or text.startswith("error:") or "&" in text:
+        msg = f"🔥 [processor] field title validate failed {context!r}"
+        print(msg)
         return False
-    elif length > 150:
+    elif length > max_length:
+        msg = f"🔥 [validator] field title validate failed {context!r} length {len(length)} > {max_length}"
+        print(msg)
         return False
     return True
 
 
 def validate_news_type(context):
-    """Version: 2020_07_18
+    """Version: 2020_08_16
     验证新闻类型
     """
+    max_length = 10
     if context.startswith("error:"):
+        msg = f"🔥 [processor] field news_type validate failed {context!r}"
+        print(msg)
         return False
-    elif len(context) > 8:
+    elif len(context) > max_length:
+        msg = f"🔥 [validator] field news_type validate failed {context!r} length {len(context)} > {max_length}"
+        print(msg)
         return False
     return True
 

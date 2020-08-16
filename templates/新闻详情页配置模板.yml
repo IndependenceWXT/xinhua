@@ -25,6 +25,56 @@ rows:
     if_match: ''
     if_url_match: ''
     fields:
+      - name: refer
+        description: "\U0001F494列表页链接上线需删除"
+        data_type: varchar(128)
+        locator: hub
+        expression: refer
+        is_dedup_key: false
+        multi: false
+        keep_html: false
+        extend_url: false
+        is_extra: true
+        allow_invalid_expression: false
+        download_policy: not_download
+        processors: []
+        validators:
+          - method: script
+            params: |-
+              def validate(context):
+                  """Version: 2020_07_18
+                  验证链接是否合法
+                  """
+                  import re
+                  from urllib.parse import urlparse
+
+                  text = context.strip()
+                  # 调度中可能复制带了空格
+                  if len(text) != len(context):
+                      return False
+
+                  rules = [
+                      r"(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]",
+                      r"@^(https?|ftp)://[^\s/$.?#].[^\s]*$@iS",
+                      r"#\b(([\w-]+://?|www[.])[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/)))#iS",
+                  ]
+                  for each in rules:
+                      p = re.compile(each)
+                      res = p.findall(text)
+                      if res:
+                          return True
+                  else:
+                      try:
+                          q = urlparse(text)
+                      except:
+                          return False
+                      else:
+                          if all([q.scheme, q.netloc, q.path]):
+                              return True
+                          else:
+                              return False
+            fail_type: retry
+        is_dedup_array: false
       - name: content_md5
         description: 用于去重的md5
         data_type: varchar(1024)
@@ -172,56 +222,6 @@ rows:
                   else:
                       return False
             fail_type: retry
-      - name: refer
-        description: "\U0001F494列表页链接上线需删除"
-        data_type: varchar(128)
-        locator: hub
-        expression: refer
-        is_dedup_key: false
-        multi: false
-        keep_html: false
-        extend_url: false
-        is_extra: true
-        allow_invalid_expression: false
-        download_policy: not_download
-        processors: []
-        validators:
-          - method: script
-            params: |-
-              def validate(context):
-                  """Version: 2020_07_18
-                  验证链接是否合法
-                  """
-                  import re
-                  from urllib.parse import urlparse
-
-                  text = context.strip()
-                  # 调度中可能复制带了空格
-                  if len(text) != len(context):
-                      return False
-
-                  rules = [
-                      r"(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]",
-                      r"@^(https?|ftp)://[^\s/$.?#].[^\s]*$@iS",
-                      r"#\b(([\w-]+://?|www[.])[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/)))#iS",
-                  ]
-                  for each in rules:
-                      p = re.compile(each)
-                      res = p.findall(text)
-                      if res:
-                          return True
-                  else:
-                      try:
-                          q = urlparse(text)
-                      except:
-                          return False
-                      else:
-                          if all([q.scheme, q.netloc, q.path]):
-                              return True
-                          else:
-                              return False
-            fail_type: retry
-        is_dedup_array: false
       - name: content_url
         description: 正文详情url
         data_type: varchar(1024)
@@ -300,14 +300,14 @@ rows:
           - method: script
             params: |-
               def validate(context):
-                  """Version: 2020_07_31
+                  """Version: 2020_08_16
                   验证标题是否是省略过的, 并且文本长度是否在100内
                   """
                   import re
 
                   text = context.strip()
                   length = len(re.sub(r"\s+", "", text))
-                  if text.endswith("...") or text.startswith("error:"):
+                  if text.endswith("...") or text.startswith("error:") or "&" in text:
                       return False
                   elif length > 150:
                       return False
@@ -540,7 +540,7 @@ rows:
                   """
                   if context.startswith("error:"):
                       return False
-                  elif len(context) > 15:
+                  elif len(context) > 20:
                       return False
                   return True
             fail_type: retry
@@ -605,7 +605,7 @@ rows:
                   if text.startswith("error:"):
                       return False
                   # 验证长度
-                  if len(text) > 10:
+                  if len(text) > 20:
                       return False
                   return True
             fail_type: retry

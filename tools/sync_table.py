@@ -52,7 +52,6 @@ def main(table_name="dijishi"):
         else:
             continue
         conf_date = td[2].find("time").get("datetime")
-        print(td[4])
 
         submit_status = True if td[3].find("ac:task-status").text == "complete" else False
         submit_date = td[3].find("time").get("datetime")
