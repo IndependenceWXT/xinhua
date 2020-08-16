@@ -150,6 +150,22 @@ def validate_news_type(context):
     return True
 
 
+def validate_content(context):
+    """Version: 2020_08_16
+    验证内容文字
+    """
+    fixes = ["打印", "关闭", "扫一扫", "扫码", "扫描下方二维码", "相关稿件"]
+    if context.startswith("<") and context.endswith(">"):
+        msg = f"🔥 [processor] field content validate failed html tag without removed"
+        print(msg)
+        return False
+    for each in fixes:
+        if each in context:
+            msg = f"🔥 [validator] field content validate failed, {each!r} without removed"
+            print(msg)
+            return False
+    return True
+
 def validate_web_site(context):
     """2020_07_13
     验证网站名是否复制带了空格

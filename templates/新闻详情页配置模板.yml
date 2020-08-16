@@ -681,15 +681,21 @@ rows:
           - method: script
             params: |-
               def process(text):
-                  """Version: 2020_07_24
+                  """Version: 2020_07_23
+                  返回的html，提取其文字内容
                   短正文置空处理
                   """
                   import re
 
+                  for each in fixes:
+                      text = text.replace(each, "")
                   if len(re.sub(r"\s+", "", text)) < 80:
                       return ""
                   return text
-        validators: []
+        validators:
+          - method: script
+            params: "def validate(context):\n    \"\"\"Version: 2020_08_16\n    验证内容文字\n    \"\"\"\n    fixes = [\"打印\", \"关闭\", \"扫一扫\", \"扫码\", \"扫描下方二维码\", \"相关稿件\"]\n    if context.startswith(\"<\") and context.endswith(\">\"):\n        msg = f\"\U0001F525 [processor] field content validate failed html tag without removed\"\n        print(msg)\n        return False\n    for each in fixes:\n        if each in context:\n            msg = f\"\U0001F525 [validator] field content validate failed, {each!r} without removed\"\n            print(msg)\n            return False\n    return True"
+            fail_type: retry
         is_dedup_array: false
       - name: content_html
         description: 新闻详情带html标签
