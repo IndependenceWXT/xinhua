@@ -122,8 +122,8 @@ def validate_title(context):
     import re
 
     max_length = 150
-    length = len(re.sub(r"\s+", "", text))
-    if text.endswith("...") or text.startswith("error:") or "&" in text:
+    length = len(re.sub(r"\s+", "", context))
+    if context.endswith("...") or context.startswith("error:") or "&" in context:
         msg = f"🔥 [processor] field title validate failed {context!r}"
         print(msg)
         return False

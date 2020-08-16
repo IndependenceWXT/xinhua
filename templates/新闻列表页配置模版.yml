@@ -236,20 +236,7 @@ rows:
                   return text
         validators:
           - method: script
-            params: |-
-              def validate(context):
-                  """Version: 2020_08_16
-                  验证标题是否是省略过的, 并且文本长度是否在100内
-                  """
-                  import re
-
-                  text = context.strip()
-                  length = len(re.sub(r"\s+", "", text))
-                  if text.endswith("...") or text.startswith("error:") or "&" in text:
-                      return False
-                  elif length > 150:
-                      return False
-                  return True
+            params: "def validate(context):\n    \"\"\"Version: 2020_08_16\n    验证标题是否是省略过的, 并且文本长度是否在100内\n    \"\"\"\n    import re\n\n    max_length = 150\n    length = len(re.sub(r\"\\s+\", \"\", context))\n    if context.endswith(\"...\") or context.startswith(\"error:\") or \"&\" in context:\n        msg = f\"\U0001F525 [processor] field title validate failed {context!r}\"\n        print(msg)\n        return False\n    elif length > max_length:\n        msg = f\"\U0001F525 [validator] field title validate failed {context!r} length {len(length)} > {max_length}\"\n        print(msg)\n        return False\n    return True"
             fail_type: retry
         is_dedup_array: false
       - name: publish_time
@@ -438,20 +425,7 @@ rows:
                       return [f"error:{text}"]
         validators:
           - method: script
-            params: |-
-              def validate(context):
-                  """Version: 2020_07_18
-                  验证标签, 不同网站调整长度
-                  """
-                  import re
-
-                  text = context.strip()
-                  if text.startswith("error:"):
-                      return False
-                  # 验证长度
-                  if len(text) > 10:
-                      return False
-                  return True
+            params: "def validate(context):\n    \"\"\"Version: 2020_08_16\n    验证标签, 不同网站调整长度\n    \"\"\"\n    max_length = 10\n    if context.startswith(\"error:\"):\n        msg = f\"\U0001F525 [processor] field tag validate failed {context!r}\"\n        print(msg)\n        return False\n    # 验证长度\n    if len(context) > max_length:\n        msg = f\"\U0001F525 [validator] field tag validate failed {context!r} length {len(context)} > {max_length}\"\n        print(msg)\n        return False\n    return True"
             fail_type: retry
         is_dedup_array: false
       - name: author
@@ -505,16 +479,7 @@ rows:
                       return [f"error:{text}"]
         validators:
           - method: script
-            params: |-
-              def validate(context):
-                  """Version: 2020_07_18
-                  验证中文作者是否含有非法词
-                  """
-                  if context.startswith("error:"):
-                      return False
-                  elif len(context) > 8:
-                      return False
-                  return True
+            params: "def validate(context):\n    \"\"\"Version: 2020_08_16\n    验证中文作者是否含有非法词\n    \"\"\"\n    max_length = 4\n    if context.startswith(\"error:\"):\n        msg = f\"\U0001F525 [processor] field author validate failed {context!r}\"\n        print(msg)\n        return False\n    elif len(context) > max_length:\n        msg = f\"\U0001F525 [validator] field author validate failed {context!r} length {len(context)} > {max_length}\"\n        print(msg)\n        return False\n    return True"
             fail_type: retry
         is_dedup_array: false
       - name: author_info
@@ -956,16 +921,7 @@ rows:
                   return text
         validators:
           - method: script
-            params: |-
-              def validate(context):
-                  """Version: 2020_07_18
-                  验证新闻类型
-                  """
-                  if context.startswith("error:"):
-                      return False
-                  elif len(context) > 10:
-                      return False
-                  return True
+            params: "def validate(context):\n    \"\"\"Version: 2020_08_16\n    验证新闻类型\n    \"\"\"\n    max_length = 10\n    if context.startswith(\"error:\"):\n        msg = f\"\U0001F525 [processor] field news_type validate failed {context!r}\"\n        print(msg)\n        return False\n    elif len(context) > max_length:\n        msg = f\"\U0001F525 [validator] field news_type validate failed {context!r} length {len(context)} > {max_length}\"\n        print(msg)\n        return False\n    return True"
             fail_type: retry
         is_dedup_array: false
       - name: publish_time
@@ -1152,17 +1108,7 @@ rows:
                       return f"error:[{text}]"
         validators:
           - method: script
-            params: |-
-              def validate(context):
-                  """Version: 2020_07_18
-                  验证来源中是否有error: 
-                      卡住未经正确处理的请求
-                  """
-                  if context.startswith("error:"):
-                      return False
-                  elif len(context) > 15:
-                      return False
-                  return True
+            params: "def validate(context):\n    \"\"\"Version: 2020_08_16\n    验证来源中是否有error: \n        卡住未经正确处理的请求\n    \"\"\"\n    max_length = 20\n    if context.startswith(\"error:\"):\n        msg = f\"\U0001F525 [processor] field publish_org validate failed {context!r}\"\n        print(msg)\n        return False\n    elif len(context) > max_length:\n        msg = f\"\U0001F525 [validator] field publish_org validate failed {context!r} length {len(context)} > {max_length}\"\n        print(msg)\n        return False\n    return True"
             fail_type: retry
         is_dedup_array: false
       - name: author
@@ -1216,16 +1162,7 @@ rows:
                       return [f"error:{text}"]
         validators:
           - method: script
-            params: |-
-              def validate(context):
-                  """Version: 2020_07_18
-                  验证中文作者是否含有非法词
-                  """
-                  if context.startswith("error:"):
-                      return False
-                  elif len(context) > 4:
-                      return False
-                  return True
+            params: "def validate(context):\n    \"\"\"Version: 2020_08_16\n    验证中文作者是否含有非法词\n    \"\"\"\n    max_length = 4\n    if context.startswith(\"error:\"):\n        msg = f\"\U0001F525 [processor] field author validate failed {context!r}\"\n        print(msg)\n        return False\n    elif len(context) > max_length:\n        msg = f\"\U0001F525 [validator] field author validate failed {context!r} length {len(context)} > {max_length}\"\n        print(msg)\n        return False\n    return True"
             fail_type: retry
         is_dedup_array: false
       - name: tag
@@ -1277,20 +1214,7 @@ rows:
                       return [f"error:{text}"]
         validators:
           - method: script
-            params: |-
-              def validate(context):
-                  """Version: 2020_07_18
-                  验证标签, 不同网站调整长度
-                  """
-                  import re
-
-                  text = context.strip()
-                  if text.startswith("error:"):
-                      return False
-                  # 验证长度
-                  if len(text) > 10:
-                      return False
-                  return True
+            params: "def validate(context):\n    \"\"\"Version: 2020_08_16\n    验证标签, 不同网站调整长度\n    \"\"\"\n    max_length = 10\n    if context.startswith(\"error:\"):\n        msg = f\"\U0001F525 [processor] field tag validate failed {context!r}\"\n        print(msg)\n        return False\n    # 验证长度\n    if len(context) > max_length:\n        msg = f\"\U0001F525 [validator] field tag validate failed {context!r} length {len(context)} > {max_length}\"\n        print(msg)\n        return False\n    return True"
             fail_type: retry
         is_dedup_array: false
       - name: abstract
