@@ -166,6 +166,7 @@ def validate_content(context):
             return False
     return True
 
+
 def validate_web_site(context):
     """2020_07_13
     验证网站名是否复制带了空格

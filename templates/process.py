@@ -41,6 +41,8 @@ def process_time_template(text):
         # r"",  # 如有不是常见的日期时间格式，此处替换成案例
     ]
     # 预处理，替换掉会影响正则提取的固定字符串, 如点击量的数字
+    if "-" in text:
+        text = "2020-" + text
     flags = [
         "发布时间",
     ]
@@ -48,7 +50,7 @@ def process_time_template(text):
         text = text.replace(each, "")
     # 无内容时间返回空
     length = len(re.sub(r"\s+", "", text))
-    if length < 6:
+    if length < 2:
         return f"error:{text}"
     # 提取日期时间
     for each in rules:
@@ -519,14 +521,15 @@ if __name__ == "__main__":
     # print(process_tag_template("主题分类：其他"))
     # print(process_publish_org_template("来源 中关村"))
     # print(process_time_template("2017/1/11 9:12:55"))
-    import requests
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36"
-    }
-    url = "http://roll.hexun.com/roolNews_listRool.action?type=all&ids=100,101,103,125,105,124,162,194,108,122,121,119,107,116,114,115,182,120,169,170,177,180,118,190,200,155,130,117,153,106&page=493&tempTime="
+    # import requests
+    # headers = {
+    #     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36"
+    # }
+    # url = "http://roll.hexun.com/roolNews_listRool.action?type=all&ids=100,101,103,125,105,124,162,194,108,122,121,119,107,116,114,115,182,120,169,170,177,180,118,190,200,155,130,117,153,106&page=493&tempTime="
 
-    res = requests.get(url, headers=headers)
-    print(
-        process_dem_json(res.text)
-    )
+    # res = requests.get(url, headers=headers)
+    # print(
+    #     process_dem_json(res.text)
+    # )
+    print(process_time_template("08-13"))
 

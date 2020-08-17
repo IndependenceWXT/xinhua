@@ -1,30 +1,18 @@
 def start_requests(**kwargs):
     source_type = 1
-    copyright = 1
-    web_site = "中央-中国网络电视台（央视网）"
+    copyright = 0
+    web_site = "AnandTech"
 
-    web_site_url = "https://news.cctv.com/?spm=C96370.PsikHJQ1ICOX.EutgeoL1Nnqo.3"
+    web_site_url = "https://www.anandtech.com/"
     hub_fields = {
         "web_site": web_site,
         "web_site_url": web_site_url,
         "source_type": source_type,
         "copyright": copyright,
     }
-    for p in range(7):
+    for p in range(344):
         p += 1
-        url = f"https://news.cctv.com/2019/07/gaiban/cmsdatainterface/page/news_{p}.jsonp?cb=t&cb=news"
-        yield {"url": url, "page_rule_id": None, "hub_fields": hub_fields}
-
-    web_site_url = "https://jingji.cctv.com/?spm=C96370.PsikHJQ1ICOX.EutgeoL1Nnqo.5"
-    hub_fields = {
-        "web_site": web_site,
-        "web_site_url": web_site_url,
-        "source_type": source_type,
-        "copyright": copyright,
-    }
-    for p in range(7):
-        p += 1
-        url = f"https://news.cctv.com/2019/07/gaiban/cmsdatainterface/page/economy_{p}.jsonp?cb=t&cb=economy"
+        url = f"https://www.anandtech.com/Page/{p}"
         yield {"url": url, "page_rule_id": None, "hub_fields": hub_fields}
 
     yield {"url": web_site_url, "page_rule_id": None, "hub_fields": hub_fields}
