@@ -687,8 +687,6 @@ rows:
                   """
                   import re
 
-                  for each in fixes:
-                      text = text.replace(each, "")
                   if len(re.sub(r"\s+", "", text)) < 80:
                       return ""
                   return text
