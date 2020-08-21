@@ -1,20 +1,15 @@
 def start_requests(**kwargs):
     source_type = 1
     copyright = 0
-    web_site = "AnandTech"
+    web_site = "Engadget"
 
-    web_site_url = "https://www.anandtech.com/"
+    web_site_url = "https://cn.engadget.com/"
     hub_fields = {
         "web_site": web_site,
         "web_site_url": web_site_url,
         "source_type": source_type,
         "copyright": copyright,
     }
-    for p in range(344):
-        p += 1
-        url = f"https://www.anandtech.com/Page/{p}"
-        yield {"url": url, "page_rule_id": None, "hub_fields": hub_fields}
-
     yield {"url": web_site_url, "page_rule_id": None, "hub_fields": hub_fields}
 
     url = ""

@@ -25,7 +25,7 @@ def progress(table_name="dijishi"):
     FROM
         progress
     WHERE
-        conf_date BETWEEN "2020-08-10"
+        conf_date BETWEEN "2020-08-17"
     AND "2020-08-31"
     GROUP BY `user`""".replace("progress", table_name)
 
@@ -47,6 +47,7 @@ def progress(table_name="dijishi"):
 
     sql_total = """/*统计总进度*/
     SELECT
+        count(*) AS "总计",
         sum( `if_configured` ) AS "已配置",
         sum( `if_submit` ) AS "已提交",
         sum( `if_approved` ) AS "已通过",
@@ -84,12 +85,12 @@ def progress(table_name="dijishi"):
             r.write("\n".join(reports) + "\n" * 5)
 
     reports = []
-    reports.append("| 已配置 | 已提交 | 已通过 | 已上线 |")
-    reports.append("|----|----|----|----|")
+    reports.append("| 总计 | 已配置 | 已提交 | 已通过 | 已上线 |")
+    reports.append("|----|----|----|----|----|")
     res = db.query_all(sql_total)
     for each in res:
-        configured, submit, approved, online = each
-        reports.append(f"| {configured} | {submit} | {int(approved)} | {online} |")
+        total, configured, submit, approved, online = each
+        reports.append(f"| {total} | {configured} | {submit} | {int(approved)} | {online} |")
     else:
         with open(f"../reports/{table_name}.md", mode="a", encoding="utf-8") as r:
             r.write("\n".join(reports))
