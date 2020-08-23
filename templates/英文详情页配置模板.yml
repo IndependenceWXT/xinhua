@@ -404,7 +404,7 @@ rows:
                   return text
         validators:
           - method: script
-            params: "def validate(context):\n    \"\"\"Version: 2020_08_16\n    验证标签, 不同网站调整长度\n    \"\"\"\n    max_length = 20\n    if context.startswith(\"error:\"):\n        msg = f\"\U0001F525 [processor] field tag validate failed {context!r}\"\n        print(msg)\n        return False\n    # 验证长度\n    if len(context) > max_length:\n        msg = f\"\U0001F525 [validator] field tag validate failed {context!r} length {len(context)} > {max_length}\"\n        print(msg)\n        return False\n    return True"
+            params: "def validate(context):\n    \"\"\"Version: 2020_08_16\n    验证标签, 不同网站调整长度\n    \"\"\"\n    max_length = 50\n    if context.startswith(\"error:\"):\n        msg = f\"\U0001F525 [processor] field tag validate failed {context!r}\"\n        print(msg)\n        return False\n    # 验证长度\n    if len(context) > max_length:\n        msg = f\"\U0001F525 [validator] field tag validate failed {context!r} length {len(context)} > {max_length}\"\n        print(msg)\n        return False\n    return True"
             fail_type: retry
         is_dedup_array: false
       - name: author
