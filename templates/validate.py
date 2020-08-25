@@ -128,7 +128,7 @@ def validate_title(context):
         print(msg)
         return False
     elif length > max_length:
-        msg = f"🔥 [validator] field title validate failed {context!r} length {len(length)} > {max_length}"
+        msg = f"🔥 [validator] field title validate failed {context!r} length {length} > {max_length}"
         print(msg)
         return False
     return True

@@ -229,7 +229,7 @@ rows:
                   return text
         validators:
           - method: script
-            params: "def validate(context):\n    \"\"\"Version: 2020_08_16\n    验证标题是否是省略过的, 并且文本长度是否在100内\n    \"\"\"\n    import re\n\n    max_length = 250\n    length = len(re.sub(r\"\\s+\", \"\", context))\n    if context.endswith(\"...\") or context.startswith(\"error:\"):\n        msg = f\"\U0001F525 [processor] field title validate failed {context!r}\"\n        print(msg)\n        return False\n    elif length > max_length:\n        msg = f\"\U0001F525 [validator] field title validate failed {context!r} length {len(length)} > {max_length}\"\n        print(msg)\n        return False\n    return True"
+            params: "def validate(context):\n    \"\"\"Version: 2020_08_16\n    验证标题是否是省略过的, 并且文本长度是否在100内\n    \"\"\"\n    import re\n\n    max_length = 250\n    length = len(re.sub(r\"\\s+\", \"\", context))\n    if context.endswith(\"...\") or context.startswith(\"error:\") or \"&\" in context:\n        msg = f\"\U0001F525 [processor] field title validate failed {context!r}\"\n        print(msg)\n        return False\n    elif length > max_length:\n        msg = f\"\U0001F525 [validator] field title validate failed {context!r} length {length} > {max_length}\"\n        print(msg)\n        return False\n    return True"
             fail_type: retry
         is_dedup_array: false
       - name: publish_time

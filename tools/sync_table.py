@@ -76,8 +76,8 @@ def main(table_name="dijishi"):
             "online_date": online_date,
         }
         condition = {"web_site": web_site}
-        # db.add(record, condition=condition, table_name=table_name)
-        db.update(record, condition=condition, table_name=table_name)
+        db.add(record, condition=condition, table_name=table_name)
+        # db.update(record, condition=condition, table_name=table_name)
     db.close()
 
 
