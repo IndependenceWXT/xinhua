@@ -25,7 +25,7 @@ def progress(table_name="dijishi"):
     FROM
         progress
     WHERE
-        conf_date BETWEEN "2020-08-16"
+        conf_date BETWEEN "2020-08-24"
     AND "2020-08-31"
     GROUP BY `user`""".replace("progress", table_name)
 
