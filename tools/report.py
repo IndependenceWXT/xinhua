@@ -18,6 +18,7 @@ from tqdm import tqdm, trange
 import fire
 
 users_db = {
+    20: "陈亚飞",
     19: "江港林",
     17: "胡涛涛",
     16: "张豹",
