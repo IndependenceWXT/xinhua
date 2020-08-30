@@ -208,6 +208,7 @@ def process_author_template(text):
         # r"",  # 如有不是常见的作者格式，此处替换成案例
     ]
     # 预处理，替换掉会影响正则提取的固定字符串, 从验证器中更新
+    text = text.replace("  ", " ")
     flags = ["作者", "记者", "撰文", "通讯员", "责任编辑", "编辑", "通讯中", "发布者"]
     punctuations = ["【", "】", "（", "）"]
     flags.extend(punctuations)
@@ -404,7 +405,7 @@ def process(data):
     if data.get("tag"):
         data["tag"] = list(set([tag for tag in data["tag"] if tag]))
     if data.get("author"):
-        data["author"] = list(set([tag for tag in data["author"] if tag]))
+        data["author"] = list(set([author for author in data["author"] if author]))
     # 附件根据链接去重复
     dedup = {}
     for filename, url in zip_longest(

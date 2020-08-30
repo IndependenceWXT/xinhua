@@ -581,7 +581,7 @@ rows:
           - method: script
             params: |-
               def process(text):
-                  """Version: 2020_07_18
+                  """Version: 2020_07_21
                   作者提取脚本模版
                   returns:
                       [error:text]: 正则提取失败
@@ -596,6 +596,7 @@ rows:
                       # r"",  # 如有不是常见的作者格式，此处替换成案例
                   ]
                   # 预处理，替换掉会影响正则提取的固定字符串, 从验证器中更新
+                  text = text.replace("  ", " ")
                   flags = ["作者", "记者", "撰文", "通讯员", "责任编辑", "编辑", "通讯中", "发布者"]
                   punctuations = ["【", "】", "（", "）"]
                   flags.extend(punctuations)
@@ -609,7 +610,7 @@ rows:
                       p = re.compile(each)
                       res = p.findall(text)
                       if res:
-                          return [i.replace(" ", "") for i in res]
+                          return [i.replace(" ", "") for i in res if 1 < len(i) < 5]
                       else:
                           continue
                   else:
@@ -724,10 +725,10 @@ rows:
           contains(translate(@href, "ZIP", "zip"), ".zip") or
           contains(translate(@href, "RAR", "rar"), ".rar") or
           contains(translate(@href, "WPS", "wps"), ".wps")) and
-          not(contains(@href, "file://") or contains(@href, "c:\") or
-          contains(@href, "C:\"))] | .//*[contains(translate(@src, "MP4",
-          "mp4"), ".mp4") and not(contains(@src, "file://") or contains(@src,
-          "c:\") or contains(@src, "C:\"))]/@src
+          not(contains(@href, "file://") or contains(translate(@href, "C", "c"),
+          "c:"))] | .//*[contains(translate(@src, "MP4", "mp4"), ".mp4") and
+          not(contains(@src, "file://") or contains(translate(@href, "C", "c"),
+          "c:"))]/@src
         is_dedup_key: false
         multi: true
         keep_html: false
@@ -758,10 +759,10 @@ rows:
           contains(translate(@href, "ZIP", "zip"), ".zip") or
           contains(translate(@href, "RAR", "rar"), ".rar") or
           contains(translate(@href, "WPS", "wps"), ".wps")) and
-          not(contains(@href, "file://") or contains(@href, "c:\") or
-          contains(@href, "c:\"))]/@href | .//*[contains(translate(@src, "MP4",
-          "mp4"), ".mp4") and not(contains(@src, "file://") or contains(@src,
-          "c:\") or contains(@src, "C:\"))]/@src
+          not(contains(@href, "file://") or contains(translate(@href, "C", "c"),
+          "c:"))]/@href | .//*[contains(translate(@src, "MP4", "mp4"), ".mp4")
+          and not(contains(@src, "file://") or contains(translate(@href, "C",
+          "c"), "c:"))]/@src
         is_dedup_key: false
         multi: true
         keep_html: false
@@ -952,7 +953,7 @@ rows:
               if data.get("tag"):
                   data["tag"] = list(set([tag for tag in data["tag"] if tag]))
               if data.get("author"):
-                  data["author"] = list(set([tag for tag in data["author"] if tag]))
+                  data["author"] = list(set([author for author in data["author"] if author]))
               return data
     links: []
 preprocessors: []

@@ -26,7 +26,7 @@ rows:
       contains(translate(@href, "ZIP", "zip"), ".zip") or
       contains(translate(@href, "RAR", "rar"), ".rar") or
       contains(translate(@href, "WPS", "wps"), ".wps")) and not(contains(@href,
-      "file://") or contains(@href, "c:\"))]
+      "file://") or contains(translate(@href, "C", "c"), "c:"))]
     storage_id: -1
     if_match: ''
     if_url_match: ''
@@ -444,7 +444,7 @@ rows:
           - method: script
             params: |-
               def process(text):
-                  """Version: 2020_07_18
+                  """Version: 2020_07_21
                   作者提取脚本模版
                   returns:
                       [error:text]: 正则提取失败
@@ -459,6 +459,7 @@ rows:
                       # r"",  # 如有不是常见的作者格式，此处替换成案例
                   ]
                   # 预处理，替换掉会影响正则提取的固定字符串, 从验证器中更新
+                  text = text.replace("  ", " ")
                   flags = ["作者", "记者", "撰文", "通讯员", "责任编辑", "编辑", "通讯中", "发布者"]
                   punctuations = ["【", "】", "（", "）"]
                   flags.extend(punctuations)
@@ -472,7 +473,7 @@ rows:
                       p = re.compile(each)
                       res = p.findall(text)
                       if res:
-                          return [i.replace(" ", "") for i in res]
+                          return [i.replace(" ", "") for i in res if 1 < len(i) < 5]
                       else:
                           continue
                   else:
@@ -544,7 +545,7 @@ rows:
       contains(translate(@href, "ZIP", "zip"), ".zip") or
       contains(translate(@href, "RAR", "rar"), ".rar") or
       contains(translate(@href, "WPS", "wps"), ".wps")) and not(contains(@href,
-      "file://") or contains(@href, "c:\"))]
+      "file://") or contains(translate(@href, "C", "c"), "c:"))]
     storage_id: 10270
     if_match: ''
     if_url_match: ''
@@ -1127,7 +1128,7 @@ rows:
           - method: script
             params: |-
               def process(text):
-                  """Version: 2020_07_18
+                  """Version: 2020_07_21
                   作者提取脚本模版
                   returns:
                       [error:text]: 正则提取失败
@@ -1142,6 +1143,7 @@ rows:
                       # r"",  # 如有不是常见的作者格式，此处替换成案例
                   ]
                   # 预处理，替换掉会影响正则提取的固定字符串, 从验证器中更新
+                  text = text.replace("  ", " ")
                   flags = ["作者", "记者", "撰文", "通讯员", "责任编辑", "编辑", "通讯中", "发布者"]
                   punctuations = ["【", "】", "（", "）"]
                   flags.extend(punctuations)
@@ -1155,7 +1157,7 @@ rows:
                       p = re.compile(each)
                       res = p.findall(text)
                       if res:
-                          return [i.replace(" ", "") for i in res]
+                          return [i.replace(" ", "") for i in res if 1 < len(i) < 5]
                       else:
                           continue
                   else:
