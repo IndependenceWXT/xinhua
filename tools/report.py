@@ -265,7 +265,7 @@ def report_all_history():
     扫描全部开启计划的历史调度
     """
     users = [k for k in users_db]
-    res = count_configured(users, today=False, ago=True)
+    res = count_configured(users, today=False, ago=True, section=(2253, 2905))
 
 
 def report_all_update():
