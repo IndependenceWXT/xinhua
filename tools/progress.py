@@ -25,8 +25,8 @@ def progress(table_name="dijishi"):
     FROM
         progress
     WHERE
-        conf_date BETWEEN "2020-08-24"
-    AND "2020-08-31"
+        conf_date BETWEEN "2020-08-31"
+    AND "2020-12-31"
     GROUP BY `user`""".replace("progress", table_name)
 
     sql_detail = """/* 统计配置人员配置数量 */
@@ -42,7 +42,7 @@ def progress(table_name="dijishi"):
         progress
     WHERE
         conf_date BETWEEN "2020-07-1"
-    AND "2020-08-31"
+    AND "2020-12-31"
     GROUP BY `user`""".replace("progress", table_name)
 
     sql_total = """/*统计总进度*/
@@ -55,7 +55,7 @@ def progress(table_name="dijishi"):
     FROM
         progress
     WHERE
-        conf_date BETWEEN "2020-07-1" AND "2020-08-31"
+        conf_date BETWEEN "2020-07-1" AND "2020-12-31"
     """.replace("progress", table_name)
 
     reports = []
