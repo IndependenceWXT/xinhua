@@ -24,8 +24,12 @@ def download(req) -> dict:
  
     """
     import requests
+    proxies = {
+        "http": f"http://{req.proxy}",
+        "https": f"http://{req.proxy}",
 
-    r = requests.get(req.url)
+    }
+    r = requests.get(req.url, proxies=proxies)
     return dict(redirect_url=r.url, content=r.content)
 
 class DownloadRequest:
