@@ -111,7 +111,7 @@ def count_configured(users, today=True, ago=False, section=(1565, 1858), notify=
         kind = "日报"
         report.append(f"日报[{now.isoformat()}]\n")
     elif not today and ago == False:
-        now = datetime.now() - timedelta(days=10)
+        now = datetime.now() - timedelta(days=10) # 为啥要十天前来着？
         now = now.date()
         kind = "扫描报告"
         report.append(f"{_type}调度扫描报告[{now.isoformat()}]\n")
@@ -227,12 +227,12 @@ def send(text):
     return res.json()
 
 
-def report_for_user(user_id):
+def report_for_user(user_id, section=(1369, 3209)):
     """
     配置人员扫描历史配置的历史调度进度
     """
     users = [k for k in users_db if k == user_id]
-    res = count_configured(users, today=False, ago=True)
+    res = count_configured(users, today=False, section=section)
 
 
 def check_today():
