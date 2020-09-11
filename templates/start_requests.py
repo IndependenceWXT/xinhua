@@ -1,4 +1,42 @@
 def start_requests(**kwargs):
+    web_site = "交通运输部"
+
+    web_site_url = "http://www.mot.gov.cn/zhengce/"
+    hub_fields = {"web_site": web_site, "web_site_url": web_site_url}
+    for p in range(67):
+        p = f"_{p}" if p else ""
+        url = f"http://xxgk.mot.gov.cn/2020/jigou/list{p}.html"
+        yield {"url": url, "page_rule_id": 9888, "hub_fields": hub_fields}
+
+    web_site_url = "http://www.mot.gov.cn/shuju/"
+    hub_fields = {"web_site": web_site, "web_site_url": web_site_url}
+    yield {"url": web_site_url, "page_rule_id": 10052, "hub_fields": hub_fields}
+
+    web_site_url = "http://www.mot.gov.cn/xinwen/"
+    hub_fields = {"web_site": web_site, "web_site_url": web_site_url}
+
+    for page in range(30):
+        page = f"_{page}" if page else ""
+        url = f"http://www.mot.gov.cn/jiaotongyaowen/index{page}.html"
+        yield {"url": url, "page_rule_id": 10058, "hub_fields": hub_fields}
+
+    for page in range(2):
+        page = f"_{page}" if page else ""
+        url = f"http://www.mot.gov.cn/zhongyaohuiyi/index{page}.html"
+        yield {"url": url, "page_rule_id": 10058, "hub_fields": hub_fields}
+
+    for page in range(10):
+        page = f"_{page}" if page else ""
+        url = f"http://www.mot.gov.cn/difangxinwen/xxlb_fabu/index{page}.html"
+        yield {"url": url, "page_rule_id": 10058, "hub_fields": hub_fields}
+
+    for page in range(17):
+        page = f"_{page}" if page else ""
+        url = f"http://www.mot.gov.cn/guowuyuanxinxi/index{page}.html"
+        yield {"url": url, "page_rule_id": 10058, "hub_fields": hub_fields}
+
+
+def start_requests(**kwargs):
     source_type = 1
     copyright = 1
     web_site = "网站名"
