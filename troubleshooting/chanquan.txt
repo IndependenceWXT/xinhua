@@ -1,0 +1,782 @@
+图片无法显示可参考该附件127家产权平台采集需求-班布尔.pdf
+1、 上海联合产权交易所
+
+
+采集频率：日度
+网址：
+https://www.suaee.com/suaeeHome/#/projectCenter
+采集截图红框分类下所有内容
+采集字段：
+
+2、 北京产权交易所
+采集频率：日度
+网址：
+http://www.cbex.com.cn/xm/
+采集字段：
+
+3、 天津联合产权交易中心
+采集频率：日度
+网址：
+https://www.suaee.com/suaeeHome/#/projectCenter
+采集字段：
+
+4、 重庆联合产权交易所
+采集频率：日度
+网址：
+https://www.suaee.com/suaeeHome/#/projectCenter
+采集字段：
+
+5、 河北产权交易中心
+采集频率：日度
+网址：
+http://www.hebaee.cn/search.html
+采集红框内所有分类下的内容
+采集字段：
+
+6、 哈尔滨产权交易中心
+采集频率：日度
+网址： https://www.hljcq.org.cn/page/cqjy.asp?pageID=104
+采集字段：
+
+7、 江苏产权交易所
+采集频率：日度
+网址：
+https://www.suaee.com/suaeeHome/#/projectCenter
+采集字段：
+
+8、 武汉光谷联合产权交易所
+采集频率：日度
+网址：
+http://portal.ovupre.com/article/proList.shtml?proType=guquan&typeGz=P3
+采集字段：
+
+9、 西部产权交易所
+采集频率：日度
+网址：
+https://www.xbcq.com/xbcq/xmgg_list.jsp
+采集字段：
+
+10、 广州产权交易所
+采集频率：日度
+网址：
+http://gz.gemas.com.cn/portal/article/proList.shtml?proType=guquan&typeGz=G3T3
+采集全部页面的每条信息，包括跳转链接下内容
+采集字段：
+
+11、 青岛产权交易所
+采集频率：日度
+网址：
+www.qdcq.net/article/xmxx/gycq/
+采集字段：
+
+12、 沈阳联合产权交易所
+采集频率：日度
+网址：
+http://a.sprtc.com:9090/saee/saee_web_bdw/web_cgqzr_more.jsp
+ 采集字段：
+13、 广东省产权交易集团
+采集频率：日度
+网址：
+https://mall.gdaee.com.cn/page/equityProject/stateOwnedEquity/index?id=183
+采集字段：
+
+
+14、 湖南省联合产权交易所
+采集频率：日度
+网址：
+http://www.hnaee.com/hnaee/xmzx.jsp
+采集字段：
+
+15、 甘肃省产权交易所
+采集频率：日度
+网址：
+http://www.gscq.com.cn/index.php?s=xm
+采集字段：
+
+16、 浙江产权交易所
+采集频率：日度
+网址：
+http://www.zjpse.com/article/ggtz/gpgg/
+采集字段：
+
+17、 山东联合产权交易中心
+采集频率：日度
+网址：
+www.sdcqjy.com/www/article/xmpd/qycgq/
+采集字段：
+
+18、 内蒙古产权交易中心
+采集频率：日度
+网址：
+http://nmgcqjy.ejy365.com/home/chengjiaogonggaomore?&type=11&typemsg=0&page=1&row=12
+采集字段：
+
+19、 厦门产权交易中心
+采集频率：日度
+网址：
+http://www.xemas.com.cn/project-announcement.html?parent-uid=&self-uid=&type=total&sub-uid=
+采集字段：
+
+20、 西南联合产权交易所
+采集频率：日度
+网址：
+www.swuee.com/index.php?m=content&c=index&a=swueeprolists&catid=15&pjttype=3373#pro
+采集字段：
+
+21、 福建省联合产权交易中心
+采集频率：日度
+网址：
+https://www.fjcqjy.com/html/list-content-vomd3d948zdm0ouy2yx2.html
+采集字段：
+
+22、 贵州阳光产权交易所
+采集频率：日度
+网址：
+www.prechina.net/channels/295.html
+采集红框分类下所有内容
+采集字段：
+
+23、 山西省产权交易所
+采集频率：日度
+网址：
+http://www.sxpre.com/
+采集字段：
+
+24、 黑龙江联合产权交易所
+采集频率：日度
+网址：
+www.huaee.net/
+采集字段：
+
+25、 大连产权交易所
+采集频率：日度
+网址：
+https://www.daee.cn/article/xmdt/
+采集字段：
+
+26、 吉林长春产权交易中心
+采集频率：日度
+网址：
+www.ccprec.com/doc/liebiao.jsp?cid=1278&path=kjtdzdxmtj&page=1&pn=1&title=%E9%87%8D%E7%82%B9%E9%A1%B9%E7%9B%AE%E6%8E%A8%E4%BB%8B&etitle=Promotion%20of%20Key%20Projects
+采集字段：
+
+27、 宁波产权交易中心
+采集频率：日度
+网址：
+www.nbcqjy.org/article/xmgp/gqxm/
+采集字段：
+
+28、 安徽省产权交易中心
+采集频率：日度
+网址：
+www.aaee.com.cn/proList/?proType=zxgp
+采集字段：
+
+29、 江西省产权交易所
+采集频率：日度
+网址：
+http://www.jxcq.org/list.aspx?nid=42
+采集字段：
+
+30、 郑州市公共资源交易中心
+采集频率：日度
+网址：
+www.zzsggzy.com/cqjy/subpage.html
+采集字段：
+
+31、 深圳联合产权交易所
+采集频率：日度
+网址：
+http://www.sotcbb.com/cn2019/gonggaoxinxi.html?classID=1
+采集字段：
+
+32、 北部湾产权交易所集团
+采集频率：日度
+网址：
+www.bbwcq.com/index.php?m=content&c=index&a=ejylists&catid=19&issc=0&ggtype=1
+采集字段：
+
+33、 海南产权交易所
+采集频率：日度
+网址：
+http://www.hncq.cn/index.php?m=content&c=index&a=lists&catid=15
+采集字段：
+
+34、 云南产权交易所
+采集频率：日度
+网址：
+http://www.cynee.net/channels/xmpd.html
+采集字段：
+
+35、 青海省产权交易市场
+采集频率：日度
+网址：
+www.qhcqjy.com.cn/item.do?para=viewlist&classCode=&ass=01
+采集字段：
+
+36、 宁夏科技资源与产权交易所
+采集频率：日度
+网址：
+http://www.ntree.com.cn/item.do?para=viewlist&cc=A201&stat=A
+采集字段：
+
+37、 新疆产权交易市场
+采集频率：日度
+网址：
+http://xjcqjy.ejy365.com/dist/index.html#/select
+采集截图范围内容
+采集字段：（所有筛选项）
+
+38、 长治市产权交易市场
+项目频道无内容
+
+39、 安徽长江产权交易所
+采集频率：日度
+网址：
+http://www.ccjex.com/htm/project.asp
+采集截图范围内容
+采集字段（截图内所有筛选项下的链接内容）
+
+40、 常州产权交易所
+采集频率：日度
+网址：
+http://www.czcq.com.cn/index.php/gq.html
+采集截图范围内容
+采集字段：（截图红框中个分类的链接都要采集）
+
+41、 珠海产权交易中心
+采集频率：日度
+网址：
+http://www.zhaeec.com/newplatform.aspx
+采集截图范围内容
+采集字段：（截图红框中个分类的链接都要采集）
+
+42、 河南中原产权交易中心
+采集频率：日度
+网址：
+http://www.zycqjy.com/wcm/zycqjy/html/gycq/index.html
+采集截图范围内容
+采集字段：（截图红框中个分类的链接都要采集）
+
+43、 杭州产权交易所
+采集频率：日度
+网址：
+http://www.hzaee.com/
+采集截图范围内容
+采集字段：（截图红框中个分类的链接都要采集）
+
+44、 广西联合产权交易所有限责任公司
+采集频率：日度
+网址：
+http://www.gxcq.com.cn/search.html
+采集截图范围内容
+采集字段：
+
+45、 郑州股权登记托管服务中心
+采集频率：日度
+网址：
+http://zzgqtg.com/index.php?m=content&c=index&a=lists&catid=22
+采集截图范围内容
+采集字段：
+
+46、 长沙联合产权交易所
+采集频率：日度
+网址：
+http://cscqjy.com.cn/xiangmuzhongxin/
+采集截图范围内容
+采集字段：（采集项目中心所有子分类下的内容）
+
+47、 河南省产权交易中心
+采集频率：日度
+网址：
+www.hnprec.com/Announce/Index?fid=8
+采集截图范围内容
+采集字段：
+
+48、 北京金融资产交易所有限公司
+采集频率：日度
+网址：
+https://www.cfae.cn/connector/more?type=3##
+采集截图范围内容
+采集字段：
+
+49、 烟台联合产权交易有限公司
+采集频率：日度
+网址：
+www.ytcq.com/xmpd/secpage.html
+采集截图范围内容
+采集字段：
+
+50、 山东潍坊产权交易中心有限公司
+采集频率：日度
+网址：
+www.wfcqjy.com/index.php?c=article&a=type&tid=3 采集截图范围内容
+采集字段：
+
+51、 南京产权交易中心
+无信息
+52、 无锡产权交易所
+采集频率：日度
+网址：
+http://www.wxcq.com.cn/wxcqwz/cqxm/002001/
+采集截图范围内容
+采集字段：
+
+53、 中山产权交易中心
+采集频率：日度
+网址：
+http://www.zhshcq.com/portal/index/display.jhtml?cid=3
+采集截图范围内容
+采集字段：
+
+54、 山西省产权交易中心
+采集频率：日度
+网址：
+https://www.sxcqjy.cn/jyzx/list/JT
+采集截图范围内容
+采集字段：
+
+55、 连云港产权交易所
+采集频率：日度
+网址：
+http://www.lygcqs.com/list-14-1.html
+采集截图范围内容
+采集字段：
+
+56、 江苏淮安产权交易中心
+采集频率：日度
+网址：
+http://www.hasggzy.com/EpointWeb/showinfo/jyxxsearch.aspx?type=cqjy
+采集截图范围内容
+采集字段：
+
+57、 苏州产权交易所
+采集频率：日度
+网址：
+https://www.szcjs.com/xmzx/gy/
+采集截图范围内容
+采集字段：
+
+58、 温州联合产权交易中心
+采集频率：日度
+网址：
+http://www.wzeoc.com/nw-cq-id-190.html
+采集截图范围内容
+采集字段：
+
+59、 金华产权交易所
+采集频率：日度
+网址：
+http://www.jhcqjy.com/jhcqjy/xmgp.asp?type=3
+采集截图范围内容
+采集字段：
+
+60、 合肥市产权交易中心
+无信息
+61、 蚌埠市产权交易中心
+采集频率：日度
+网址：
+http://ggzy.bengbu.gov.cn/bbfwweb/mb/045003/
+采集截图范围内容
+采集字段：
+
+62、 扬州市产权交易中心
+采集频率：日度
+网址：
+http://www.yzcq.com.cn/index.php?m=content&c=index&a=lists&catid=10
+采集截图范围内容
+采集字段：
+
+63、 盐城市产权交易所
+采集频率：日度
+网址：
+http://www.yccqw.com/xmxx.asp?gknews=%B9%CC%B6%A8%D7%CA%B2%FA%D7%AA%C8%C3%CF%EE%C4%BF
+采集截图范围内容
+采集字段：
+
+64、 台州市产权交易所
+采集频率：日度
+网址：
+http://www.tzpre.com/progchan.php
+采集截图范围内容
+采集字段：
+
+65、 济南产权交易中心
+采集频率：日度
+网址：
+http://www.jncq.com/projects.aspx
+采集截图范围内容
+采集字段：
+
+66、 镇江市产权交易中心
+无信息
+67、 开封市产权交易中心
+采集频率：日度
+网址：
+http://www.kfsggzyjyw.cn/yjygg/index.jhtml
+采集截图范围内容
+采集字段：
+
+68、 义乌产权交易所
+采集频率：日度
+网址：
+http://www.ywcq.com/Root/NewsList.aspx?typeid=5
+采集截图范围内容
+采集字段：
+
+69、 南通众和产权交易所
+采集频率：日度
+网址：
+http://www.zhaee.com/
+采集截图范围内容
+采集字段：
+
+70、 珠海市产权交易中心
+采集频率：日度
+网址：
+http://www.zhaeec.com/newplatform.aspx
+采集截图范围内容
+采集字段：
+
+71、 银川产权交易中心
+无信息
+72、 抚顺市产权交易中心
+采集频率：日度
+网址：
+http://www.fsprec.net/10051.asp?page=1
+采集截图范围内容
+采集字段：
+
+73、 大庆市产权交易中心
+采集频率：日度
+网址：
+http://ggzyjyzx.daqing.gov.cn/jrkbGtcqjy/index.htm
+采集截图范围内容
+采集字段：
+
+74、 秦皇岛市产权交易中心
+采集频率：日度
+网址：
+http://qinhuangdao.portal.sztdcqjy.com/projects/transfer
+采集截图范围内容
+采集字段：
+
+75、 烟台联合产权交易中心有限公司
+采集频率：日度
+网址：
+http://www.ytcq.com/xmpd/secpage.html
+采集截图范围内容
+采集字段：
+
+76、 邢台市企业产权交易中心
+采集频率：日度
+网址：
+http://www.xtcqw.cn/item_list.php
+采集截图范围内容
+采集字段：
+
+77、 焦作市公共资源交易中心
+采集频率：日度
+网址：
+http://www.jzggzy.cn/TPFront/ztbzx/069002/069002003/069002003001/MoreInfo.aspx?CategoryNum=69002003001
+采集截图范围内容
+采集字段：
+
+78、 黑龙江垦产权交易中心
+采集频率：日度
+网址：
+http://www.nkcqjy.com/index/index/project
+采集截图范围内容
+采集字段：
+
+79、 晋城市产权交易中心
+无信息
+80、 张家口市产权交易中心
+采集频率：日度
+网址：
+http://www.zjkcqjy.com/cqgq/
+采集截图范围内容
+采集字段：
+
+81、 保定市产权交易市场
+无信息
+82、 佳木斯产权交易中心
+采集频率：日度
+网址：
+http://www.zhaoyonghou.com/pagelist.asp?type_id=1
+采集截图范围内容
+采集字段：
+
+83、 新乡公共资源交易中心
+采集频率：日度
+网址：
+http://www.xxggzy.cn/jyxx/089006/089006001/moreinfo_len6.html
+采集截图范围内容
+采集字段：
+
+84、 太原市产权交易中心
+采集频率：日度
+网址：
+http://www.tycqjy.com/item.html
+采集截图范围内容
+采集字段：
+
+85、 大同市产权交易市场
+无信息
+86、 阳泉市产权交易市场
+采集频率：日度
+网址： https://otc.tpre.cn/cqzr/detail/2009108.html
+采集截图范围内容
+采集字段：
+
+87、 宁夏产权交易所
+采集频率：日度
+网址：
+http://www.naee.com.cn/projectList.do?type=2
+采集截图范围内容
+采集字段：
+
+88、 辽源市产权交易中心
+采集频率：日度
+网址：
+http://ggzy.liaoyuan.gov.cn/jyxx/003003/secondPage.html
+采集截图范围内容
+采集字段：
+
+89、 铁岭市产权交易中心
+采集频率：日度
+网址：
+http://tlggzyjy.com/Project?ProjectState=1&CountyId=1&TradeTypeId=4
+采集截图范围内容
+采集字段：（截图中产权下字段所有内容）
+
+90、 许昌亚太产权交易中心
+采集频率：日度
+网址：
+http://www.xcytcq.com/cgqjy/list.html
+采集截图范围内容
+采集字段：
+
+91、 阜新产权公共资源交易平台
+采集频率：日度
+网址：
+http://ggzy.fuxin.gov.cn/cqjy/secondPage.html
+采集截图范围内容
+采集字段：
+
+92、 吉林产权交易中心
+采集频率：日度
+网址：
+http://www.jlsggzyjy.gov.cn/jlsztb/jyxx/003003/
+采集截图范围内容
+采集字段：
+
+93、 朝阳市产权交易市场
+采集频率：日度
+网址：
+http://www.cycqjy.com/col.jsp?id=117
+采集截图范围内容
+采集字段：
+
+94、 喀什地区公共资源交易网
+采集频率：日度
+网址：
+http://ggzykashi.cn/jygkgycq/index.jhtml
+采集截图范围内容
+采集字段：
+
+95、 长沙市产权交易所
+采集频率：日度
+网址：
+http://www.51baojia.net/main/guapai/
+采集截图范围内容
+采集字段：
+
+96、 齐齐哈尔公共资源交易中心
+采集频率：日度
+网址：
+http://ggzy.qqhr.gov.cn/jyxx/003003/003003001/about.html
+采集截图范围内容
+采集字段：
+
+97、 天津产权交易中心
+无信息
+98、 晋中市产权交易中心
+采集频率：日度
+网址：
+http://ggzy.sxjz.gov.cn/jygkgycq/index.jhtml
+采集截图范围内容
+采集字段：
+
+99、 伊犁联合产权交易责任有限公司
+采集频率：日度
+网址：https://www.cspea.com.cn/insts/instdetail/INS_047/publiclist
+采集范围
+采集字段
+
+100、 唐山市产权交易中心
+无信息
+101、 南阳市产权交易中心
+采集频率：日度
+网址：
+www.nycqjy.cn/chanquangonggao/
+采集截图范围内容
+采集字段：
+
+102、 中国技术交易所有限公司
+采集频率：日度
+网址：
+http://us.ctex.cn/article/zdxm/
+采集截图范围内容
+采集字段：
+
+103、 北京环境交易所有限公司
+采集频率：日度
+网址：
+www.cbeex.com.cn/article/xmgp/gpxm/
+采集截图范围内容
+采集字段：
+
+104、 洛阳市产权交易中心
+采集频率：日度
+网址：
+www.lyggzyjy.cn/TPFront/jyxx/009003/
+采集截图范围内容
+采集字段：
+
+105、 株洲市产权交易中心有限公司
+无信息
+106、 青海股权交易中心
+需要账密
+107、 绍兴公共资源交易中心
+采集频率：日度
+网址：
+ggb.sx.gov.cn/col/col1518864/index.html
+采集截图范围内容
+采集字段：
+
+108、 浙江江南要素交易中心
+拒绝访问
+109、 天津产权交易中心
+采集频率：日度
+网址：
+www.qzcq0595.com/content/xmzx.aspx
+采集截图范围内容
+采集字段：
+
+110、 泰州国联产权交易所
+无法访问
+111、 温州股权运营中心
+采集频率：日度
+网址：
+http://www.wzeoc.com/nw-cq-id-190.html
+采集截图范围内容
+采集字段：
+
+112、 南平市产权交易中心
+采集频率：日度
+网址： https://otc.tpre.cn/cqzr/detail/2009108.html
+采集截图范围内容
+采集字段：
+
+113、 西藏产权交易中心
+采集频率：日度
+网址：
+http://www.xzcqjy.com/?m=home&c=Lists&a=index&tid=14
+采集截图范围内容
+采集字段：
+
+114、 乐山产权交易中心
+采集频率：日度
+网址：
+http://www.lscq.com.cn/lscq/html/chanqzr/index.jhtml
+采集截图范围内容
+采集字段：
+
+115、 广西广飞投资管理有限公司
+采集频率：日度
+网址：
+http://www.fgcqjy.com/Htmls/news/58/
+采集截图范围内容
+采集字段：
+
+116、 厦门国际金融资产交易中心
+采集频率：日度
+网址：
+https://www.xfinex.com/archive_notice_transfer.html
+采集截图范围内容
+采集字段：
+
+117、 甘肃省文化产权交易中心
+采集频率：日度
+网址：
+http://759933447.wezhan.cn/cqgg
+采集截图范围内容
+采集字段：
+
+118、 苏州公共资源中心
+采集频率：日度
+网址：
+https://szg.zbytb.com/
+采集截图范围内容
+采集字段：（采集信息公告-项目频道下所有内容）
+
+119、 徐州市公共资源交易中心
+采集频率：日度
+网址：
+http://www.xzggzy.com.cn/jyxx/tradeInfo.html
+采集截图范围内容
+采集字段：
+
+120、 武汉航运交易所
+采集频率：日度
+网址：
+http://eship.whse.net.cn/f/list
+采集截图范围内容
+采集字段：
+
+121、 广西联合产权交易中心
+采集频率：日度
+网址：
+https://www.gduaee.com/www/article/xmdt/qycgq/
+采集截图范围内容
+采集字段：
+
+122、 通化市产权交易中心
+采集频率：日度
+网址：
+https://www.thgjzx.com/page/zcjy/search/index
+采集截图范围内容
+采集字段：
+
+123、 广东产权顺德交易所
+采集频率：日度
+网址：
+http://sdemas.cn/gpmain.asp
+采集截图范围内容
+采集字段：
+
+124、 浙江船舶交易市场有限公司
+采集频率：日度
+网址：
+http://www.zjsem.com.cn/CGALList.html
+采集截图范围内容
+采集字段：
+
+125、 长春市公共资源交易中心
+采集频率：日度
+网址：
+http://ccggzy.gov.cn/sjxxgk/002003/CityPurchaseNotice.html
+
+采集截图范围内容
+采集字段：
+
+126、 昆明联合产权交易所
+采集频率：日度
+网址：
+https://www.thgjzx.com/page/zcjy/search/index
+采集截图范围内容
+采集字段：
+
+127、 安徽省股权托管中心
+需要账密
