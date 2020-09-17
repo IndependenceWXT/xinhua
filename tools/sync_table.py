@@ -14,7 +14,7 @@ mysql_uri = f"mysql://{usr}:{pwd}@rm-2ze3450z16n1c2msxco.mysql.rds.aliyuncs.com:
 db = DB().create(mysql_uri)
 
 confluence = Confluence(
-    url="http://10.40.35.103:8090/", username="fangtiansheng", password="fangtiansheng123"
+    url="http://10.40.35.132:8090/", username="fangtiansheng", password="fangtiansheng123"
 )
 
 users = {
