@@ -12,17 +12,20 @@ def extract(context):
 
 
 def extract_from_script(context):
+    """
+    抽取函数
+    :param context: 字典 {"url": url, "row": "当前行", "body": "当前页面"}
+    :return: list 元素为字符串
+    """
     import re
-
-    p = re.compile(r"urls\[i\]='(.*?)'")
-    body = context["body"]
-    res = p.findall(body)
-    if res:
-        return res
+    text = context["body"]
+    p = re.compile('<h1>.*?</h1>', re.DOTALL)
+    res = p.findall(text)
+    return res
 
 
 if __name__ == "__main__":
-    url = "http://www.fuzhou.gov.cn/was5/web/search?channelid=290792&templet=advsch.jsp&sortfield=-docorderpri%2C-docreltime&classsql=chnlid%3D5727&random=0.653659668892808&prepage=10&page=3"
+    url = "https://www.chinanews.com/gn/2020/06-15/9212390.shtml"
     res = requests.get(url)
     print(res.text)
     context = {}
