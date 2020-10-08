@@ -48,6 +48,38 @@ def start_requests(**kwargs):
             url = f""
             yield {"url": url, "page_rule_id": None, "hub_fields": hub_fields}
 
+def start_requests(**kwargs):
+    source_type = 1
+    copyright = 0
+    web_site = "随州市政府"
+    web_site_url = "http://www.suizhou.gov.cn/zwgk/zfwj/szbf/"
+    hub_fields = {
+        "web_site": web_site,
+        "web_site_url": web_site_url,
+        "source_type": source_type,
+        "copyright": copyright,
+      }
+    cates = [
+          {"cate": "szf", "pages": 12},
+          {"cate": "szbf", "pages": 23},
+      ]
+    for each in cates:
+	    cate = each["cate"]
+	    pages = each["pages"]
+	    hub_fields = {
+	            "web_site": web_site,
+	            "web_site_url": web_site_url,
+	            "source_type": source_type,
+	            "copyright": copyright,
+	          }
+
+	    for p in range(pages):
+	        p = f"_{p}" if p else ""
+	        url = f"http://www.suizhou.gov.cn/zwgk/zfwj/szbf/{cate}/index{p}.shtml"
+	        yield {"url": url, "page_rule_id": 13138, "hub_fields": hub_fields}
+
+
+
 
 if __name__ == "__main__":
     for each in start_requests():
