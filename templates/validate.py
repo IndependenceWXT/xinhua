@@ -166,6 +166,18 @@ def validate_content(context):
             return False
     return True
 
+def validate_json_content(context):
+    """Version: 2020_10_10
+    验证内容是合法json字符串
+    """
+    import json
+    try:
+        data = json.loads(context)
+    except:
+        return False
+    else:
+        return True
+
 
 def validate_web_site(context):
     """2020_07_13
