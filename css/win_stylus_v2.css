@@ -43,7 +43,7 @@
     padding: 0px 0px;
 }
 .el-card__body .content_body_left_treeBox {
-    max-height: 848px;
+    padding-bottom: 160px;
 }
 /* 左侧栏展开按钮 */
 .menu_triangle_hover[data-v-6e4beb92] {
@@ -301,9 +301,7 @@ textarea {
     height: 20px;
 }
 
-.content_body_left_treeBox {
-    max-height: 877px;
-}
+
 
 .el-input-number__increase,
 .el-input-number__decrease {
