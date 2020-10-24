@@ -64,8 +64,15 @@ def get_rule_list(group_id):
     user: null
     """
     url = f"http://spider.vpc.shangjian.tech/crawl/crawl/rule/?group__id={group_id}&rule_type=1&fields=id,name,project_name,status,user,rule_type,project_id,create_time,extra,group,group_name"
-    res = requests.get(url, headers=headers, proxies=proxies)
-    return res.json()["results"]
+    while 1:
+        res = requests.get(url, headers=headers, proxies=proxies)
+        try:
+            data = res.json()["results"]
+        except:
+            sleep(2)
+        else:
+            break
+    return data
 
 
 def get_lastest_batch_result(plan_id):
@@ -85,11 +92,18 @@ def get_lastest_batch_result(plan_id):
     update_count_time: "2019-12-02T11:10:03+08:00"
     """
     url = f"http://spider.vpc.shangjian.tech/crawl/crawl/run/?plan__id={plan_id}&limit=1&offset=0&sort=-id"
-    res = requests.get(url, headers=headers, proxies=proxies)
-    return res.json()["results"]
+    while 1:
+        res = requests.get(url, headers=headers, proxies=proxies)
+        try:
+            data = res.json()["results"]
+        except:
+            sleep(2)
+        else:
+            break
+    return data
 
 
-def count_configured(users, today=True, ago=False, section=(1565, 1858), notify=False):
+def count_configured(users, today=True, ago=False, section=(1565, 1858), notify=False, _type=""):
     """
     {
         1: [275],
@@ -101,7 +115,7 @@ def count_configured(users, today=True, ago=False, section=(1565, 1858), notify=
     section: 组ID的范围
     """
     res = {k: [] for k in users_db}
-    _type = "更新" if not ago else "历史"
+    _type = "更新" if not ago else _type + "历史"
 
     report = []
     ctime = datetime.now().isoformat(sep=" ", timespec="seconds")
@@ -111,7 +125,7 @@ def count_configured(users, today=True, ago=False, section=(1565, 1858), notify=
         kind = "日报"
         report.append(f"日报[{now.isoformat()}]\n")
     elif not today and ago == False:
-        now = datetime.now() - timedelta(days=10) # 为啥要十天前来着？
+        now = datetime.now() - timedelta(days=10)  # 为啥要十天前来着？
         now = now.date()
         kind = "扫描报告"
         report.append(f"{_type}调度扫描报告[{now.isoformat()}]\n")
@@ -133,7 +147,7 @@ def count_configured(users, today=True, ago=False, section=(1565, 1858), notify=
         if len(rules) < 1:
             continue
         for rule in rules:
-            if _type in rule["name"] and rule["user"] in users and rule["status"] == 0:
+            if _type[-2:] in rule["name"] and rule["user"] in users and rule["status"] == 0:
                 plan_id = rule["id"]
                 user = rule["user"]
                 batches = get_lastest_batch_result(plan_id)
@@ -260,12 +274,29 @@ def report_for_progress():
     res = count_configured(users, today=True)
 
 
-def report_all_history():
+def report_all_history(index):
     """
     扫描全部开启计划的历史调度
+    (1369, 1565)   6月底前完成的配置
+    (1565, 1857)   地级市
+    (1888, 2253)   附件B等
+    (2253, 2905)   网信办
+    (2905, 3446)   附件A等
     """
+    tasks = [
+        {"前期配置": (1369, 1565)},
+        {"地级市": (1565, 1857)},
+        {"附件B等": (1888, 2253)},
+        {"网信办": (2253, 2905)},
+        {"附件A等": (2905, 3446)},
+    ]
+    task = tasks[index]
+    (_type,) = task
+    section = task[_type]
+    print(_type, section)
+
     users = [k for k in users_db]
-    res = count_configured(users, today=False, ago=True, section=(2253, 2905))
+    res = count_configured(users, today=False, ago=True, section=section, _type=_type)
 
 
 def report_all_update():
