@@ -234,7 +234,7 @@ def validate_abstract(context):
 
 
 def test_validators():
-    # TODO: 测试验证器
+    # 测试验证器
     pass
 
 

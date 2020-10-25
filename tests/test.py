@@ -7,4 +7,3 @@ if __name__ == '__main__':
     print(s.paintingPlan(2, 2), 4)
     print(s.paintingPlan(2, 1), 0)
     print(s.paintingPlan(2, 4), 1)
-
