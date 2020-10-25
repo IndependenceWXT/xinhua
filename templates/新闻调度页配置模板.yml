@@ -1,5 +1,5 @@
 description: 'Version: 2020_08_02'
-doc_rate: 1
+doc_rate: 10
 batch_start:
   type: once
   num: []
