@@ -1,7 +1,7 @@
 def start_requests(**kwargs):
+    web_site = "网站名"
     source_type = 1
     copyright = 0
-    web_site = "网站名"
 
     web_site_url = "栏目的链接"
     hub_fields = {
