@@ -2,6 +2,9 @@
 .home_title[data-v-78aa1581] {
     height: 17px;
 }
+.head[data-v-1c4d1eb2] {
+    background-color: #2196F3;
+}
 /* 页面上移动 */
 .content_body {
     top: -37px;
@@ -89,11 +92,13 @@
     font-size: 12px;
     padding: 0 20px;
 }
-.nav {
-    font-size: 12px;
+.nav[data-v-1c4d1eb2] {
+    font-size: 17px;
+    line-height: 17px;
 }
-.system_name {
-    font-size: 12px;
+.system_name[data-v-1c4d1eb2] {
+    font-size: 16px;
+    color: #fafafa;
 }
 .el-input--medium {
     font-size: 12px;
@@ -141,6 +146,43 @@
 .el-button--mini:hover,
 .el-button--small:hover {
     border-color: #abb2bb;
+}
+/* 操作按钮 */
+.planDetail_icon[data-v-4bc00ca8],
+.crawl_validatorTable_icon[data-v-72ba13d2],
+.crawl_row_icon[data-v-2b5ddb2c],
+.crawl_field_icon[data-v-2a4ae085],
+.crawl_row_icon {
+    margin: 0px 2px;
+    outline: none;
+    border: 1px outset #e6e6e6;
+
+    /* 设置文字阴影 */
+    text-shadow: 0 1px 0 rgba(68, 67, 67, .08);
+
+    /* 设置盒子阴影 */
+    box-shadow: 4px 4px 0 0 #9cb8d8, 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+.planDetail_icon[data-v-4bc00ca8]:hover,
+.crawl_validatorTable_icon[data-v-72ba13d2]:hover,
+.crawl_row_icon[data-v-2b5ddb2c]:hover,
+.crawl_field_icon[data-v-2a4ae085]:hover,
+.crawl_row_icon:hover {
+    /*     background-color: yellow; */
+    /*     border-color: #abb2bb; */
+    filter: blur(.1px) brightness(50%) opacity(.8);
+}
+.planDetail_icon[data-v-4bc00ca8]:active,
+.crawl_validatorTable_icon[data-v-72ba13d2]:active,
+.crawl_row_icon[data-v-2b5ddb2c]:active,
+.crawl_field_icon[data-v-2a4ae085]:active,
+.crawl_row_icon:active {
+    border: -11px outset #e6e6e6;
+    /* 设置文字阴影 */
+    text-shadow: 0 1px 0 rgba(68, 67, 67, .08);
+
+    /* 设置盒子阴影 */
+    box-shadow: 2px 2px 0 0 #9cb8d8, 2px 2px 5px rgba(0, 0, 0, 0.3);
 }
 /* 刷新按钮 */
 .el-button--mini,
@@ -341,9 +383,9 @@ fieldset {
     height: 20px;
 }
 
-.system_icon[data-v-d65e295e] {
+.system_icon[data-v-1c4d1eb2] {
     width: 20px;
-    height: 15px;
+    height: 10px;
 }
 .home_body[data-v-1116fa80] {
     top: -45px;
