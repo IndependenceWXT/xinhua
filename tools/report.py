@@ -65,7 +65,11 @@ def get_rule_list(group_id):
     """
     url = f"http://spider.vpc.shangjian.tech/crawl/crawl/rule/?group__id={group_id}&rule_type=1&fields=id,name,project_name,status,user,rule_type,project_id,create_time,extra,group,group_name"
     while 1:
-        res = requests.get(url, headers=headers, proxies=proxies)
+        try:
+            res = requests.get(url, headers=headers, proxies=proxies)
+        except:
+            sleep(10)
+            continue
         try:
             data = res.json()["results"]
         except:
@@ -93,7 +97,11 @@ def get_lastest_batch_result(plan_id):
     """
     url = f"http://spider.vpc.shangjian.tech/crawl/crawl/run/?plan__id={plan_id}&limit=1&offset=0&sort=-id"
     while 1:
-        res = requests.get(url, headers=headers, proxies=proxies)
+        try:
+            res = requests.get(url, headers=headers, proxies=proxies)
+        except:
+            sleep(10)
+            continue
         try:
             data = res.json()["results"]
         except:
