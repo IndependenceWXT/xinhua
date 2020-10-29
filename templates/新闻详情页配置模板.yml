@@ -959,9 +959,9 @@ rows:
 preprocessors: []
 prevalidators:
   - method: regex
-    params: ^(?!.*200|200).*$
-    fail_type: success
-    succ_type: ignore
+    params: 200|200
+    fail_type: ignore
+    succ_type: success
     target: status_code
 examples:
   - method: GET

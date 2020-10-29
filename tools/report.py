@@ -123,7 +123,7 @@ def count_configured(users, today=True, ago=False, section=(1565, 1858), notify=
     section: 组ID的范围
     """
     res = {k: [] for k in users_db}
-    _type = "更新" if not ago else _type + "历史"
+    _type = _type + "更新" if not ago else _type + "历史"
 
     report = []
     ctime = datetime.now().isoformat(sep=" ", timespec="seconds")
@@ -307,12 +307,23 @@ def report_all_history(index):
     res = count_configured(users, today=False, ago=True, section=section, _type=_type)
 
 
-def report_all_update():
+def report_all_update(index):
     """
     扫描全部开启计划的更新调度
     """
+    tasks = [
+        {"前期配置": (1369, 1565)},
+        {"地级市": (1565, 1857)},
+        {"附件B等": (1888, 2253)},
+        {"网信办": (2253, 2905)},
+        {"附件A等": (2905, 3446)},
+    ]
+    task = tasks[index]
+    (_type,) = task
+    section = task[_type]
+    print(_type, section)
     users = [k for k in users_db]
-    res = count_configured(users, today=False)
+    res = count_configured(users, today=False, section=section, _type=_type)
 
 
 if __name__ == "__main__":
