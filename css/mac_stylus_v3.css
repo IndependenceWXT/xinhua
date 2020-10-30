@@ -356,8 +356,6 @@
 .CodeMirror-hscrollbar {
     bottom: 0;
     left: 0;
-    /*     overflow-y: hidden; */
-    /*     overflow-x: hidden; */
 }
 /* 文本框 */
 .el-textarea__inner {
@@ -366,11 +364,6 @@
     padding: 0px 0px;
 }
 /* 脚本编辑框 */
-.popup_hover div.popup_container[data-v-caa78828] {
-    top: -150px;
-    right: 100px;
-    color: #000;
-}
 .CodeMirror-code {
     border: 1px groove #0049B0;
 }
@@ -382,25 +375,11 @@
 }
 .CodeMirror-scroll {
     background-color: #eae9e90f;
-    /*     word-wrap: break-word; */
     word-break: break-all;
     overflow: hidden;
     word-wrap: normal;
 }
 
-/* 代码编辑器背景色 */
-/* .CodeMirror-scroll {
-    background-color: #c9eea1bd;
-} */
-.flex_column_bottom .planDetail_testBox_log {
-    height: 700px;
-}
-.cm-s-default.CodeMirror {
-    height: 800px;
-}
-div.planDetail_testBox_log[data-v-54e7e330] {
-    height: 96%;
-}
 /* xpath编辑换行 */
 .CodeMirror {
     word-wrap: break-word;
@@ -409,46 +388,6 @@ div.planDetail_testBox_log[data-v-54e7e330] {
     border: 2px solid #7f787c;
 }
 
-/* 日志 */
-.popup_hover .popup_container div.popup_head {
-    border: 3px outset #f9f9f9;
-    background-color: #b7b7b7;
-    width: 1525px;
-    left: -290px;
-
-    /* 设置文字阴影 */
-    text-shadow: 0 1px 0 rgba(68, 67, 67, .08);
-
-    /* 设置盒子阴影 */
-    box-shadow: 0 1px 0 #9cb8d8, 1px 2px 10px rgba(0, 0, 0, 0.3);
-}
-.popup_hover .popup_container div.popup_body[data-v-caa78828] {
-    border: 3px outset #dcdfe6;
-    width: 1525px;
-    height: 800px;
-    left: -290px;
-    background-color: #fafafa;
-    background: #fafafa;
-    border-radius: 0px;
-}
-/* 日志栏 */
-div.popup_head[data-v-caa78828] {
-    border-radius: 1px;
-    border-style: outset;
-    border: 3px outset #f9f9f9;
-    background-color: #b7b7b7;
-    width: 1200px;
-    left: -50px;
-}
-/* 日志框 */
-div.popup_body[data-v-caa78828] {
-    width: 1900px;
-    height: 810px;
-    left: -350px;
-    background-color: #fafafa;
-    background: #fafafa;
-    border-radius: 1px;
-}
 /* 日志搜索栏 */
 .el-range-editor--small.el-input__inner {
     height: 23px;
@@ -462,15 +401,7 @@ div.popup_body[data-v-caa78828] {
 .el-input--small .el-input__inner {
     height: 23px;
 }
-/* 日志文本部分 */
-.flex_column_bottom > div.planDetail_testBox_log[data-v-ce0dab22] {
-    border-style: ridge;
-    padding: 0px;
-    height: 500px;
-}
-.flex_column_bottom .planDetail_testBox_log > span {
-    font-size: 12px;
-}
+
 
 /* 通知 */
 div.el-notification {
