@@ -136,6 +136,7 @@
 }
 .el-table .cell {
     line-height: 18px;
+    white-space: nowrap;
     /*     padding-left: 0px;
     padding-right: 0px; */
 }
