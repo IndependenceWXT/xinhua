@@ -44,7 +44,7 @@ def check_organization():
 
 if __name__ == '__main__':
     check_organization()
-    
+
 
 # text = "中国人民银行网站"
 # res = client.lexer(text)

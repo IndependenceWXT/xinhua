@@ -5,10 +5,10 @@
 """
 def download(req) -> dict:
     """
- 
+
     Args:
         req:  即为 DownloadRequest 对象 具体属性参见 http://confluence.shangjian.tech:8090/pages/viewpage.action?pageId=44155217
- 
+
     Returns:
         {
             "redirect_url": "跳转后url str",
@@ -21,7 +21,7 @@ def download(req) -> dict:
         }
         不需要全部返回：
             一般情况下 仅需要 redirect_url、content、status_code 字段
- 
+
     """
     import requests
     proxies = {
@@ -45,7 +45,7 @@ class DownloadRequest:
         self.timeout: int = 0
         self.proxy: str = "" # ip:port
         self.allow_redirects = True
- 
+
         self.js_expr: str = ""
         self.load_wait: int = 0
         self.host: str = ""
@@ -65,22 +65,22 @@ class DownloadResponse:
         self.charset = "utf-8"
         self.fail_reason = ""
         self.status: str = DownloadStatus.ok
- 
+
     def from_dict(self, d: dict):
         """
         从字典加载
         Args:
             d:
- 
+
         Returns:
- 
+
         """
         self.status_code = d.get("status_code", self.status_code)
         self.redirect_url = d.get("redirect_url", self.status_code)
- 
+
         self.headers.update(format_headers(d.get("headers", self.headers)))
         self.cookies.update(d.get("cookies", {}))
- 
+
         self.content = d.get("content", self.content)
         self.text = d.get("text", self.text)
         self.status = d.get("status", self.status)
