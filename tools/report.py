@@ -182,6 +182,9 @@ def count_configured(users, today=True, ago=False, section=(1565, 1858), notify=
                 group_name = rule["group_name"]
                 total = batch_result["total_count"]
                 done = batch_result["done_count"]
+                if int(done) == int(total) == 0:
+                    tqdm.write(f"{group_name} 调度异常...")
+                    continue
                 if max(int(total), int(done)) == 0:
                     tqdm.write(f"{group_name} 调度正在启动稍后再试...")
                     continue
@@ -260,7 +263,7 @@ def report_for_user(user_id, section=(1369, 3209)):
 def check_today():
     """
     配置人员扫描今天开始的更新调度进度
-    
+
     """
     users = [k for k in users_db]
     res = count_configured(users, today=True, ago=False)
