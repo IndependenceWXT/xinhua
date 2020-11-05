@@ -13,7 +13,7 @@
 // ==/UserScript==
 
 (function () {
-    'use strict';
+    "use strict";
 
     // Your code here...
     function enlarge_log() {
@@ -22,16 +22,17 @@
         for (var i = 0, len = popups.length; i < len; i++) {
             popups[i].style = "height: 90%;width: 90%;max-height: 1217px;";
             // 文本区扩大
-            var log = $('.flex_column_bottom > div.planDetail_testBox_log[data-v-ce0dab22]');
+            var log = $(
+                ".flex_column_bottom > div.planDetail_testBox_log[data-v-ce0dab22]"
+            );
             if (log.length > 0) {
-                log[0].style.height = '90%';
+                log[0].style.height = "90%";
             }
-            var yaml = $('.CodeMirror');
+            var yaml = $(".CodeMirror");
             if (yaml.length > 0) {
-                yaml[0].style = 'height: 800px;';
+                yaml[0].style = "height: 800px;";
             }
-        };
-    };
+        }
+    }
     window.setInterval(enlarge_log, 500);
-
 })();
