@@ -30,16 +30,20 @@ users_db = {
     6: "唐浩",
 }
 headers = {
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,"
+              "application/signed-exchange;v=b3;q=0.9",
     "Accept-Encoding": "gzip, deflate",
     "Accept-Language": "en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7",
     "Cache-Control": "no-cache",
     "Connection": "keep-alive",
-    "Cookie": "username=fangtiansheng; remember_token=18|3c0e4afbacb93a873a5e93388b0a6d35159f2516fdb56dbfa8cc7a6454f01316b34e9e6721414c272430c7a2ffc426278ce8e2d5f3eaca3746afef6452167041; session=.eJw1zjFuwzAMQNG7cA4CkpJIy5cxJIpEO9gN5GQqevcYAbr-v7xf2GL6-QXrc778Btv3gBUallY1K7NIEUYehGZG7G30moUL5UgqoShNKgfVjOmayNjRsgw1X5JEteuZpbBmfWjC4gtJiqqSowYWasm1i1bybN2aKvEocEEePvd2-PH8p03ffe8-t9Pt5xgnrItkxDve4HVe-SOnBf7eKeQ93w.EZeaMw.rns4ayA-ciY47zFHl0q2lIfkUc0; baelish_username=fangtiansheng; baelish_remember_token=10|c0c87feee015ce01a645312214eaa4d8e50e9f905c30d61929069ae417101c4284ce5c92ce116f4b18d4e274e543100d3f5a8d77c6178ea575688cab1c382c89; baelish_session=.eJw1zjFuwzAMAMC_aA4KUpQo0p8xKIlEOtgt5GQq-vcGBbLedD9pj-XXPW2P9fRb2j9n2lIINRbrbIIUnVyBMmnXHoWJ2hx9NAIJEDJqNUqhVriiAOZpqOQ4qOFgVTCwyDWosmixOhWDW2md-1DBpjQ8Ss7VTTz7zBI1vSLfvg47_Xy8a8sPP7qv_fLxdc4rbcIF4ANu6Xm9-H-OkH7_AOphPRk.XrYUPw.IdH7ibUktSYBC9jsTRjMwFC_FaU",
+    "Cookie": "username=fangtiansheng; "
+              "remember_token=18"
+              "|3c0e4afbacb93a873a5e93388b0a6d35159f2516fdb56dbfa8cc7a6454f01316b34e9e6721414c272430c7a2ffc426278ce8e2d5f3eaca3746afef6452167041; session=.eJw1zjFuwzAMQNG7cA4CkpJIy5cxJIpEO9gN5GQqevcYAbr-v7xf2GL6-QXrc778Btv3gBUallY1K7NIEUYehGZG7G30moUL5UgqoShNKgfVjOmayNjRsgw1X5JEteuZpbBmfWjC4gtJiqqSowYWasm1i1bybN2aKvEocEEePvd2-PH8p03ffe8-t9Pt5xgnrItkxDve4HVe-SOnBf7eKeQ93w.EZeaMw.rns4ayA-ciY47zFHl0q2lIfkUc0; baelish_username=fangtiansheng; baelish_remember_token=10|c0c87feee015ce01a645312214eaa4d8e50e9f905c30d61929069ae417101c4284ce5c92ce116f4b18d4e274e543100d3f5a8d77c6178ea575688cab1c382c89; baelish_session=.eJw1zjFuwzAMAMC_aA4KUpQo0p8xKIlEOtgt5GQq-vcGBbLedD9pj-XXPW2P9fRb2j9n2lIINRbrbIIUnVyBMmnXHoWJ2hx9NAIJEDJqNUqhVriiAOZpqOQ4qOFgVTCwyDWosmixOhWDW2md-1DBpjQ8Ss7VTTz7zBI1vSLfvg47_Xy8a8sPP7qv_fLxdc4rbcIF4ANu6Xm9-H-OkH7_AOphPRk.XrYUPw.IdH7ibUktSYBC9jsTRjMwFC_FaU",
     "DNT": "1",
     "Pragma": "no-cache",
     "Upgrade-Insecure-Requests": "1",
-    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.129 Safari/537.36",
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) "
+                  "Chrome/81.0.4044.129 Safari/537.36",
 }
 
 proxies = {"http": None, "https": None}
@@ -67,12 +71,12 @@ def get_rule_list(group_id):
     while 1:
         try:
             res = requests.get(url, headers=headers, proxies=proxies)
-        except:
+        except Exception as e:
             sleep(10)
             continue
         try:
             data = res.json()["results"]
-        except:
+        except Exception as e:
             sleep(2)
         else:
             break
