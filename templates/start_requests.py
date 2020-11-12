@@ -1,5 +1,5 @@
 def start_requests(**kwargs):
-    web_site = "外汇交易中心统计日报"
+    web_site = "网站名"
     source_type = 1
     copyright = 0
 
