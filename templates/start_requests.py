@@ -1,5 +1,5 @@
 def start_requests(**kwargs):
-    web_site = "网站名"
+    web_site = "外汇交易中心统计日报"
     source_type = 1
     copyright = 0
 
@@ -49,13 +49,8 @@ def start_requests(**kwargs):
             yield {"url": url, "page_rule_id": None, "hub_fields": hub_fields}
 
 
-
-
-
-
-
-
-
 if __name__ == "__main__":
-    for each in start_requests():
-        print(each)
+    import json
+
+    for each in start_requests_1():
+        print(json.dumps(each, indent=4, ensure_ascii=False))

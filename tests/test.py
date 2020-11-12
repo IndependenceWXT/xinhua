@@ -1,11 +1,8 @@
-class Solution:
-    def paintingPlan(self, n, k):
-        pass
-
-if __name__ == '__main__':
-    s = Solution()
-    print(s.paintingPlan(2, 2), 4)
-    print(s.paintingPlan(2, 1), 0)
-    print(s.paintingPlan(2, 4), 1)
-    a != b
-
+def process(text):
+    import json
+    data = json.loads(text)
+    for record in data["records"]:
+        for rate in record["interestRateSwapList"]:
+            rate["refRate"] = record["refRate"]
+            rate["lastDate"] = data["data"]["lastDate"]
+    return json.dumps(data)
