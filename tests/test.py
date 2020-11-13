@@ -2,9 +2,9 @@ def process(text):
     import json
     data = json.loads(text)
     for record in data["records"]:
-        for rate in record["interestRateSwapList"]:
-            rate["refRate"] = record["refRate"]
-            rate["lastDate"] = data["data"]["lastDate"]
+        for rate in record["list"]:
+            rate["rate"] = record["rate"]
+            rate["updateDate"] = data["data"]["showYearMonth"]
     return json.dumps(data)
 
 

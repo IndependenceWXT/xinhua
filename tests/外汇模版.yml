@@ -1,0 +1,262 @@
+description: |-
+  Version: 2020_10_12
+  ⚠️注意配置组合生成content_md5的行处理器配置
+proxy: default
+normal_status_list:
+  - '200'
+  - '404'
+login_id: ''
+downloader: pycurl
+min_data_length: 1
+min_link_length: 0
+timeout: 30
+load_wait: 0
+cache_ttl: 0
+cache_after: 0
+encoding: ''
+headers: ''
+download_script: ''
+rows:
+  - name: ❤️详情配置
+    description: 注意保持字段与列表页对应
+    locator: json_at
+    expression: records
+    storage_id: -1
+    if_match: ''
+    if_url_match: ''
+    fields:
+      - name: content_md5
+        description: 用于去重的md5
+        data_type: varchar(1024)
+        locator: hub
+        expression: web_site
+        is_dedup_key: false
+        multi: false
+        keep_html: false
+        extend_url: false
+        is_extra: false
+        allow_invalid_expression: false
+        download_policy: not_download
+        processors: []
+        validators:
+          - method: length
+            params: 1 +inf
+            fail_type: retry
+        is_dedup_array: false
+      - name: web_site
+        description: 来源网站
+        data_type: varchar(1024)
+        locator: hub
+        expression: web_site
+        is_dedup_key: false
+        multi: false
+        keep_html: false
+        extend_url: false
+        is_extra: false
+        allow_invalid_expression: false
+        download_policy: not_download
+        processors: []
+        validators:
+          - method: script
+            params: |-
+              def validate(context):
+                  """2020_07_13
+                  验证网站名是否复制带了空格
+                  """
+                  import re
+
+                  if len(context) == len(context.strip()):
+                      return True
+                  return False
+            fail_type: retry
+        is_dedup_array: false
+      - name: web_site_url
+        description: 来源网站地址
+        data_type: varchar(1024)
+        locator: hub
+        expression: web_site_url
+        is_dedup_key: false
+        multi: false
+        keep_html: false
+        extend_url: false
+        is_extra: false
+        allow_invalid_expression: false
+        download_policy: not_download
+        processors: []
+        validators:
+          - method: script
+            params: |-
+              def validate(context):
+                  """Version: 2020_07_18
+                  验证链接是否合法
+                  """
+                  import re
+                  from urllib.parse import urlparse
+
+                  text = context.strip()
+                  # 调度中可能复制带了空格
+                  if len(text) != len(context):
+                      return False
+
+                  rules = [
+                      r"(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]",
+                      r"@^(https?|ftp)://[^\s/$.?#].[^\s]*$@iS",
+                      r"#\b(([\w-]+://?|www[.])[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/)))#iS",
+                  ]
+                  for each in rules:
+                      p = re.compile(each)
+                      res = p.findall(text)
+                      if res:
+                          return True
+                  else:
+                      try:
+                          q = urlparse(text)
+                      except:
+                          return False
+                      else:
+                          if all([q.scheme, q.netloc, q.path]):
+                              return True
+                          else:
+                              return False
+            fail_type: retry
+        is_dedup_array: false
+      - name: source_type
+        description: 资讯来源分类（1. 网站）
+        data_type: bigint
+        locator: hub
+        expression: source_type
+        is_dedup_key: false
+        multi: false
+        keep_html: false
+        extend_url: false
+        is_extra: false
+        allow_invalid_expression: false
+        is_dedup_array: false
+        download_policy: not_download
+        processors: []
+        validators:
+          - method: script
+            params: |
+              def validate(context):
+                  """Version: 2020_07_18
+                  验证资源类型字段是否设置
+                  """
+                  if context in ["1", "2", "3", "4"]:
+                      return True
+                  else:
+                      return False
+            fail_type: retry
+      - name: copyright
+        description: 是否存在版权问题
+        data_type: bigint
+        locator: hub
+        expression: copyright
+        is_dedup_key: false
+        multi: false
+        keep_html: false
+        extend_url: false
+        is_extra: false
+        allow_invalid_expression: false
+        is_dedup_array: false
+        download_policy: not_download
+        processors: []
+        validators:
+          - method: script
+            params: |-
+              def validate(context):
+                  """Version: 2020_07_18
+                  验证版权字段是否设置
+                  """
+                  if context in ["0", "1"]:
+                      return True
+                  else:
+                      return False
+            fail_type: retry
+      - name: publish_time
+        description: 更新时间
+        data_type: datetime
+        locator: json_at
+        expression: updateDate
+        is_dedup_key: false
+        multi: false
+        keep_html: false
+        extend_url: false
+        is_extra: false
+        allow_invalid_expression: false
+        download_policy: not_download
+        processors:
+          - method: text2datetime
+            params: ''
+        validators: []
+        is_dedup_array: false
+      - name: xxx
+        description: xxx
+        data_type: varchar(1024)
+        locator: json_at
+        expression: xxx
+        is_dedup_key: false
+        multi: false
+        keep_html: false
+        extend_url: false
+        is_extra: false
+        allow_invalid_expression: true
+        download_policy: not_download
+        processors: []
+        validators: []
+        is_dedup_array: false
+    processors:
+      - method: script
+        params: |-
+          # 计算content_md5
+          import hashlib
+          from itertools import zip_longest
+
+
+          def md5(text):
+              return hashlib.md5(str(text).encode()).hexdigest()
+
+
+          def process(data):
+              keys = ["web_site", "publish_time", xxx]
+              values = [data.get(k) or "" for k in keys]
+
+              data["content_md5"] = md5("".join(values))
+              return data
+    links: []
+preprocessors:
+  - method: script
+    params: |-
+      def process(text):
+          import json
+          data = json.loads(text)
+          for each in data["records"]:
+              each["updateDate"] = data["data"]["updateDate"]
+          return json.dumps(data)
+prevalidators:
+  - method: regex
+    params: '200'
+    fail_type: ignore
+    succ_type: success
+    target: status_code
+examples:
+  - method: GET
+    url: ''
+    data: ''
+    description: "\U0001F7E2配置测试保存做对比"
+    should_save_sync: false
+  - method: GET
+    url: ''
+    data: ''
+    description: "\U0001F534异常测试说明:"
+    should_save_sync: false
+  - method: GET
+    url: ''
+    data: ''
+    description: "\U0001F534异常测试说明:"
+    should_save_sync: false
+size: small
+global_dedup: false
+batch_dedup: true
+robots: false
+captcha: {}
+use_bot: false

@@ -1,5 +1,5 @@
 import requests
-
+import json
 
 def field(url):
     headers = {
@@ -23,8 +23,10 @@ def field(url):
 
 
 if __name__ == '__main__':
-    url = "http://www.chinamoney.com.cn/ags/ms/cm-u-dlrp/IblDlyBltn?lang=cn&indexType=markVOList&searchDate=2020-11-10"
+    url = "http://www.chinamoney.com.cn/dqs/rest/dqs-u-shibor/IrsMthBltn?lang=cn&empty=-1&searchDate=202009&indexType=irsmGroupVoList"
     fields = field(url)
+    fields = sorted(fields)
+    print(json.dumps(fields))
     lines = []
     for each in fields:
         line = f"  `{each}` varchar(255) DEFAULT NULL COMMENT '{each}',"
