@@ -29,6 +29,12 @@ users_db = {
     7: "王小婷",
     6: "唐浩",
 }
+cookies = {
+    'username': 'fangtiansheng',
+    'remember_token': '18|3c0e4afbacb93a873a5e93388b0a6d35159f2516fdb56dbfa8cc7a6454f01316b34e9e6721414c272430c7a2ffc426278ce8e2d5f3eaca3746afef6452167041',
+    'session': '.eJw1zjFuwzAMQNG7cA4CiqZEypcxRJFCO9gN5GQKeve6Bbp-_OG9YRszzg9Yn_MVN9g-HVZYUkWvKTqzm4W7-ggfvVgyymN0jaVWRey_l5ANtiEsqQhzaaSaRHUgtsq8hEUll9BsQhmlLTk4KzJZqqpNXYlz1ZyblU5EAhfkEXNvRxzPf9qMPXaLuZ3Rvw4_YdXCiHe8weu88p88KXz_AMadPeo.Eo9lVQ.6jkpWl4TNzk4lkPibDvWAHqW_Fc',
+    'baelish_session': '.eJw1zkEKAjEQRNG79FqkOyadZC4zJOkKuphRMroS724Q3H6q4L1p7QPHlZbneOFE681oIS8ucxHjEpr00JxzXSp7WDfVojWJqGivihDqxdcABppVlpCMkVk0exetx2xx7vXC85PMpSZaYuPmEwo6I8WOXFqQ2diCOmdaaEIeGFvZsT__tIENW8VYD7T7bgctST3zmU_0Omb-yYXp8wXEbj7h.X63T1g.Y8grWioF-5GultKs1ZbTGDxViMo',
+}
 headers = {
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,"
               "application/signed-exchange;v=b3;q=0.9",
@@ -36,9 +42,6 @@ headers = {
     "Accept-Language": "en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7",
     "Cache-Control": "no-cache",
     "Connection": "keep-alive",
-    "Cookie": "username=fangtiansheng; "
-              "remember_token=18"
-              "|3c0e4afbacb93a873a5e93388b0a6d35159f2516fdb56dbfa8cc7a6454f01316b34e9e6721414c272430c7a2ffc426278ce8e2d5f3eaca3746afef6452167041; session=.eJw1zjFuwzAMQNG7cA4CkpJIy5cxJIpEO9gN5GQqevcYAbr-v7xf2GL6-QXrc778Btv3gBUallY1K7NIEUYehGZG7G30moUL5UgqoShNKgfVjOmayNjRsgw1X5JEteuZpbBmfWjC4gtJiqqSowYWasm1i1bybN2aKvEocEEePvd2-PH8p03ffe8-t9Pt5xgnrItkxDve4HVe-SOnBf7eKeQ93w.EZeaMw.rns4ayA-ciY47zFHl0q2lIfkUc0; baelish_username=fangtiansheng; baelish_remember_token=10|c0c87feee015ce01a645312214eaa4d8e50e9f905c30d61929069ae417101c4284ce5c92ce116f4b18d4e274e543100d3f5a8d77c6178ea575688cab1c382c89; baelish_session=.eJw1zjFuwzAMAMC_aA4KUpQo0p8xKIlEOtgt5GQq-vcGBbLedD9pj-XXPW2P9fRb2j9n2lIINRbrbIIUnVyBMmnXHoWJ2hx9NAIJEDJqNUqhVriiAOZpqOQ4qOFgVTCwyDWosmixOhWDW2md-1DBpjQ8Ss7VTTz7zBI1vSLfvg47_Xy8a8sPP7qv_fLxdc4rbcIF4ANu6Xm9-H-OkH7_AOphPRk.XrYUPw.IdH7ibUktSYBC9jsTRjMwFC_FaU",
     "DNT": "1",
     "Pragma": "no-cache",
     "Upgrade-Insecure-Requests": "1",
@@ -67,10 +70,10 @@ def get_rule_list(group_id):
     status: 1 未启用 0 启用
     user: null
     """
-    url = f"http://spider.vpc.shangjian.tech/crawl/crawl/rule/?group__id={group_id}&rule_type=1&fields=id,name,project_name,status,user,rule_type,project_id,create_time,extra,group,group_name"
+    url = f"https://spider.vpc.shangjian.tech/crawl/crawl/rule/?group__id={group_id}&rule_type=1&fields=id,name,project_name,status,user,rule_type,project_id,create_time,extra,group,group_name"
     while 1:
         try:
-            res = requests.get(url, headers=headers, proxies=proxies)
+            res = requests.get(url, headers=headers, proxies=proxies, cookies=cookies)
         except Exception as e:
             sleep(10)
             continue
@@ -99,10 +102,10 @@ def get_lastest_batch_result(plan_id):
     total_count: 49
     update_count_time: "2019-12-02T11:10:03+08:00"
     """
-    url = f"http://spider.vpc.shangjian.tech/crawl/crawl/run/?plan__id={plan_id}&limit=1&offset=0&sort=-id"
+    url = f"https://spider.vpc.shangjian.tech/crawl/crawl/run/?plan__id={plan_id}&limit=1&offset=0&sort=-id"
     while 1:
         try:
-            res = requests.get(url, headers=headers, proxies=proxies)
+            res = requests.get(url, headers=headers, proxies=proxies, cookies=cookies)
         except:
             sleep(10)
             continue
