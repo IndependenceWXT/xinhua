@@ -15,7 +15,7 @@ def field(url):
         "Referer": "http://www.chinamoney.com.cn/chinese/mtmoncjgl/",
         "Accept-Language": "en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7",
     }
-    response = requests.get(url)
+    response = requests.get(url, headers=headers)
     data = response.json()
     records = data["records"]
     fields = records[0].keys()
@@ -31,4 +31,4 @@ if __name__ == '__main__':
         lines.append(line)
     res = "\n".join(lines)
     print(res)
-    
+
