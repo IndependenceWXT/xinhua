@@ -1,52 +1,80 @@
 def start_requests(**kwargs):
-    web_site = "网站名"
+    from datetime import datetime, timedelta
+
+    now = datetime.now()
+    web_site = "外汇交易中心统计月报-成交概览"
     source_type = 1
     copyright = 0
 
-    web_site_url = "栏目的链接"
-    hub_fields = {
-        "web_site": web_site,
-        "web_site_url": web_site_url,
-        "source_type": source_type,
-        "copyright": copyright,
-    }
-    for p in range(None):
-        p = f"_{p}" if p else ""
-        url = f"列表页链接然后修改为格式化字符串"
-        yield {"url": url, "page_rule_id": None, "hub_fields": hub_fields}
+    web_site_url = "http://www.chinamoney.com.cn/chinese/mtmoncjgl/"
 
-    yield {"url": web_site_url, "page_rule_id": None, "hub_fields": hub_fields}
-
-    url = ""
-    for p in range(None):
-        p = f"_{p}" if p else ""
-        data = f""
-        yield {
-            "url": url,
-            "page_rule_id": None,
-            "data": data,
-            "method": "POST",
-            "hub_fields": hub_fields,
-        }
-
+    # 外汇交易中心统计月报-成交概览_按交易品种
     cates = [
-        {"cate": "栏目链接的差异部分", "pages": None},
-        {"cate": "栏目链接的差异部分", "pages": None},
+        {
+            "cate": "dqs-u-currency/IblMthBltn?lang=cn&empty=-1&indexType=tvvo&yearMonth=",
+            "web_site": "同业拆借月报",
+        },
+        {
+            "cate": "dqs-u-currency/PrMthBltn?lang=cn&empty=-1&indexType=tvvo&searchDate=",
+            "web_site": "质押式回购月报",
+        },
+        {
+            "cate": "dqs-u-currency/OrMthBltn?lang=cn&empty=-1&indexType=tvvo&yearMonth=",
+            "web_site": "买断式回购月报",
+        },
+        {"cate": "dqs-u-bond/BdcMthBltn?lang=cn&indexType=pro&yearMonth=", "web_site": "债券借贷月报"},
     ]
     for each in cates:
         cate = each["cate"]
-        pages = each["pages"]
-        web_site_url = f"栏目的链接格式化"
-        hub_fields = {
-            "web_site": web_site,
-            "web_site_url": web_site_url,
-            "source_type": source_type,
-            "copyright": copyright,
-        }
-        for p in range(pages):
-            p = f"_{p}" if p else ""
-            url = f""
-            yield {"url": url, "page_rule_id": None, "hub_fields": hub_fields}
+        web_site = each["web_site"]
+        for i in range(31):
+            hub_fields = {
+                "web_site": web_site,
+                "web_site_url": web_site_url,
+                "source_type": source_type,
+                "copyright": copyright,
+            }
+            day = now + timedelta(days=-1 * i)
+            date = day.strftime("%Y-%m-%d")
+            url = f"http://www.chinamoney.com.cn/dqs/rest/{cate}{date}"
+            yield {"url": url, "page_rule_id": 18433, "hub_fields": hub_fields}
+
+    # 外汇交易中心统计月报-成交概览_按机构类别交易统计
+    cates = [
+        {
+            "cate": "http://www.chinamoney.com.cn/dqs/rest/dqs-u-currency/IblMthBltn?lang=cn&empty=-1&yearMonth=202008&indexType=ittvo",
+            "web_site": "同业拆借月报",
+        },
+        {
+            "cate": "http://www.chinamoney.com.cn/dqs/rest/dqs-u-currency/PrMthBltn?lang=cn&empty=-1&searchDate=202009&indexType=pitvo",
+            "web_site": "质押式回购月报",
+        },
+        {
+            "cate": "http://www.chinamoney.com.cn/dqs/rest/dqs-u-currency/OrMthBltn?lang=cn&empty=-1&yearMonth=202009&indexType=ittvo",
+            "web_site": "买断式回购月报",
+        },
+        {
+            "cate": "http://www.chinamoney.com.cn/dqs/rest/dqs-u-bond/BdcMthBltn?lang=cn&yearMonth=202009&indexType=orgT",
+            "web_site": "债券借贷月报",
+        },
+        {"cate": "", "web_site": ""},
+        {"cate": "", "web_site": ""},
+        {"cate": "", "web_site": ""},
+    ]
+    for each in cates:
+        cate = each["cate"]
+        web_site = each["web_site"]
+        for i in range(31):
+            hub_fields = {
+                "web_site": web_site,
+                "web_site_url": web_site_url,
+                "source_type": source_type,
+                "copyright": copyright,
+            }
+            day = now + timedelta(days=-1 * i)
+            date = day.strftime("%Y-%m-%d")
+            url = f"http://www.chinamoney.com.cn/dqs/rest/{cate}{date}"
+            yield {"url": url, "page_rule_id": 18434, "hub_fields": hub_fields}
 
 
 if __name__ == "__main__":
