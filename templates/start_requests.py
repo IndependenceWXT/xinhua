@@ -42,21 +42,19 @@ def start_requests(**kwargs):
     # 外汇交易中心统计月报-成交概览_按机构类别交易统计
     cates = [
         {
-            "cate": "http://www.chinamoney.com.cn/dqs/rest/dqs-u-currency/IblMthBltn?lang=cn&empty=-1&yearMonth=202008&indexType=ittvo",
+            "cate": "dqs-u-currency/IblMthBltn?lang=cn&empty=-1&indexType=ittvo&yearMonth=",
             "web_site": "同业拆借月报",
         },
         {
-            "cate": "http://www.chinamoney.com.cn/dqs/rest/dqs-u-currency/PrMthBltn?lang=cn&empty=-1&searchDate=202009&indexType=pitvo",
+            "cate": "dqs-u-currency/PrMthBltn?lang=cn&empty=-1&indexType=pitvo&searchDate=",
             "web_site": "质押式回购月报",
         },
         {
-            "cate": "http://www.chinamoney.com.cn/dqs/rest/dqs-u-currency/OrMthBltn?lang=cn&empty=-1&yearMonth=202009&indexType=ittvo",
+            "cate": "dqs-u-currency/OrMthBltn?lang=cn&empty=-1&indexType=ittvo&yearMonth=",
             "web_site": "买断式回购月报",
         },
-        {
-            "cate": "http://www.chinamoney.com.cn/dqs/rest/dqs-u-bond/BdcMthBltn?lang=cn&yearMonth=202009&indexType=orgT",
-            "web_site": "债券借贷月报",
-        },
+        {"cate": "dqs-u-bond/BdcMthBltn?lang=cn&indexType=orgT&yearMonth=", "web_site": "债券借贷月报",},
+        {"cate": "dqs-u-bond/BdcMthBltn?lang=cn&indexType=orgB&yearMonth=", "web_site": "现券买卖月报"},
     ]
     for each in cates:
         cate = each["cate"]
@@ -104,10 +102,79 @@ def start_requests(**kwargs):
             url = f"http://www.chinamoney.com.cn/dqs/rest/{cate}{date}"
             yield {"url": url, "page_rule_id": 20309, "hub_fields": hub_fields}
 
+    # 外汇交易中心统计月报-成交概览_按券种统计
+    web_site = "买断式回购月报"
+    hub_fields = {
+        "web_site": web_site,
+        "web_site_url": web_site_url,
+        "source_type": source_type,
+        "copyright": copyright,
+    }
+    for i in range(31):
+        day = now + timedelta(days=-1 * i)
+        date = day.strftime("%Y%m")
+        url = f"http://www.chinamoney.com.cn/dqs/rest/dqs-u-currency/OrMthBltn?lang=cn&empty=-1&indexType=btvo&yearMonth={date}"
+        yield {"url": url, "page_rule_id": 20310, "hub_fields": hub_fields}
+
     # 外汇交易中心统计月报-成交概览_按待偿期分类统计
+    # 现券买卖月报
+    web_site = "现券买卖月报"
+    hub_fields = {
+        "web_site": web_site,
+        "web_site_url": web_site_url,
+        "source_type": source_type,
+        "copyright": copyright,
+    }
+    for i in range(31):
+        day = now + timedelta(days=-1 * i)
+        date = day.strftime("%Y%m")
+        url = f"http://www.chinamoney.com.cn/dqs/rest/dqs-u-bond/CbtMthBltn?lang=cn&empty=-1&indexType=cpvo&yearMonth={date}"
+        yield {"url": url, "page_rule_id": 20311, "hub_fields": hub_fields}
+
     # 外汇交易中心统计月报-成交概览_按债券类别分类统计
+    web_site = "现券买卖月报"
+    hub_fields = {
+        "web_site": web_site,
+        "web_site_url": web_site_url,
+        "source_type": source_type,
+        "copyright": copyright,
+    }
+    for i in range(31):
+        day = now + timedelta(days=-1 * i)
+        date = day.strftime("%Y%m")
+        url = f"http://www.chinamoney.com.cn/dqs/rest/dqs-u-bond/CbtMthBltn?lang=cn&empty=-1&yearMonth=202009&indexType=btvo{date}"
+        yield {"url": url, "page_rule_id": 20312, "hub_fields": hub_fields}
+
     # 外汇交易中心统计月报-成交概览_按计息方式分类
+    # 现券买卖月报
+    web_site = "现券买卖月报"
+    hub_fields = {
+        "web_site": web_site,
+        "web_site_url": web_site_url,
+        "source_type": source_type,
+        "copyright": copyright,
+    }
+    for i in range(31):
+        day = now + timedelta(days=-1 * i)
+        date = day.strftime("%Y%m")
+        url = f"http://www.chinamoney.com.cn/dqs/rest/dqs-u-bond/CbtMthBltn?lang=cn&empty=-1&indexType=imvo&yearMonth={date}"
+        yield {"url": url, "page_rule_id": 20313, "hub_fields": hub_fields}
+
     # 外汇交易中心统计月报-成交概览_按机构类别分类
+    # 现券买卖月报
+    web_site = "现券买卖月报"
+    hub_fields = {
+        "web_site": web_site,
+        "web_site_url": web_site_url,
+        "source_type": source_type,
+        "copyright": copyright,
+    }
+    for i in range(31):
+        day = now + timedelta(days=-1 * i)
+        date = day.strftime("%Y%m")
+        url = f"http://www.chinamoney.com.cn/dqs/rest/dqs-u-bond/CbtMthBltn?lang=cn&empty=-1&indexType=itvo&yearMonth={date}"
+        yield {"url": url, "page_rule_id": 20314, "hub_fields": hub_fields}
+
     # 外汇交易中心统计月报-成交概览_利率互换
     web_site = "利率互换月报"
     hub_fields = {
@@ -119,9 +186,7 @@ def start_requests(**kwargs):
     for i in range(31):
         day = now + timedelta(days=-1 * i)
         date = day.strftime("%Y%m")
-        url = (
-            f"http://www.chinamoney.com.cn/dqs/rest/dqs-u-shibor/IrsMthBltn?lang=cn&empty=-1&indexType=irsmGroupVoList&searchDate={date}"
-        )
+        url = f"http://www.chinamoney.com.cn/dqs/rest/dqs-u-shibor/IrsMthBltn?lang=cn&empty=-1&indexType=irsmGroupVoList&searchDate={date}"
         yield {"url": url, "page_rule_id": 20315, "hub_fields": hub_fields}
 
     # 外汇交易中心统计月报-成交概览_标准债券远期成交情况
@@ -135,9 +200,7 @@ def start_requests(**kwargs):
     for i in range(31):
         day = now + timedelta(days=-1 * i)
         date = day.strftime("%Y-%m")
-        url = (
-            f"http://www.chinamoney.com.cn/dqs/rest/dqs-u-bond/BondFwdBltn?lang=cn&rprtTp=6&searchDate={date}"
-        )
+        url = f"http://www.chinamoney.com.cn/dqs/rest/dqs-u-bond/BondFwdBltn?lang=cn&rprtTp=6&searchDate={date}"
         yield {"url": url, "page_rule_id": 20316, "hub_fields": hub_fields}
 
     # 外汇交易中心统计月报-成交概览_标准债券远期分类成交情况(按交易品种分类)
@@ -151,9 +214,7 @@ def start_requests(**kwargs):
     for i in range(31):
         day = now + timedelta(days=-1 * i)
         date = day.strftime("%Y-%m")
-        url = (
-            f"http://www.chinamoney.com.cn/dqs/rest/dqs-u-bond/BondFwdBltn?lang=cn&rprtTp=6&searchDate={date}"
-        )
+        url = f"http://www.chinamoney.com.cn/dqs/rest/dqs-u-bond/BondFwdBltn?lang=cn&rprtTp=6&searchDate={date}"
         yield {"url": url, "page_rule_id": 20317, "hub_fields": hub_fields}
 
     # 外汇交易中心统计月报-成交概览_人民币外汇即期
@@ -167,15 +228,19 @@ def start_requests(**kwargs):
     for i in range(31):
         day = now + timedelta(days=-1 * i)
         date = day.strftime("%Y%m")
-        url = (
-            f"http://www.chinamoney.com.cn/dqs/rest/dqs-u-fx/RfxSpMthBltn?lang=cn&empty=-1&searchDate={date}"
-        )
+        url = f"http://www.chinamoney.com.cn/dqs/rest/dqs-u-fx/RfxSpMthBltn?lang=cn&empty=-1&searchDate={date}"
         yield {"url": url, "page_rule_id": 20318, "hub_fields": hub_fields}
 
     # 外汇交易中心统计月报-成交概览_人民币外汇掉期\货币掉期
     cates = [
-        {"cate": "dqs/rest/dqs-u-fx/RfxSwMthBltn?lang=cn&empty=-1&searchDate=", "web_site": "人民币外汇掉期月报"},
-        {"cate": "ags/ms/cm-u-fx-mthrpt/searchCrsDealRptHis?lang=cn&month=", "web_site": "人民币外汇货币掉期月报"},
+        {
+            "cate": "dqs/rest/dqs-u-fx/RfxSwMthBltn?lang=cn&empty=-1&searchDate=",
+            "web_site": "人民币外汇掉期月报",
+        },
+        {
+            "cate": "ags/ms/cm-u-fx-mthrpt/searchCrsDealRptHis?lang=cn&month=",
+            "web_site": "人民币外汇货币掉期月报",
+        },
     ]
     for each in cates:
         cate = each["cate"]
@@ -189,9 +254,7 @@ def start_requests(**kwargs):
         for i in range(31):
             day = now + timedelta(days=-1 * i)
             date = day.strftime("%Y%m")
-            url = (
-                f"http://www.chinamoney.com.cn/{cate}{date}"
-            )
+            url = f"http://www.chinamoney.com.cn/{cate}{date}"
             yield {"url": url, "page_rule_id": 20319, "hub_fields": hub_fields}
 
     # 外汇交易中心统计月报-成交概览_人民币外汇远期
@@ -205,9 +268,7 @@ def start_requests(**kwargs):
     for i in range(31):
         day = now + timedelta(days=-1 * i)
         date = day.strftime("%Y%m")
-        url = (
-            f"http://www.chinamoney.com.cn/dqs/rest/dqs-u-fx/RfxFwMthBltn?lang=cn&empty=-1&searchDate={date}"
-        )
+        url = f"http://www.chinamoney.com.cn/dqs/rest/dqs-u-fx/RfxFwMthBltn?lang=cn&empty=-1&searchDate={date}"
         yield {"url": url, "page_rule_id": 20320, "hub_fields": hub_fields}
 
     # 外汇交易中心统计月报-成交概览_人民币外汇期权

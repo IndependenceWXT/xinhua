@@ -23,7 +23,7 @@ def field(url):
 
 
 if __name__ == '__main__':
-    url = "http://www.chinamoney.com.cn/dqs/rest/dqs-u-shibor/IrsMthBltn?lang=cn&empty=-1&searchDate=202009&indexType=irsmGroupVoList"
+    url = "http://www.chinamoney.com.cn/dqs/rest/dqs-u-currency/OrMthBltn?lang=cn&empty=-1&indexType=btvo&yearMonth=202009"
     fields = field(url)
     fields = sorted(fields)
     print(json.dumps(fields))
