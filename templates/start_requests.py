@@ -7,7 +7,15 @@ def start_requests(**kwargs):
     copyright = 0
 
     web_site_url = "http://www.chinamoney.com.cn/chinese/mtmoncjgl/"
-
+    months = []
+    start = datetime.strptime("2017-01", "%Y-%m")
+    now = datetime.now()
+    while 1:
+        months.append(start.strftime("%Y-%m"))
+        start += timedelta(days=1)
+        if start >= now:
+            break
+    months = sorted(list(set(months)))
     # 外汇交易中心统计月报-成交概览_按交易品种
     cates = [
         {
@@ -27,15 +35,14 @@ def start_requests(**kwargs):
     for each in cates:
         cate = each["cate"]
         web_site = each["web_site"]
-        for i in range(31):
+        for month in months:
             hub_fields = {
                 "web_site": web_site,
                 "web_site_url": web_site_url,
                 "source_type": source_type,
                 "copyright": copyright,
             }
-            day = now + timedelta(days=-1 * i)
-            date = day.strftime("%Y-%m-%d")
+            date = datetime.strptime(month, "%Y-%m").strftime("%Y%m")
             url = f"http://www.chinamoney.com.cn/dqs/rest/{cate}{date}"
             yield {"url": url, "page_rule_id": 18433, "hub_fields": hub_fields}
 
@@ -59,15 +66,14 @@ def start_requests(**kwargs):
     for each in cates:
         cate = each["cate"]
         web_site = each["web_site"]
-        for i in range(31):
+        for month in months:
             hub_fields = {
                 "web_site": web_site,
                 "web_site_url": web_site_url,
                 "source_type": source_type,
                 "copyright": copyright,
             }
-            day = now + timedelta(days=-1 * i)
-            date = day.strftime("%Y-%m-%d")
+            date = datetime.strptime(month, "%Y-%m").strftime("%Y%m")
             url = f"http://www.chinamoney.com.cn/dqs/rest/{cate}{date}"
             yield {"url": url, "page_rule_id": 18434, "hub_fields": hub_fields}
 
@@ -90,15 +96,14 @@ def start_requests(**kwargs):
     for each in cates:
         cate = each["cate"]
         web_site = each["web_site"]
-        for i in range(31):
+        for month in months:
             hub_fields = {
                 "web_site": web_site,
                 "web_site_url": web_site_url,
                 "source_type": source_type,
                 "copyright": copyright,
             }
-            day = now + timedelta(days=-1 * i)
-            date = day.strftime("%Y-%m-%d")
+            date = datetime.strptime(month, "%Y-%m").strftime("%Y%m")
             url = f"http://www.chinamoney.com.cn/dqs/rest/{cate}{date}"
             yield {"url": url, "page_rule_id": 20309, "hub_fields": hub_fields}
 
@@ -110,9 +115,8 @@ def start_requests(**kwargs):
         "source_type": source_type,
         "copyright": copyright,
     }
-    for i in range(31):
-        day = now + timedelta(days=-1 * i)
-        date = day.strftime("%Y%m")
+    for month in months:
+        date = datetime.strptime(month, "%Y-%m").strftime("%Y%m")
         url = f"http://www.chinamoney.com.cn/dqs/rest/dqs-u-currency/OrMthBltn?lang=cn&empty=-1&indexType=btvo&yearMonth={date}"
         yield {"url": url, "page_rule_id": 20310, "hub_fields": hub_fields}
 
@@ -125,9 +129,8 @@ def start_requests(**kwargs):
         "source_type": source_type,
         "copyright": copyright,
     }
-    for i in range(31):
-        day = now + timedelta(days=-1 * i)
-        date = day.strftime("%Y%m")
+    for month in months:
+        date = datetime.strptime(month, "%Y-%m").strftime("%Y%m")
         url = f"http://www.chinamoney.com.cn/dqs/rest/dqs-u-bond/CbtMthBltn?lang=cn&empty=-1&indexType=cpvo&yearMonth={date}"
         yield {"url": url, "page_rule_id": 20311, "hub_fields": hub_fields}
 
@@ -139,9 +142,8 @@ def start_requests(**kwargs):
         "source_type": source_type,
         "copyright": copyright,
     }
-    for i in range(31):
-        day = now + timedelta(days=-1 * i)
-        date = day.strftime("%Y%m")
+    for month in months:
+        date = datetime.strptime(month, "%Y-%m").strftime("%Y%m")
         url = f"http://www.chinamoney.com.cn/dqs/rest/dqs-u-bond/CbtMthBltn?lang=cn&empty=-1&yearMonth=202009&indexType=btvo{date}"
         yield {"url": url, "page_rule_id": 20312, "hub_fields": hub_fields}
 
@@ -154,9 +156,8 @@ def start_requests(**kwargs):
         "source_type": source_type,
         "copyright": copyright,
     }
-    for i in range(31):
-        day = now + timedelta(days=-1 * i)
-        date = day.strftime("%Y%m")
+    for month in months:
+        date = datetime.strptime(month, "%Y-%m").strftime("%Y%m")
         url = f"http://www.chinamoney.com.cn/dqs/rest/dqs-u-bond/CbtMthBltn?lang=cn&empty=-1&indexType=imvo&yearMonth={date}"
         yield {"url": url, "page_rule_id": 20313, "hub_fields": hub_fields}
 
@@ -169,9 +170,8 @@ def start_requests(**kwargs):
         "source_type": source_type,
         "copyright": copyright,
     }
-    for i in range(31):
-        day = now + timedelta(days=-1 * i)
-        date = day.strftime("%Y%m")
+    for month in months:
+        date = datetime.strptime(month, "%Y-%m").strftime("%Y%m")
         url = f"http://www.chinamoney.com.cn/dqs/rest/dqs-u-bond/CbtMthBltn?lang=cn&empty=-1&indexType=itvo&yearMonth={date}"
         yield {"url": url, "page_rule_id": 20314, "hub_fields": hub_fields}
 
@@ -183,9 +183,8 @@ def start_requests(**kwargs):
         "source_type": source_type,
         "copyright": copyright,
     }
-    for i in range(31):
-        day = now + timedelta(days=-1 * i)
-        date = day.strftime("%Y%m")
+    for month in months:
+        date = datetime.strptime(month, "%Y-%m").strftime("%Y%m")
         url = f"http://www.chinamoney.com.cn/dqs/rest/dqs-u-shibor/IrsMthBltn?lang=cn&empty=-1&indexType=irsmGroupVoList&searchDate={date}"
         yield {"url": url, "page_rule_id": 20315, "hub_fields": hub_fields}
 
@@ -197,9 +196,8 @@ def start_requests(**kwargs):
         "source_type": source_type,
         "copyright": copyright,
     }
-    for i in range(31):
-        day = now + timedelta(days=-1 * i)
-        date = day.strftime("%Y-%m")
+    for month in months:
+        date = datetime.strptime(month, "%Y-%m").strftime("%Y-%m")
         url = f"http://www.chinamoney.com.cn/dqs/rest/dqs-u-bond/BondFwdBltn?lang=cn&rprtTp=6&searchDate={date}"
         yield {"url": url, "page_rule_id": 20316, "hub_fields": hub_fields}
 
@@ -211,9 +209,8 @@ def start_requests(**kwargs):
         "source_type": source_type,
         "copyright": copyright,
     }
-    for i in range(31):
-        day = now + timedelta(days=-1 * i)
-        date = day.strftime("%Y-%m")
+    for month in months:
+        date = datetime.strptime(month, "%Y-%m").strftime("%Y-%m")
         url = f"http://www.chinamoney.com.cn/dqs/rest/dqs-u-bond/BondFwdBltn?lang=cn&rprtTp=6&searchDate={date}"
         yield {"url": url, "page_rule_id": 20317, "hub_fields": hub_fields}
 
@@ -225,9 +222,8 @@ def start_requests(**kwargs):
         "source_type": source_type,
         "copyright": copyright,
     }
-    for i in range(31):
-        day = now + timedelta(days=-1 * i)
-        date = day.strftime("%Y%m")
+    for month in months:
+        date = datetime.strptime(month, "%Y-%m").strftime("%Y%m")
         url = f"http://www.chinamoney.com.cn/dqs/rest/dqs-u-fx/RfxSpMthBltn?lang=cn&empty=-1&searchDate={date}"
         yield {"url": url, "page_rule_id": 20318, "hub_fields": hub_fields}
 
@@ -244,16 +240,15 @@ def start_requests(**kwargs):
     ]
     for each in cates:
         cate = each["cate"]
-        web_site = each["web_siet"]
+        web_site = each["web_site"]
         hub_fields = {
             "web_site": web_site,
             "web_site_url": web_site_url,
             "source_type": source_type,
             "copyright": copyright,
         }
-        for i in range(31):
-            day = now + timedelta(days=-1 * i)
-            date = day.strftime("%Y%m")
+        for month in months:
+            date = datetime.strptime(month, "%Y-%m").strftime("%Y%m")
             url = f"http://www.chinamoney.com.cn/{cate}{date}"
             yield {"url": url, "page_rule_id": 20319, "hub_fields": hub_fields}
 
@@ -265,9 +260,8 @@ def start_requests(**kwargs):
         "source_type": source_type,
         "copyright": copyright,
     }
-    for i in range(31):
-        day = now + timedelta(days=-1 * i)
-        date = day.strftime("%Y%m")
+    for month in months:
+        date = datetime.strptime(month, "%Y-%m").strftime("%Y%m")
         url = f"http://www.chinamoney.com.cn/dqs/rest/dqs-u-fx/RfxFwMthBltn?lang=cn&empty=-1&searchDate={date}"
         yield {"url": url, "page_rule_id": 20320, "hub_fields": hub_fields}
 
@@ -279,9 +273,8 @@ def start_requests(**kwargs):
         "source_type": source_type,
         "copyright": copyright,
     }
-    for i in range(31):
-        day = now + timedelta(days=-1 * i)
-        date = day.strftime("%Y%m")
+    for month in months:
+        date = datetime.strptime(month, "%Y-%m").strftime("%Y%m")
         url = (
             f"http://www.chinamoney.com.cn/dqs/rest/dqs-u-fx/RfxSoMthBltn?lang=cn&yearMonth={date}"
         )
@@ -295,9 +288,8 @@ def start_requests(**kwargs):
         "source_type": source_type,
         "copyright": copyright,
     }
-    for i in range(31):
-        day = now + timedelta(days=-1 * i)
-        date = day.strftime("%Y%m")
+    for month in months:
+        date = datetime.strptime(month, "%Y-%m").strftime("%Y%m")
         url = f"http://www.chinamoney.com.cn/ags/ms/cm-u-fx-mthrpt/searchFxclDealRptHis?lang=cn&month={date}"
         yield {"url": url, "page_rule_id": 20322, "hub_fields": hub_fields}
 
@@ -309,9 +301,8 @@ def start_requests(**kwargs):
         "source_type": source_type,
         "copyright": copyright,
     }
-    for i in range(31):
-        day = now + timedelta(days=-1 * i)
-        date = day.strftime("%Y%m")
+    for month in months:
+        date = datetime.strptime(month, "%Y-%m").strftime("%Y%m")
         url = f"http://www.chinamoney.com.cn/dqs/rest/dqs-u-fx/CpairMthBltn?lang=cn&empty=-1&searchDate={date}"
         yield {"url": url, "page_rule_id": 20323, "hub_fields": hub_fields}
 
@@ -319,5 +310,5 @@ def start_requests(**kwargs):
 if __name__ == "__main__":
     import json
 
-    for each in start_requests_1():
+    for each in start_requests():
         print(json.dumps(each, indent=4, ensure_ascii=False))
