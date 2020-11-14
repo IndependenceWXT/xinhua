@@ -21,6 +21,7 @@ http://www.chinamoney.com.cn/dqs/rest/dqs-u-bond/CbtDlyBltn?lang=cn&indexType=in
 
 标准债券远期日报
 标准债券远期成交情况
+http://www.chinamoney.com.cn/dqs/rest/dqs-u-bond/BondFwdBltn
 标准债券远期分类成交情况(按交易品种分类)
 http://www.chinamoney.com.cn/dqs/rest/dqs-u-bond/BondFwdBltn?lang=cn&rprtTp=5&searchDate=2020-11-10
 
@@ -36,9 +37,9 @@ http://www.chinamoney.com.cn/dqs/rest/dqs-u-shibor/IrsDlyBltn?lang=cn&searchDate
 按交易品种
 http://www.chinamoney.com.cn/dqs/rest/dqs-u-currency/IblMthBltn?lang=cn&empty=-1&yearMonth=202009&indexType=tvvo
 按机构类别交易统计
-http://www.chinamoney.com.cn/dqs/rest/dqs-u-currency/IblMthBltn?lang=cn&empty=-1&yearMonth=202009&indexType=itvo
+http://www.chinamoney.com.cn/dqs/rest/dqs-u-currency/IblMthBltn?lang=cn&empty=-1&yearMonth=202008&indexType=ittvo
 按机构类别余额统计
-http://www.chinamoney.com.cn/dqs/rest/dqs-u-currency/IblMthBltn?lang=cn&empty=-1&yearMonth=202009&indexType=ittvo
+http://www.chinamoney.com.cn/dqs/rest/dqs-u-currency/IblMthBltn?lang=cn&empty=-1&yearMonth=202009&indexType=itvo
 
 质押式回购月报
 http://www.chinamoney.com.cn/dqs/rest/dqs-u-currency/PrMthBltn
