@@ -140,7 +140,7 @@ def count_configured(users, today=True, ago=False, section=(1565, 1858), notify=
         kind = "日报"
         report.append(f"日报[{now.isoformat()}]\n")
     elif not today and ago == False:
-        now = datetime.now()
+        now = datetime.now().date()
         kind = "扫描报告"
         report.append(f"{_type}调度扫描报告[{now.isoformat()}]\n")
     elif not today and ago:
