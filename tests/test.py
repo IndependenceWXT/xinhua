@@ -14,3 +14,10 @@ def process(text):
     for each in data["records"]:
         each["lastDate"] = data["data"]["lastDate"]
     return json.dumps(data)
+
+def test():
+    print("fuck 3")
+    print "fuck 2"
+
+if __name__ == "__main__":
+    test()

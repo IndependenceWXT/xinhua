@@ -1,52 +1,29 @@
 def start_requests(**kwargs):
-    web_site = "网站名"
+    from datetime import datetime, timedelta
+
+    web_site = "外汇交易中心机构交易情况"
     source_type = 1
     copyright = 0
-
-    web_site_url = "栏目的链接"
-    hub_fields = {
-        "web_site": web_site,
-        "web_site_url": web_site_url,
-        "source_type": source_type,
-        "copyright": copyright,
-    }
-    for p in range(None):
-        p = f"_{p}" if p else ""
-        url = f"列表页链接然后修改为格式化字符串"
-        yield {"url": url, "page_rule_id": None, "hub_fields": hub_fields}
-
-    yield {"url": web_site_url, "page_rule_id": None, "hub_fields": hub_fields}
-
-    url = ""
-    for p in range(None):
-        p = f"_{p}" if p else ""
-        data = f""
-        yield {
-            "url": url,
-            "page_rule_id": None,
-            "data": data,
-            "method": "POST",
-            "hub_fields": hub_fields,
-        }
+    web_site_url = "http://www.chinamoney.com.cn/chinese/mtdexorgtrade/"
+    now = datetime.now()
 
     cates = [
-        {"cate": "栏目链接的差异部分", "pages": None},
-        {"cate": "栏目链接的差异部分", "pages": None},
+        {"cate": "bondsSale", "web_site": "现券买卖分机构交易情况"},
+        {"cate": "creditLend", "web_site": "同业拆借分机构交易情况"},
+        {"cate": "pledgeRepurchase", "web_site": "质押式回购分机构交易情况"},
     ]
     for each in cates:
         cate = each["cate"]
-        pages = each["pages"]
-        web_site_url = f"栏目的链接格式化"
+        web_site = each["web_site"]
         hub_fields = {
             "web_site": web_site,
             "web_site_url": web_site_url,
             "source_type": source_type,
             "copyright": copyright,
         }
-        for p in range(pages):
-            p = f"_{p}" if p else ""
-            url = f""
-            yield {"url": url, "page_rule_id": None, "hub_fields": hub_fields}
+        date = now.strftime("%Y-%m-%d")
+        url = f"http://www.chinamoney.com.cn/fe-c/{cate}SubsectorTranAction.do?method=showTable&searchDate={date}"
+        yield {"url": url, "page_rule_id": 18430, "hub_fields": hub_fields}
 
 
 if __name__ == "__main__":

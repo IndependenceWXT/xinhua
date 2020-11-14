@@ -32,5 +32,5 @@ if __name__ == '__main__':
         line = f"  `{each}` varchar(255) DEFAULT NULL COMMENT '{each}',"
         lines.append(line)
     res = "\n".join(lines)
-    print(res)
 
+    print(res)
